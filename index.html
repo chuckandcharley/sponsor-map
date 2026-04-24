@@ -46,8 +46,9 @@ svg#us-map{width:100%;height:auto;display:block;overflow:visible}
 /* Modal — anchored by % within map so it stays put as map scales */
 #modal-card{
   position:absolute;
-  left:37%;top:12%;
-  width:26%;min-width:200px;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:220px;
   background:var(--modal-bg);
   border:1px solid var(--modal-border);
   border-radius:11px;overflow:hidden;
@@ -101,11 +102,7 @@ svg#us-map{width:100%;height:auto;display:block;overflow:visible}
       <div class="modal-facts">
         <div class="modal-fact">
           <div class="fact-icon"><svg viewBox="0 0 16 16"><path d="M8 1a3.5 3.5 0 1 0 0 7A3.5 3.5 0 0 0 8 1zM5.5 4.5a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0zM6 9l-1.5 6h7L10 9H6z"/></svg></div>
-          <div><div class="fact-label">Diagnosis</div><div class="fact-value" id="modal-cancer">&#8212;</div></div>
-        </div>
-        <div class="modal-fact">
-          <div class="fact-icon"><svg viewBox="0 0 16 16"><path d="M8 1L1 7v8h5v-5h4v5h5V7L8 1z"/></svg></div>
-          <div><div class="fact-label">Request</div><div class="fact-value" id="modal-request">&#8212;</div></div>
+          <div><div class="fact-label">Age</div><div class="fact-value" id="modal-age">&#8212;</div></div>
         </div>
         <div class="modal-fact">
           <div class="fact-icon"><svg viewBox="0 0 16 16"><path d="M8 1a5 5 0 0 0-5 5c0 3.5 5 9 5 9s5-5.5 5-9a5 5 0 0 0-5-5zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg></div>
@@ -214,9 +211,8 @@ let isOpen=false;
 function openModal(kid){
   if(isOpen)return;isOpen=true;
   document.getElementById('modal-name').textContent=kid.name;
-  document.getElementById('modal-cancer').textContent=kid.cancerType;
-  document.getElementById('modal-request').textContent=kid.request;
-  document.getElementById('modal-location').textContent=kid.state?kid.state+' · ZIP '+kid.zip:'ZIP '+kid.zip;
+  document.getElementById('modal-age').textContent=kid.age;
+  document.getElementById('modal-location').textContent=kid.city&&kid.state?kid.city+', '+kid.state:kid.state||'';
   fadePinsOut(()=>card.classList.add('active'));
 }
 function closeModal(){
@@ -229,19 +225,7 @@ document.getElementById('map-wrap').addEventListener('click',()=>{if(isOpen)clos
 card.addEventListener('click',e=>e.stopPropagation());
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
-const PLACEHOLDER=[
-  {name:"Placeholder",cancerType:"Leukemia",request:"Playhouse",zip:"10001",state:"NY",lat:40.748,lon:-73.997},
-  {name:"Placeholder",cancerType:"Neuroblastoma",request:"Playset",zip:"60601",state:"IL",lat:41.883,lon:-87.623},
-  {name:"Placeholder",cancerType:"Wilms Tumor",request:"Playhouse",zip:"90210",state:"CA",lat:34.090,lon:-118.244},
-  {name:"Placeholder",cancerType:"Osteosarcoma",request:"Playset",zip:"77001",state:"TX",lat:29.754,lon:-95.368},
-  {name:"Placeholder",cancerType:"Medulloblastoma",request:"Playhouse",zip:"33040",state:"FL",lat:24.555,lon:-81.779},
-  {name:"Placeholder",cancerType:"Rhabdomyosarcoma",request:"Playset",zip:"98101",state:"WA",lat:47.606,lon:-122.332},
-  {name:"Placeholder",cancerType:"Ewing Sarcoma",request:"Playset",zip:"30301",state:"GA",lat:33.749,lon:-84.388},
-  {name:"Placeholder",cancerType:"Leukemia",request:"Playhouse",zip:"27601",state:"NC",lat:35.780,lon:-78.638},
-  {name:"Placeholder",cancerType:"Wilms Tumor",request:"Playset",zip:"56649",state:"MN",lat:48.601,lon:-93.410},
-  {name:"Placeholder",cancerType:"Neuroblastoma",request:"Playhouse",zip:"96813",state:"HI",lat:21.306,lon:-157.858},
-  {name:"Placeholder",cancerType:"Osteosarcoma",request:"Playset",zip:"96720",state:"HI",lat:19.724,lon:-155.084},
-];
+const PLACEHOLDER=[];
 
 fetch('./zip_centroids.json')
   .then(r=>r.ok?r.json():{})
