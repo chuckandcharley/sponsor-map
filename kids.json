@@ -1,5 +1,12 @@
 [
   {
+    "name": "Dakota",
+    "age": "8 years old",
+    "city": "North Chesterfield",
+    "state": "VA",
+    "zip": "23237"
+  },
+  {
     "name": "Joshua",
     "age": "4 years old",
     "city": "Charlotte",
