@@ -1,5 +1,26 @@
 [
   {
+    "name": "Lukas",
+    "age": "4 years old",
+    "city": "Columbia",
+    "state": "MO",
+    "zip": "65202"
+  },
+  {
+    "name": "Ariela",
+    "age": "6 years old",
+    "city": "Palmdale",
+    "state": "CA",
+    "zip": "93550"
+  },
+  {
+    "name": "Juliette",
+    "age": "3 years old",
+    "city": "New London",
+    "state": "WI",
+    "zip": "54961"
+  },
+  {
     "name": "Salem",
     "age": "2 years old",
     "city": "Mobile",
