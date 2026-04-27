@@ -1,10 +1,10 @@
 [
   {
-    "name": "Abbygail",
-    "age": "5 years old",
-    "city": "Huntingdon",
-    "state": "PA",
-    "zip": "16652"
+    "name": "Salem",
+    "age": "2 years old",
+    "city": "Mobile",
+    "state": "AL",
+    "zip": "36617"
   },
   {
     "name": "Sloane",
@@ -28,25 +28,11 @@
     "zip": "46236"
   },
   {
-    "name": "Dakota",
-    "age": "8 years old",
-    "city": "North Chesterfield",
-    "state": "VA",
-    "zip": "23237"
-  },
-  {
     "name": "Joshua",
     "age": "4 years old",
     "city": "Charlotte",
     "state": "NC",
     "zip": "28210"
-  },
-  {
-    "name": "Chloe",
-    "age": "4 years old",
-    "city": "New braunfels",
-    "state": "TX",
-    "zip": "78132"
   },
   {
     "name": "Amelia",
@@ -124,13 +110,6 @@
     "city": "Limestone",
     "state": "TN",
     "zip": "37681"
-  },
-  {
-    "name": "William",
-    "age": "6 years old",
-    "city": "Okeechobee",
-    "state": "FL",
-    "zip": "34974"
   },
   {
     "name": "Amelia",
