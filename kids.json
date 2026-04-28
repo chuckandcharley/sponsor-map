@@ -1,5 +1,40 @@
 [
   {
+    "name": "Broly",
+    "age": "4 years old",
+    "city": "Grand Rapids",
+    "state": "MI",
+    "zip": "49505"
+  },
+  {
+    "name": "Isabella",
+    "age": "7 years old",
+    "city": "Dacula",
+    "state": "GA",
+    "zip": "30019"
+  },
+  {
+    "name": "Briggs",
+    "age": "2 years old",
+    "city": "Aubrey",
+    "state": "TX",
+    "zip": "76227"
+  },
+  {
+    "name": "Zalaina",
+    "age": "4 years old",
+    "city": "Fred",
+    "state": "CA",
+    "zip": "93725"
+  },
+  {
+    "name": "Chase",
+    "age": "7 years old",
+    "city": "Amarillo",
+    "state": "TX",
+    "zip": "79118"
+  },
+  {
     "name": "Lukas",
     "age": "4 years old",
     "city": "Columbia",
@@ -362,13 +397,6 @@
     "city": "New Bedford",
     "state": "MA",
     "zip": "02740"
-  },
-  {
-    "name": "Wyatt",
-    "age": "7 years old",
-    "city": "Del Haven",
-    "state": "NJ",
-    "zip": "08251"
   },
   {
     "name": "Holden",
@@ -1275,7 +1303,7 @@
   },
   {
     "name": "Ari",
-    "age": "5 years old",
+    "age": "6 years old",
     "city": "Diamond Bar",
     "state": "CA",
     "zip": "91765"
@@ -2318,7 +2346,7 @@
   },
   {
     "name": "Obsidian",
-    "age": "4 years old",
+    "age": "5 years old",
     "city": "Millbrook",
     "state": "AL",
     "zip": "36054"
@@ -3337,13 +3365,6 @@
     "city": "Wichita",
     "state": "KS",
     "zip": "67218"
-  },
-  {
-    "name": "Dean",
-    "age": "6 years old",
-    "city": "Florence",
-    "state": "TX",
-    "zip": "76527"
   },
   {
     "name": "Delta",
