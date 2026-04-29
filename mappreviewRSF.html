@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waiting for a Sponsor — RSF</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #004270;
+  --blue: #0378ad;
+  --light-blue: #d0e8f5;
+  --white: #ffffff;
+  --map-bg: #002d4d;
+  --ff: 'Franklin Gothic Medium','Franklin Gothic','ITC Franklin Gothic','Arial Narrow',Arial,sans-serif;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: var(--ff);
+  background: #ffffff;
+}
+
+/* ── SPLASH ── */
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+#splash.to-navy {
+  background: var(--navy);
+  transition: background 1.6s ease;
+}
+
+#splash.fade-out {
+  opacity: 0;
+  transition: opacity 1.6s ease;
+  pointer-events: none;
+}
+
+/* Number */
+#num-clip {
+  overflow: hidden;
+  line-height: 1;
+}
+
+#counter-num {
+  display: block;
+  font-size: clamp(100px, 20vw, 220px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  transform: translateY(110%);
+  transition: transform 0s;
+  text-align: center;
+  will-change: transform;
+}
+
+#counter-num.drop {
+  transform: translateY(0);
+  transition: transform 1s cubic-bezier(0.16,1,0.3,1);
+}
+
+#counter-num.on-navy {
+  color: var(--white);
+  transition: color 1.4s ease;
+}
+
+/* Label */
+#label-clip {
+  overflow: hidden;
+  line-height: 1;
+  margin-top: 0.08em;
+}
+
+#counter-label {
+  display: block;
+  font-size: clamp(18px, 3.5vw, 44px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blue);
+  line-height: 1;
+  transform: translateY(110%);
+  transition: transform 0s;
+  text-align: center;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+#counter-label.rise {
+  transform: translateY(0);
+  transition: transform 0.85s cubic-bezier(0.16,1,0.3,1);
+}
+
+#counter-label.on-navy {
+  color: var(--light-blue);
+  transition: color 1.4s ease;
+}
+
+/* ── MAP CONTAINER ── */
+#map-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: var(--map-bg);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+#map-container.visible { opacity: 1; }
+
+/*
+  Map sizer — absolutely centered, no flex involvement.
+  Uses CSS variables set by JS on resize so it always
+  matches exactly 960:600 ratio within the viewport.
+*/
+#map-sizer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* width and height set by JS */
+}
+
+#map-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: var(--map-bg);
+}
+
+/* ── HINT — bottom left ── */
+#hint {
+  position: fixed;
+  bottom: 18px;
+  left: 20px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+#hint.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div id="num-clip">
+    <span id="counter-num">0</span>
+  </div>
+  <div id="label-clip">
+    <span id="counter-label">waiting for a sponsor</span>
+  </div>
+</div>
+
+<div id="map-container">
+  <div id="map-sizer">
+    <iframe
+      id="map-iframe"
+      src=""
+      scrolling="no"
+      title="rsffoundationmap">
+    </iframe>
+  </div>
+</div>
+
+<div id="hint">help rsf reach the world</div>
+
+<script>
+(async function(){
+
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  // Map is 960x600 — 8:5 ratio
+  const MAP_RATIO = 960 / 600;
+
+  const sizer = document.getElementById('map-sizer');
+
+  function sizemap() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    let w, h;
+    if (vw / vh > MAP_RATIO) {
+      // Viewport wider than map ratio — height is the constraint
+      h = vh;
+      w = vh * MAP_RATIO;
+    } else {
+      // Viewport taller than map ratio — width is the constraint
+      w = vw;
+      h = vw / MAP_RATIO;
+    }
+    sizer.style.width  = Math.round(w) + 'px';
+    sizer.style.height = Math.round(h) + 'px';
+  }
+
+  sizemap();
+  window.addEventListener('resize', sizemap);
+
+  // Fetch real count
+  let kidCount = 0;
+  try {
+    const r = await fetch('https://chuckandcharley.github.io/sponsor-map/kids.json');
+    const d = await r.json();
+    kidCount = Array.isArray(d) ? d.length : 0;
+  } catch(e) { kidCount = 0; }
+
+  const splash       = document.getElementById('splash');
+  const numEl        = document.getElementById('counter-num');
+  const labelEl      = document.getElementById('counter-label');
+  const mapContainer = document.getElementById('map-container');
+  const mapIframe    = document.getElementById('map-iframe');
+  const hint         = document.getElementById('hint');
+
+  // Ease out quart
+  function countUp(target, duration) {
+    return new Promise(res => {
+      const start = performance.now();
+      (function tick(now){
+        const p = Math.min((now-start)/duration, 1);
+        const eased = 1 - Math.pow(1-p, 4);
+        numEl.textContent = Math.round(eased * target);
+        if (p < 1) requestAnimationFrame(tick);
+        else res();
+      })(performance.now());
+    });
+  }
+
+  // Phase 1 — Number drops in on white
+  await sleep(400);
+  numEl.classList.add('drop');
+  await sleep(300);
+
+  // Phase 2 — Count up
+  await countUp(kidCount, 2400);
+
+  // Phase 3 — Label rises
+  await sleep(80);
+  labelEl.classList.add('rise');
+  await sleep(1600);
+
+  // Phase 4 — Navy wash + text flip
+  splash.classList.add('to-navy');
+  numEl.classList.add('on-navy');
+  labelEl.classList.add('on-navy');
+  await sleep(2222);
+
+  // Phase 5 — Splash fades, brief navy silence
+  splash.classList.add('fade-out');
+  await sleep(211);
+
+  // Phase 6 — Map appears, iframe loads from zero
+  mapContainer.classList.add('visible');
+  await sleep(200);
+  mapIframe.src = 'https://chuckandcharley.github.io/sponsor-map';
+
+  // Phase 7 — Hint after full build
+  await sleep(2800);
+  hint.classList.add('visible');
+
+  // Cleanup
+  await sleep(1000);
+  splash.style.display = 'none';
+
+})();
+</script>
+</body>
+</html>
