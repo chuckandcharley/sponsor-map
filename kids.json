@@ -1,5 +1,12 @@
 [
   {
+    "name": "Justin",
+    "age": "4 years old",
+    "city": "Fenton",
+    "state": "MI",
+    "zip": "48430"
+  },
+  {
     "name": "Jibrail",
     "age": "2 years old",
     "city": "Abingdon",
@@ -33,27 +40,6 @@
     "city": "Fitchburg",
     "state": "MA",
     "zip": "01420"
-  },
-  {
-    "name": "Mateo",
-    "age": "3 years old",
-    "city": "Fitchburg",
-    "state": "MA",
-    "zip": "01420"
-  },
-  {
-    "name": "Mateo",
-    "age": "3 years old",
-    "city": "Fitchburg",
-    "state": "MA",
-    "zip": "01420"
-  },
-  {
-    "name": "Broly",
-    "age": "4 years old",
-    "city": "Grand Rapids",
-    "state": "MI",
-    "zip": "49505"
   },
   {
     "name": "Isabella",
@@ -250,13 +236,6 @@
     "city": "Ardsley",
     "state": "NY",
     "zip": "10502"
-  },
-  {
-    "name": "Ainhoa",
-    "age": "5 years old",
-    "city": "Kissimmee",
-    "state": "FL",
-    "zip": "34741"
   },
   {
     "name": "Cruz",
@@ -733,13 +712,6 @@
     "city": "Lexington",
     "state": "KY",
     "zip": "40511"
-  },
-  {
-    "name": "Ylan",
-    "age": "4 years old",
-    "city": "Oviedo",
-    "state": "FL",
-    "zip": "32765"
   },
   {
     "name": "Jenna",
