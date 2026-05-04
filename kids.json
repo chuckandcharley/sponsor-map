@@ -1,5 +1,19 @@
 [
   {
+    "name": "Jayden",
+    "age": "6 years old",
+    "city": "Hesperia",
+    "state": "CA",
+    "zip": "92345"
+  },
+  {
+    "name": "Tyler",
+    "age": "3 years old",
+    "city": "Midland",
+    "state": "GA",
+    "zip": "31820"
+  },
+  {
     "name": "Olivia",
     "age": "3 years old",
     "city": "Yaphank",
@@ -63,13 +77,6 @@
     "zip": "27537"
   },
   {
-    "name": "Gattlynn",
-    "age": "3 years old",
-    "city": "Henderson",
-    "state": "NC",
-    "zip": "27537"
-  },
-  {
     "name": "Willow",
     "age": "1 year old",
     "city": "Cleveland Heights",
@@ -82,13 +89,6 @@
     "city": "Parkville",
     "state": "MD",
     "zip": "21234"
-  },
-  {
-    "name": "Jaxson",
-    "age": "2 years old",
-    "city": "Palm Coast",
-    "state": "FL",
-    "zip": "32164"
   },
   {
     "name": "Omar",
