@@ -1,5 +1,12 @@
 [
   {
+    "name": "Olivia",
+    "age": "3 years old",
+    "city": "Yaphank",
+    "state": "NY",
+    "zip": "11980"
+  },
+  {
     "name": "Owen",
     "age": "6 years old",
     "city": "Auburn",
@@ -75,13 +82,6 @@
     "city": "Parkville",
     "state": "MD",
     "zip": "21234"
-  },
-  {
-    "name": "Rowan",
-    "age": "6 years old",
-    "city": "Anderson",
-    "state": "SC",
-    "zip": "29626"
   },
   {
     "name": "Jaxson",
