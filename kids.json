@@ -1,5 +1,19 @@
 [
   {
+    "name": "Harper",
+    "age": "1 year old",
+    "city": "Middlesex",
+    "state": "NC",
+    "zip": "27557"
+  },
+  {
+    "name": "Laikyn",
+    "age": "9 years old",
+    "city": "Josephine",
+    "state": "TX",
+    "zip": "75173"
+  },
+  {
     "name": "Laikyn",
     "age": "9 years old",
     "city": "Josephine",
@@ -3260,13 +3274,6 @@
     "city": "El Dorado",
     "state": "CA",
     "zip": "95623"
-  },
-  {
-    "name": "Barrett",
-    "age": "2 years old",
-    "city": "Vestavia Hills",
-    "state": "AL",
-    "zip": "35242"
   },
   {
     "name": "Emilia",
