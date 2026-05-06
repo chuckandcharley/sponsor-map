@@ -1,5 +1,33 @@
 [
   {
+    "name": "Timothy",
+    "age": "9 years old",
+    "city": "Hixson",
+    "state": "TN",
+    "zip": "37343"
+  },
+  {
+    "name": "Timothy",
+    "age": "9 years old",
+    "city": "Hixson",
+    "state": "TN",
+    "zip": "37343"
+  },
+  {
+    "name": "Mohammed",
+    "age": "2 years old",
+    "city": "Rochester",
+    "state": "MN",
+    "zip": "55902"
+  },
+  {
+    "name": "Ryla",
+    "age": "4 years old",
+    "city": "Paxton",
+    "state": "MA",
+    "zip": "01612"
+  },
+  {
     "name": "Sebastian",
     "age": "1 year old",
     "city": "Chicago",
@@ -232,7 +260,7 @@
   },
   {
     "name": "Zalaina",
-    "age": "4 years old",
+    "age": "5 years old",
     "city": "Fred",
     "state": "CA",
     "zip": "93725"
@@ -2212,13 +2240,6 @@
     "zip": "73115"
   },
   {
-    "name": "Brian",
-    "age": "9 years old",
-    "city": "Lynwood",
-    "state": "CA",
-    "zip": "90262"
-  },
-  {
     "name": "Emilia",
     "age": "2 years old",
     "city": "Sidney",
@@ -3039,7 +3060,7 @@
   },
   {
     "name": "Violet",
-    "age": "5 years old",
+    "age": "6 years old",
     "city": "Hesperia",
     "state": "CA",
     "zip": "92345"
@@ -3186,7 +3207,7 @@
   },
   {
     "name": "Nolan",
-    "age": "9 years old",
+    "age": "10 years old",
     "city": "Newbern",
     "state": "TN",
     "zip": "38059"
