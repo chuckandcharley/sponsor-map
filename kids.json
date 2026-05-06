@@ -1,5 +1,19 @@
 [
   {
+    "name": "Abdul Rasheed",
+    "age": "1 year old",
+    "city": "Reynoldsburg",
+    "state": "OH",
+    "zip": "43068"
+  },
+  {
+    "name": "Calvin",
+    "age": "3 years old",
+    "city": "Sayville",
+    "state": "NY",
+    "zip": "11782"
+  },
+  {
     "name": "Gattlynn",
     "age": "3 years old",
     "city": "Henderson",
