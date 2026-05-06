@@ -132,8 +132,8 @@ svg#us-map{width:100%;height:auto;display:block;overflow:visible}
       </div>
     </div>
     <div class="modal-footer">
-      <a href="#" class="btn btn-primary">Build</a>
-      <a href="#" class="btn btn-secondary">Sponsor</a>
+      <a id="btn-build" href="#" class="btn btn-primary">Build</a>
+      <a id="btn-sponsor" href="#" class="btn btn-secondary">Sponsor</a>
     </div>
   </div>
 </div>
@@ -141,6 +141,13 @@ svg#us-map{width:100%;height:auto;display:block;overflow:visible}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
 const SVG_W=960,SVG_H=600,ALASKA="02",HAWAII=15;
+
+// ── BUTTON URLS ──────────────────────────────────────────────
+// When the team is ready, swap these two URLs and push to GitHub.
+// The kid's first name will be appended automatically as ?kiddo=Name
+const URL_BUILD   = "https://rocsolidfoundation.org/build-request";
+const URL_SPONSOR = "https://rocsolidfoundation.org/sponsor-request";
+// ─────────────────────────────────────────────────────────────
 const PALETTE=["#004270","#00527f","#01618e","#01719e","#0378ad","#0266a5"];
 const projection=d3.geoAlbersUsa().scale(1280).translate([SVG_W/2,SVG_H/2]);
 const pathGen=d3.geoPath().projection(projection);
@@ -328,6 +335,10 @@ function openModal(kid){
   document.getElementById('modal-name').textContent=kid.name;
   document.getElementById('modal-age').textContent=kid.age;
   document.getElementById('modal-location').textContent=kid.city&&kid.state?kid.city+', '+kid.state:kid.state||'';
+  // Wire buttons with kid's name in URL
+  const encoded = encodeURIComponent(kid.name);
+  document.getElementById('btn-build').href   = URL_BUILD   + '?kiddo=' + encoded;
+  document.getElementById('btn-sponsor').href = URL_SPONSOR + '?kiddo=' + encoded;
   fadePinsOut(()=>card.classList.add('active'));
 }
 function closeModal(){
