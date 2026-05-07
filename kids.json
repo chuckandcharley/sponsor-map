@@ -1,5 +1,12 @@
 [
   {
+    "name": "Mason",
+    "age": "1 year old",
+    "city": "Henrico",
+    "state": "VA",
+    "zip": "23231"
+  },
+  {
     "name": "Julius",
     "age": "8 years old",
     "city": "University Hts.",
@@ -474,6 +481,13 @@
     "city": "Merylan",
     "state": "MD",
     "zip": "21061"
+  },
+  {
+    "name": "Soleil",
+    "age": "1 year old",
+    "city": "Charlotte",
+    "state": "NC",
+    "zip": "28278"
   },
   {
     "name": "Kora",
@@ -1552,6 +1566,13 @@
     "city": "Swartz Creek",
     "state": "MI",
     "zip": "48473"
+  },
+  {
+    "name": "Nathan",
+    "age": "5 years old",
+    "city": "Plainfield",
+    "state": "IL",
+    "zip": "60586"
   },
   {
     "name": "Rah-Miyah",
