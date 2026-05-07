@@ -1,5 +1,12 @@
 [
   {
+    "name": "Kai",
+    "age": "1 year old",
+    "city": "Siler City",
+    "state": "NC",
+    "zip": "27344"
+  },
+  {
     "name": "Mason",
     "age": "1 year old",
     "city": "Henrico",
@@ -47,13 +54,6 @@
     "city": "Sayville",
     "state": "NY",
     "zip": "11782"
-  },
-  {
-    "name": "Gattlynn",
-    "age": "3 years old",
-    "city": "Henderson",
-    "state": "NC",
-    "zip": "27537"
   },
   {
     "name": "Timothy",
@@ -278,13 +278,6 @@
     "city": "Fitchburg",
     "state": "MA",
     "zip": "01420"
-  },
-  {
-    "name": "Isabella",
-    "age": "7 years old",
-    "city": "Dacula",
-    "state": "GA",
-    "zip": "30019"
   },
   {
     "name": "Briggs",
