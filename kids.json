@@ -1,5 +1,33 @@
 [
   {
+    "name": "Julius",
+    "age": "8 years old",
+    "city": "University Hts.",
+    "state": "OH",
+    "zip": "44118"
+  },
+  {
+    "name": "Olivia",
+    "age": "3 years old",
+    "city": "LAS VEGAS",
+    "state": "NV",
+    "zip": "89147"
+  },
+  {
+    "name": "Calvin",
+    "age": "3 years old",
+    "city": "Sayville",
+    "state": "NY",
+    "zip": "11782"
+  },
+  {
+    "name": "Luke",
+    "age": "3 years old",
+    "city": "Yukon",
+    "state": "OK",
+    "zip": "73099"
+  },
+  {
     "name": "Abdul Rasheed",
     "age": "1 year old",
     "city": "Reynoldsburg",
@@ -313,13 +341,6 @@
     "city": "Kennewick",
     "state": "WA",
     "zip": "99336"
-  },
-  {
-    "name": "Amiyah",
-    "age": "1 year old",
-    "city": "Indianapolis",
-    "state": "IN",
-    "zip": "46236"
   },
   {
     "name": "Amelia",
@@ -1517,13 +1538,6 @@
     "city": "Gig Harbor",
     "state": "WA",
     "zip": "98332"
-  },
-  {
-    "name": "Ari",
-    "age": "6 years old",
-    "city": "Diamond Bar",
-    "state": "CA",
-    "zip": "91765"
   },
   {
     "name": "Joel",
