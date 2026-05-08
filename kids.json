@@ -14,13 +14,6 @@
     "zip": "27344"
   },
   {
-    "name": "Kai",
-    "age": "1 year old",
-    "city": "Siler City",
-    "state": "NC",
-    "zip": "27344"
-  },
-  {
     "name": "Mason",
     "age": "1 year old",
     "city": "Henrico",
@@ -40,13 +33,6 @@
     "city": "LAS VEGAS",
     "state": "NV",
     "zip": "89147"
-  },
-  {
-    "name": "Calvin",
-    "age": "3 years old",
-    "city": "Sayville",
-    "state": "NY",
-    "zip": "11782"
   },
   {
     "name": "Luke",
@@ -432,13 +418,6 @@
     "city": "Limestone",
     "state": "TN",
     "zip": "37681"
-  },
-  {
-    "name": "Amelia",
-    "age": "6 years old",
-    "city": "Buxton",
-    "state": "NC",
-    "zip": "27920"
   },
   {
     "name": "Daviana",
@@ -1491,13 +1470,6 @@
     "zip": "60047"
   },
   {
-    "name": "Luke",
-    "age": "4 years old",
-    "city": "De Pere",
-    "state": "WI",
-    "zip": "54115"
-  },
-  {
     "name": "Phoenix",
     "age": "2 years old",
     "city": "Marion",
@@ -1636,13 +1608,6 @@
     "city": "Milwaukee",
     "state": "WI",
     "zip": "53210"
-  },
-  {
-    "name": "Calvin",
-    "age": "3 years old",
-    "city": "Sayville",
-    "state": "NY",
-    "zip": "11782"
   },
   {
     "name": "Brogen",
