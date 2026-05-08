@@ -1,5 +1,12 @@
 [
   {
+    "name": "Valentina",
+    "age": "1 year old",
+    "city": "Bixby",
+    "state": "OK",
+    "zip": "74008"
+  },
+  {
     "name": "Kai",
     "age": "1 year old",
     "city": "Siler City",
@@ -3008,13 +3015,6 @@
     "city": "Graham",
     "state": "WA",
     "zip": "98338"
-  },
-  {
-    "name": "Zarah",
-    "age": "4 years old",
-    "city": "East Liverpool",
-    "state": "OH",
-    "zip": "43920"
   },
   {
     "name": "Mackenzie",
