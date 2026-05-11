@@ -1,5 +1,12 @@
 [
   {
+    "name": "Levi",
+    "age": "3 years old",
+    "city": "Richmond",
+    "state": "IL",
+    "zip": "60071"
+  },
+  {
     "name": "Ella",
     "age": "1 year old",
     "city": "Westbury",
@@ -61,13 +68,6 @@
     "city": "Siler City",
     "state": "NC",
     "zip": "27344"
-  },
-  {
-    "name": "Mason",
-    "age": "1 year old",
-    "city": "Henrico",
-    "state": "VA",
-    "zip": "23231"
   },
   {
     "name": "Julius",
@@ -924,13 +924,6 @@
     "zip": "43614"
   },
   {
-    "name": "Sulaiman",
-    "age": "5 years old",
-    "city": "Dearborn",
-    "state": "MI",
-    "zip": "48120"
-  },
-  {
     "name": "Kyson",
     "age": "6 years old",
     "city": "Menan",
@@ -1485,7 +1478,7 @@
   },
   {
     "name": "Genesis",
-    "age": "5 years old",
+    "age": "6 years old",
     "city": "Daingerfield",
     "state": "TX",
     "zip": "75638"
