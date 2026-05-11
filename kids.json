@@ -1,5 +1,12 @@
 [
   {
+    "name": "Rylee",
+    "age": "4 years old",
+    "city": "Avoca",
+    "state": "MN",
+    "zip": "56114"
+  },
+  {
     "name": "Madeline",
     "age": "4 years old",
     "city": "Green Bay",
@@ -733,13 +740,6 @@
     "city": "Sacramento",
     "state": "CA",
     "zip": "95824"
-  },
-  {
-    "name": "Samira",
-    "age": "Under 1 year old",
-    "city": "Lincoln Park",
-    "state": "NJ",
-    "zip": "07035"
   },
   {
     "name": "Yoana",
@@ -1699,13 +1699,6 @@
     "city": "Batavia",
     "state": "OH",
     "zip": "45103"
-  },
-  {
-    "name": "Zander",
-    "age": "1 year old",
-    "city": "Stephens City",
-    "state": "VA",
-    "zip": "22655"
   },
   {
     "name": "Brook",
@@ -3225,13 +3218,6 @@
     "city": "Marinette",
     "state": "WI",
     "zip": "54143"
-  },
-  {
-    "name": "Midula",
-    "age": "5 years old",
-    "city": "Westland",
-    "state": "MI",
-    "zip": "48185"
   },
   {
     "name": "Presley",
