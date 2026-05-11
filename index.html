@@ -222,7 +222,7 @@ fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
       setTimeout(()=>{ border.transition().duration(600).style('opacity','1'); }, STATE_MS-400);
       setTimeout(()=>{ mapReady=true; if(pendingKids) renderMarkers(pendingKids,true); }, STATE_MS);
     };
-    if(window._kidsForIllumination) window._illuminateMap(window._kidsForIllumination);
+    // countdown triggers illumination after splash
   }).catch(()=>{ mapReady=true; if(pendingKids) renderMarkers(pendingKids,true); });
 
 // ── CENTROIDS ────────────────────────────────────────────────
@@ -494,8 +494,20 @@ function openModal(kid){
   document.getElementById('modal-location').textContent =
     kid.city&&kid.state ? kid.city+', '+kid.state : kid.state||'';
   const enc = encodeURIComponent(kid.name);
-  document.getElementById('btn-build').href = URL_BUILD+'?kiddo='+enc;
-  document.getElementById('btn-sponsor').href = URL_SPONSOR;
+  // Build button — will use postMessage to fill Virtuous form on parent page
+  const kidLabel = kid.name + (kid.city ? ', ' + kid.city : '') + (kid.state ? ', ' + kid.state : '');
+  document.getElementById('btn-build').onclick = function(e){
+    e.preventDefault();
+    window.parent.postMessage({
+      type: 'RSF_FILL_FORM',
+      kiddo: kidLabel
+    }, '*');
+  };
+  // GoFundMe blocks iframes — break out to parent tab
+  document.getElementById('btn-sponsor').onclick = function(e){
+    e.preventDefault();
+    window.parent.location.href = URL_SPONSOR;
+  };
   fadePinsOut(()=>card.classList.add('active'));
 }
 function closeModal(){
@@ -530,14 +542,13 @@ fetch('./zip_centroids.json')
     };
     const activeSet=new Set();
     list.forEach(k=>{ const f=abbrToFips[k.state]; if(f) activeSet.add(f); });
-    if(window._illuminateMap) window._illuminateMap(activeSet);
-    else window._kidsForIllumination=activeSet;
+    window._kidsForIllumination=activeSet;
+    // Countdown will trigger illumination after splash fades
   })
   .catch(()=>{
     pendingKids=[];
     _resolveKidCount(0);
-    if(window._illuminateMap) window._illuminateMap(new Set());
-    else window._kidsForIllumination=new Set();
+    window._kidsForIllumination=new Set();
   });
 
 // ── RESIZE ───────────────────────────────────────────────────
@@ -575,7 +586,12 @@ new ResizeObserver(()=>{
   await sleep(1400);
   splash.classList.add('fade-out');
   mapWrap.classList.add('visible');
-  await sleep(1400);
+  await sleep(400);
+  // Map builds NOW — user sees the full animation as splash fades
+  if(window._illuminateMap && window._kidsForIllumination){
+    window._illuminateMap(window._kidsForIllumination);
+  }
+  await sleep(1000);
   splash.style.display='none';
 })();
 </script>
