@@ -1,5 +1,12 @@
 [
   {
+    "name": "Madeline",
+    "age": "4 years old",
+    "city": "Green Bay",
+    "state": "WI",
+    "zip": "54301"
+  },
+  {
     "name": "Levi",
     "age": "3 years old",
     "city": "Richmond",
@@ -61,13 +68,6 @@
     "city": "Bixby",
     "state": "OK",
     "zip": "74008"
-  },
-  {
-    "name": "Kai",
-    "age": "1 year old",
-    "city": "Siler City",
-    "state": "NC",
-    "zip": "27344"
   },
   {
     "name": "Julius",
@@ -700,13 +700,6 @@
     "zip": "55720"
   },
   {
-    "name": "Madelyn",
-    "age": "3 years old",
-    "city": "Algonquin",
-    "state": "IL",
-    "zip": "60102"
-  },
-  {
     "name": "Abigail",
     "age": "5 years old",
     "city": "Folsom",
@@ -1218,13 +1211,6 @@
     "zip": "63383"
   },
   {
-    "name": "AnnaLee",
-    "age": "8 years old",
-    "city": "Mt Washington",
-    "state": "KY",
-    "zip": "40047"
-  },
-  {
     "name": "Presley",
     "age": "4 years old",
     "city": "Mechanicsburg",
@@ -1729,13 +1715,6 @@
     "zip": "87937"
   },
   {
-    "name": "Lucas",
-    "age": "4 years old",
-    "city": "Bakersfield",
-    "state": "CA",
-    "zip": "93305"
-  },
-  {
     "name": "Barret",
     "age": "8 years old",
     "city": "Batesville",
@@ -1897,13 +1876,6 @@
     "zip": "53572"
   },
   {
-    "name": "Samuel",
-    "age": "8 years old",
-    "city": "Goodyear",
-    "state": "AZ",
-    "zip": "85338"
-  },
-  {
     "name": "Aiden",
     "age": "4 years old",
     "city": "Ottawa Lake",
@@ -2042,13 +2014,6 @@
     "city": "Newnan",
     "state": "GA",
     "zip": "30263"
-  },
-  {
-    "name": "Emersyn",
-    "age": "7 years old",
-    "city": "Grayslake",
-    "state": "IL",
-    "zip": "60030"
   },
   {
     "name": "Jacob",
@@ -2280,13 +2245,6 @@
     "city": "Sidney",
     "state": "OH",
     "zip": "45365"
-  },
-  {
-    "name": "Joseph",
-    "age": "6 years old",
-    "city": "Queen Creek",
-    "state": "AZ",
-    "zip": "85142"
   },
   {
     "name": "Josephine",
@@ -2758,25 +2716,11 @@
     "zip": "07461"
   },
   {
-    "name": "Yasir",
-    "age": "8 years old",
-    "city": "Stockton",
-    "state": "CA",
-    "zip": "95205"
-  },
-  {
     "name": "Brynlee",
     "age": "2 years old",
     "city": "New Lexington",
     "state": "OH",
     "zip": "43764"
-  },
-  {
-    "name": "Declynn",
-    "age": "3 years old",
-    "city": "Arlington",
-    "state": "TN",
-    "zip": "38002"
   },
   {
     "name": "Asher",
@@ -2812,13 +2756,6 @@
     "city": "Atoka",
     "state": "TN",
     "zip": "38004"
-  },
-  {
-    "name": "Cailee",
-    "age": "3 years old",
-    "city": "Memphis",
-    "state": "TN",
-    "zip": "38105"
   },
   {
     "name": "Trinity",
@@ -3388,13 +3325,6 @@
     "zip": "94611"
   },
   {
-    "name": "Noah",
-    "age": "2 years old",
-    "city": "somerville",
-    "state": "AL",
-    "zip": "35670"
-  },
-  {
     "name": "Nicholas",
     "age": "5 years old",
     "city": "Troy",
@@ -3470,13 +3400,6 @@
     "city": "Palm Bay",
     "state": "FL",
     "zip": "32907"
-  },
-  {
-    "name": "Harlie",
-    "age": "6 years old",
-    "city": "Cleveland",
-    "state": "TN",
-    "zip": "37312"
   },
   {
     "name": "Ethan",
