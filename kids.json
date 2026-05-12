@@ -1,5 +1,40 @@
 [
   {
+    "name": "Sai",
+    "age": "4 years old",
+    "city": "Modesto",
+    "state": "CA",
+    "zip": "95358"
+  },
+  {
+    "name": "Sai",
+    "age": "4 years old",
+    "city": "Modesto",
+    "state": "CA",
+    "zip": "95358"
+  },
+  {
+    "name": "Jordan",
+    "age": "8 years old",
+    "city": "Cincinnati",
+    "state": "OH",
+    "zip": "45238"
+  },
+  {
+    "name": "Miguel",
+    "age": "6 years old",
+    "city": "Portola",
+    "state": "CA",
+    "zip": "96122"
+  },
+  {
+    "name": "Rylee",
+    "age": "4 years old",
+    "city": "Avoca",
+    "state": "MN",
+    "zip": "56114"
+  },
+  {
     "name": "Rylee",
     "age": "4 years old",
     "city": "Avoca",
@@ -208,13 +243,6 @@
     "city": "White Deer",
     "state": "TX",
     "zip": "79097"
-  },
-  {
-    "name": "Jaxson",
-    "age": "4 years old",
-    "city": "Scappoose",
-    "state": "OR",
-    "zip": "97056"
   },
   {
     "name": "Chloe",
@@ -595,13 +623,6 @@
     "zip": "74137"
   },
   {
-    "name": "Thomas",
-    "age": "3 years old",
-    "city": "Long valley",
-    "state": "NJ",
-    "zip": "07853"
-  },
-  {
     "name": "Sebastian",
     "age": "5 years old",
     "city": "Sacramento",
@@ -672,13 +693,6 @@
     "zip": "18324"
   },
   {
-    "name": "Gideon",
-    "age": "6 years old",
-    "city": "Middletown",
-    "state": "VA",
-    "zip": "22645"
-  },
-  {
     "name": "Mila",
     "age": "7 years old",
     "city": "Mullica Hill",
@@ -726,13 +740,6 @@
     "city": "Westville",
     "state": "IL",
     "zip": "61832"
-  },
-  {
-    "name": "Wyatt",
-    "age": "6 years old",
-    "city": "Willowick",
-    "state": "OH",
-    "zip": "44095"
   },
   {
     "name": "Eliazar",
@@ -1211,13 +1218,6 @@
     "zip": "63383"
   },
   {
-    "name": "Presley",
-    "age": "4 years old",
-    "city": "Mechanicsburg",
-    "state": "PA",
-    "zip": "17050"
-  },
-  {
     "name": "Oliver",
     "age": "6 years old",
     "city": "Cottage Grove",
@@ -1296,7 +1296,7 @@
   },
   {
     "name": "Emmitt",
-    "age": "6 years old",
+    "age": "7 years old",
     "city": "Omaha",
     "state": "NE",
     "zip": "68104"
@@ -2331,13 +2331,6 @@
     "zip": "94503"
   },
   {
-    "name": "Damian",
-    "age": "8 years old",
-    "city": "Las Vegas",
-    "state": "NV",
-    "zip": "89130"
-  },
-  {
     "name": "Finley",
     "age": "9 years old",
     "city": "Saint Joseph",
@@ -2451,7 +2444,7 @@
   },
   {
     "name": "Hazel",
-    "age": "6 years old",
+    "age": "7 years old",
     "city": "Newton Falls",
     "state": "OH",
     "zip": "44444"
