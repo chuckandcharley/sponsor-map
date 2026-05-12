@@ -1,10 +1,24 @@
 [
   {
-    "name": "Sai",
+    "name": "Oliver",
     "age": "4 years old",
-    "city": "Modesto",
-    "state": "CA",
-    "zip": "95358"
+    "city": "Saginaw",
+    "state": "MI",
+    "zip": "48609"
+  },
+  {
+    "name": "Trinity",
+    "age": "6 years old",
+    "city": "Milwaukee",
+    "state": "WI",
+    "zip": "53209"
+  },
+  {
+    "name": "Benjamin",
+    "age": "7 years old",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "77064"
   },
   {
     "name": "Sai",
@@ -35,13 +49,6 @@
     "zip": "56114"
   },
   {
-    "name": "Rylee",
-    "age": "4 years old",
-    "city": "Avoca",
-    "state": "MN",
-    "zip": "56114"
-  },
-  {
     "name": "Madeline",
     "age": "4 years old",
     "city": "Green Bay",
@@ -54,20 +61,6 @@
     "city": "Richmond",
     "state": "IL",
     "zip": "60071"
-  },
-  {
-    "name": "Ella",
-    "age": "1 year old",
-    "city": "Westbury",
-    "state": "NY",
-    "zip": "11590"
-  },
-  {
-    "name": "Ella",
-    "age": "1 year old",
-    "city": "Westbury",
-    "state": "NY",
-    "zip": "11590"
   },
   {
     "name": "Lillian",
@@ -89,13 +82,6 @@
     "city": "Westbury",
     "state": "NY",
     "zip": "11590"
-  },
-  {
-    "name": "Cora",
-    "age": "4 years old",
-    "city": "Sullivan",
-    "state": "OH",
-    "zip": "44880"
   },
   {
     "name": "Ellie",
