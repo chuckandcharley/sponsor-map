@@ -1,5 +1,12 @@
 [
   {
+    "name": "Evelyn",
+    "age": "7 years old",
+    "city": "Waltham",
+    "state": "MA",
+    "zip": "02453"
+  },
+  {
     "name": "Oliver",
     "age": "4 years old",
     "city": "Saginaw",
@@ -992,13 +999,6 @@
     "city": "Berea",
     "state": "KY",
     "zip": "40403"
-  },
-  {
-    "name": "Ivy",
-    "age": "1 year old",
-    "city": "Saint Peter",
-    "state": "MN",
-    "zip": "56082"
   },
   {
     "name": "Seyda Marieme",
