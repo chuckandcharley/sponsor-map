@@ -1,5 +1,12 @@
 [
   {
+    "name": "Penelope",
+    "age": "9 years old",
+    "city": "Douglassville",
+    "state": "PA",
+    "zip": "19518"
+  },
+  {
     "name": "Jaxson",
     "age": "6 years old",
     "city": "Longview",
@@ -56,13 +63,6 @@
     "zip": "78641"
   },
   {
-    "name": "Ariana",
-    "age": "6 years old",
-    "city": "Dallas",
-    "state": "TX",
-    "zip": "75211"
-  },
-  {
     "name": "Nazareth Belén",
     "age": "8 years old",
     "city": "Austin",
@@ -96,20 +96,6 @@
     "city": "San Antonio",
     "state": "TX",
     "zip": "78211"
-  },
-  {
-    "name": "Briggs",
-    "age": "2 years old",
-    "city": "Aubrey",
-    "state": "TX",
-    "zip": "76227"
-  },
-  {
-    "name": "Evann",
-    "age": "3 years old",
-    "city": "Houston",
-    "state": "TX",
-    "zip": "77086"
   },
   {
     "name": "Tegan",
