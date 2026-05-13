@@ -1,5 +1,19 @@
 [
   {
+    "name": "Adeline",
+    "age": "4 years old",
+    "city": "Cedar Creek",
+    "state": "TX",
+    "zip": "78612"
+  },
+  {
+    "name": "Hayfa",
+    "age": "2 years old",
+    "city": "Katy",
+    "state": "TX",
+    "zip": "77449"
+  },
+  {
     "name": "Penelope",
     "age": "9 years old",
     "city": "Douglassville",
