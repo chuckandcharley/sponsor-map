@@ -9,10 +9,10 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#004270;--blue:#0378ad;--white:#fff;
+  --navy:#004270;--blue:#0378ad;--white:#fff;--bg:#2596be;
   --ff:'Franklin Gothic Medium','Franklin Gothic','ITC Franklin Gothic','Source Sans 3','Arial Narrow',Arial,sans-serif;
 }
-html,body{width:100%;height:100%;margin:0;padding:0;background:#fff;overflow:hidden;font-family:var(--ff)}
+html,body{width:100%;height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden;font-family:var(--ff)}
 
 #map-wrap{position:relative;width:100%;max-width:1200px;margin:0 auto;user-select:none;-webkit-user-select:none}
 svg#us-map{width:100%;height:auto;display:block;cursor:grab;touch-action:none}
@@ -72,13 +72,13 @@ svg#us-map:active{cursor:grabbing}
 #zoom-hint{position:absolute;bottom:16px;left:16px;font-size:10px;color:rgba(0,66,112,.45);letter-spacing:.08em;text-transform:uppercase;z-index:30;pointer-events:none}
 
 /* Splash */
-#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;pointer-events:none}
+#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);pointer-events:none}
 #splash.fade-out{opacity:0;transition:opacity 1.2s ease;pointer-events:none}
 #num-clip{overflow:visible;line-height:1;width:100%;text-align:center;padding:0 20px}
-#counter-num{display:block;font-size:clamp(72px,16vw,180px);font-weight:900;letter-spacing:-0.04em;color:var(--navy);font-variant-numeric:tabular-nums;line-height:1;transform:translateY(110%);transition:transform 0s;text-align:center;will-change:transform;white-space:nowrap}
+#counter-num{display:block;font-size:clamp(72px,16vw,180px);font-weight:900;letter-spacing:-0.04em;color:#fff;font-variant-numeric:tabular-nums;line-height:1;transform:translateY(110%);transition:transform 0s;text-align:center;will-change:transform;white-space:nowrap}
 #counter-num.drop{transform:translateY(0);transition:transform 1s cubic-bezier(0.16,1,0.3,1)}
 #label-clip{overflow:hidden;line-height:1;margin-top:.1em;width:100%;text-align:center;padding:0 20px}
-#counter-label{display:block;font-size:clamp(13px,2.4vw,32px);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);line-height:1;transform:translateY(110%);transition:transform 0s;text-align:center;white-space:nowrap;will-change:transform}
+#counter-label{display:block;font-size:clamp(13px,2.4vw,32px);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;line-height:1;transform:translateY(110%);transition:transform 0s;text-align:center;white-space:nowrap;will-change:transform}
 #counter-label.rise{transform:translateY(0);transition:transform 0.85s cubic-bezier(0.16,1,0.3,1)}
 #map-wrap{opacity:0;transition:opacity 1.2s ease}
 #map-wrap.visible{opacity:1}
@@ -120,7 +120,6 @@ svg#us-map:active{cursor:grabbing}
     <div id="modal-footer">
       <a id="btn-build" href="#" class="btn btn-primary">I Want to Build This</a>
       <a id="btn-sponsor" href="#" class="btn btn-secondary">Fund This Build</a>
-
     </div>
   </div>
 
@@ -129,12 +128,14 @@ svg#us-map:active{cursor:grabbing}
     <button class="zoom-btn" id="btn-zoom-out" aria-label="Zoom out">−</button>
     <button class="zoom-btn" id="btn-zoom-reset" aria-label="Reset zoom" style="font-size:11px">⊙</button>
   </div>
-  
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
+// ── DETECT MOBILE ──────────────────────────────────────────
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+
 function runLogoIntro(){
   return new Promise(resolve => {
     const svgNS = 'http://www.w3.org/2000/svg';
@@ -151,11 +152,10 @@ function runLogoIntro(){
     const els = paths.map(d => {
       const p = document.createElementNS(svgNS,'path');
       p.setAttribute('d',d);
-      p.style.cssText = 'fill:none;stroke:#004270;stroke-width:28;stroke-linecap:round;stroke-linejoin:round;';
+      p.style.cssText = 'fill:none;stroke:#ffffff;stroke-width:28;stroke-linecap:round;stroke-linejoin:round;';
       svg.appendChild(p);
       return p;
     });
-    // Add defs with clipPath for bottom-up fill
     const defs = document.createElementNS(svgNS,'defs');
     const clipPath = document.createElementNS(svgNS,'clipPath');
     clipPath.setAttribute('id','logo-fill-clip');
@@ -168,20 +168,17 @@ function runLogoIntro(){
     clipPath.appendChild(clipRect);
     defs.appendChild(clipPath);
     svg.insertBefore(defs, svg.firstChild);
-    // Filled navy paths revealed by rising clip
     const fillGroup = document.createElementNS(svgNS,'g');
     fillGroup.setAttribute('clip-path','url(#logo-fill-clip)');
     paths.forEach(d => {
       const p = document.createElementNS(svgNS,'path');
       p.setAttribute('d',d);
-      p.style.cssText = 'fill:#004270;stroke:none;';
+      p.style.cssText = 'fill:#ffffff;stroke:none;';
       fillGroup.appendChild(p);
     });
     svg.appendChild(fillGroup);
-    // Insert above the number in the splash
     const numClip = document.getElementById('num-clip');
     numClip.parentNode.insertBefore(svg, numClip);
-    // Now SVG is in DOM — getTotalLength() works
     const lens = els.map(el => el.getTotalLength());
     els.forEach((el,i) => {
       el.style.strokeDasharray = lens[i];
@@ -195,7 +192,8 @@ function runLogoIntro(){
       }, i * STAGGER + 80);
     });
     const totalDraw = els.length * STAGGER + DRAW_MS + 80;
-    setTimeout(resolve, totalDraw + 600);
+    // Resolve immediately when drawing finishes — no extra pause
+    setTimeout(resolve, totalDraw);
   });
 }
 </script>
@@ -207,16 +205,29 @@ const PALETTE=['#004270','#00527f','#01618e','#01719e','#0378ad','#0266a5'];
 const URL_BUILD   = 'VIRTUOUS_FORM_URL_HERE';
 const URL_SPONSOR = 'https://give.rocsolidfoundation.org/campaign/799349/donate';
 
-// Kid count promise for countdown sync
+// ── DEDUPLICATE KIDS ─────────────────────────────────────────
+// Deduplicates by name (case-insensitive trim). If a kid appears multiple
+// times in the JSON only the first occurrence is kept for rendering and counting.
+function deduplicateKids(kids){
+  const seen = new Set();
+  const out = [];
+  for(const k of kids){
+    const key = (k.name||'').trim().toLowerCase();
+    if(!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(k);
+  }
+  return out;
+}
+
 let _resolveKidCount;
 const _kidCountReady = new Promise(r=>{ _resolveKidCount=r; });
 
-// Projection
 const projection = d3.geoAlbersUsa().scale(1280).translate([SVG_W/2, SVG_H/2]);
 const pathGen = d3.geoPath().projection(projection);
 
 // ── D3 ZOOM ─────────────────────────────────────────────────
-let currentK = 1; // current zoom scale
+let currentK = 1;
 const svg = d3.select('#us-map');
 const zoomGroup = d3.select('#zoom-group');
 
@@ -224,10 +235,16 @@ let lastReclusterK = 1;
 const zoom = d3.zoom()
   .scaleExtent([1, 12])
   .translateExtent([[0,0],[SVG_W,SVG_H]])
+  // Disable scroll wheel zoom to prevent accidental zoom while scrolling the page
+  .filter(event => {
+    // Allow: touch gestures (pinch), button-triggered, dblclick
+    // Disallow: scroll wheel
+    if(event.type === 'wheel') return false;
+    return true;
+  })
   .on('zoom', event=>{
     currentK = event.transform.k;
     zoomGroup.attr('transform', event.transform);
-    // Only recluster when zoom changes by more than 15% — prevents flickering
     clearTimeout(window._reclusterTimer);
     window._reclusterTimer = setTimeout(()=>{
       if(window._allKids && Math.abs(currentK - lastReclusterK)/lastReclusterK > 0.15){
@@ -238,6 +255,27 @@ const zoom = d3.zoom()
   });
 
 svg.call(zoom);
+
+// Double-click to zoom in (mobile: double-tap)
+svg.on('dblclick.zoom', function(event){
+  event.preventDefault();
+  const t = d3.zoomTransform(svg.node());
+  const newK = Math.min(currentK * 2, 12);
+  const coords = d3.pointer(event, svg.node());
+  // Convert screen coords to SVG coords
+  const svgEl = document.getElementById('us-map');
+  const rect = svgEl.getBoundingClientRect();
+  const scaleX = SVG_W / rect.width;
+  const scaleY = SVG_H / rect.height;
+  const svgX = (event.clientX - rect.left) * scaleX;
+  const svgY = (event.clientY - rect.top) * scaleY;
+  svg.transition().duration(350).call(
+    zoom.transform,
+    d3.zoomIdentity
+      .translate(SVG_W/2 - svgX * newK, SVG_H/2 - svgY * newK)
+      .scale(newK)
+  );
+});
 
 // Zoom buttons
 document.getElementById('btn-zoom-in').addEventListener('click', ()=>{
@@ -279,7 +317,6 @@ fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
       .attr('stroke-width','0.3').attr('d',pathGen)
       .style('opacity','0');
 
-    const STATE_MS = 2600;
     window._illuminateMap = activeSet=>{
       stateFeatures.forEach((d,i)=>{
         const el=window._statePaths[d.id]; if(!el) return;
@@ -289,24 +326,34 @@ fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
       border.style('opacity','1');
       setTimeout(()=>{ mapReady=true; if(pendingKids) renderMarkers(pendingKids,true); }, 500);
     };
-    // countdown triggers illumination after splash
   }).catch(()=>{ mapReady=true; if(pendingKids) renderMarkers(pendingKids,true); });
 
 // ── CENTROIDS ────────────────────────────────────────────────
 let centroids={};
 
-// ── SVG COORD LOOKUP ─────────────────────────────────────────
-// Returns {x,y} in SVG viewBox units (0-960, 0-600)
 function toSVG(lat, lon){
   const pt = projection([lon, lat]);
   return pt ? {x:pt[0], y:pt[1]} : null;
 }
 
-// ── CLUSTER in SCREEN PIXELS then express in SVG units ───────
-// This guarantees clusters dissolve correctly at any zoom level
-// because we measure overlap in the same px the user sees
-function buildClusters(kids){
-  // Resolve every kid to SVG coords first
+// ── PIN SIZE ─────────────────────────────────────────────────
+// On mobile we use a larger base pin so it stays tappable at all zoom levels.
+// The pin is rendered in SVG units and scaled by 1/currentK so it stays
+// visually constant size regardless of zoom — like a real map pin.
+const BASE_PIN_R = isMobile ? 7 : 4.5;
+
+// Minimum pin radius in SVG units — never shrink below this so pins
+// remain tappable even when zoomed out on mobile.
+const MIN_PIN_R = isMobile ? 6 : 3;
+
+function getPinR(){
+  return Math.max(MIN_PIN_R, BASE_PIN_R / currentK);
+}
+
+// ── CLUSTER / SPREAD LOGIC ───────────────────────────────────
+// No more cluster badges — we just spread overlapping pins so none overlap.
+// Returns array of {kid, x, y} — one entry per kid.
+function buildPinPositions(kids){
   const pts = [];
   kids.forEach(k=>{
     if(k.state==='AK'||k.state==='HI') return;
@@ -318,227 +365,133 @@ function buildClusters(kids){
     pts.push({kid:k, x:pos.x, y:pos.y});
   });
 
-  // At zoom >= 4, show every pin individually — spread same-coord pins
-  if(currentK >= 4){
-    // Group by exact coordinate
-    const coordMap = {};
-    pts.forEach(p=>{
-      const key = `${Math.round(p.x*100)},${Math.round(p.y*100)}`;
-      if(!coordMap[key]) coordMap[key]=[];
-      coordMap[key].push(p);
-    });
-    const result = [];
-    Object.values(coordMap).forEach(group=>{
-      if(group.length===1){
-        result.push({kids:[group[0].kid], x:group[0].x, y:group[0].y});
-      } else {
-        // Spread in a small circle so each pin is individually tappable
-        // Spread radius shrinks as zoom increases so pins stay close to real location
-        // Spread pins just enough to be individually tappable
-        // Pin diameter in SVG units at current zoom = BASE_PIN_R*2 / currentK
-        // We space by 1.5x pin diameter so there's clear separation
-        const pinDiam = (BASE_PIN_R * 2) / currentK;
-        const spread = pinDiam * 1.5;
-        const RING1_MAX = 6;
-        group.forEach((p,i)=>{
-          let radius, angleOffset;
-          if(group.length <= RING1_MAX){
-            radius = spread;
-            angleOffset = (i / group.length) * 2 * Math.PI;
-          } else {
-            if(i < RING1_MAX){
-              radius = spread;
-              angleOffset = (i / RING1_MAX) * 2 * Math.PI;
-            } else {
-              const outerIdx = i - RING1_MAX;
-              const outerCount = group.length - RING1_MAX;
-              radius = spread * 2;
-              angleOffset = (outerIdx / outerCount) * 2 * Math.PI;
-            }
-          }
-          // Simple: try spread position, if water nudge toward map center
-          const svgEl = document.getElementById('us-map');
-          const pt = svgEl.createSVGPoint();
-          const isOnLand = (ax, ay) => {
-            pt.x = ax; pt.y = ay;
-            const statePaths = document.querySelectorAll('#states-group path.state');
-            for(let sp of statePaths){ if(sp.isPointInFill(pt)) return true; }
-            return false;
-          };
-          let tx = p.x + Math.cos(angleOffset) * radius;
-          let ty = p.y + Math.sin(angleOffset) * radius;
-          if(!isOnLand(tx, ty)){
-            // Nudge toward map center instead
-            const a = Math.atan2(SVG_H/2 - p.y, SVG_W/2 - p.x);
-            tx = p.x + Math.cos(a) * radius;
-            ty = p.y + Math.sin(a) * radius;
-          }
-          result.push({kids:[p.kid], x:tx, y:ty});
-        });
-      }
-    });
-    return result;
+  // Diameter of a pin in SVG units at current zoom
+  const pr = getPinR();
+  const minDist = pr * 2.4; // minimum center-to-center distance
+
+  // isOnLand helper (reuse SVG point check)
+  const svgEl = document.getElementById('us-map');
+  const svgPt = svgEl.createSVGPoint();
+  const statePaths = Array.from(document.querySelectorAll('#states-group path.state'));
+  function isOnLand(ax, ay){
+    svgPt.x = ax; svgPt.y = ay;
+    for(let sp of statePaths){ if(sp.isPointInFill(svgPt)) return true; }
+    return false;
   }
 
-  // Cluster threshold in SVG units based on zoom level
-  // At zoom 1: ~18 SVG units threshold (covers ~18px at default render)
-  // Shrinks proportionally as zoom increases
-  const thresh = 18 / currentK;
+  // Iterative repulsion — nudge overlapping pins apart
+  // Run multiple passes so pins fully separate even in dense areas
+  const MAX_PASSES = 12;
+  for(let pass = 0; pass < MAX_PASSES; pass++){
+    let moved = false;
+    for(let i = 0; i < pts.length; i++){
+      for(let j = i+1; j < pts.length; j++){
+        const dx = pts[j].x - pts[i].x;
+        const dy = pts[j].y - pts[i].y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < minDist && dist > 0){
+          moved = true;
+          const overlap = (minDist - dist) / 2;
+          const nx = dx/dist, ny = dy/dist;
+          // Try moving j away from i
+          const jx = pts[j].x + nx*overlap;
+          const jy = pts[j].y + ny*overlap;
+          if(isOnLand(jx, jy)){ pts[j].x=jx; pts[j].y=jy; }
+          else {
+            // If that direction goes into water, try moving i the other way
+            const ix = pts[i].x - nx*overlap;
+            const iy = pts[i].y - ny*overlap;
+            if(isOnLand(ix, iy)){ pts[i].x=ix; pts[i].y=iy; }
+            // If both are water, try perpendicular nudge
+            else {
+              const px2 = -ny*overlap, py2 = nx*overlap;
+              const jx2 = pts[j].x + px2, jy2 = pts[j].y + py2;
+              if(isOnLand(jx2, jy2)){ pts[j].x=jx2; pts[j].y=jy2; }
+            }
+          }
+        }
+      }
+    }
+    if(!moved) break;
+  }
 
-  // Greedy cluster
-  const used = new Uint8Array(pts.length);
-  const clusters = [];
-  pts.forEach((p,i)=>{
-    if(used[i]) return;
-    const grp=[p]; used[i]=1;
-    pts.forEach((p2,j)=>{
-      if(used[j]) return;
-      const dx=p2.x-p.x, dy=p2.y-p.y;
-      if(Math.sqrt(dx*dx+dy*dy) < thresh){ grp.push(p2); used[j]=1; }
-    });
-    const cx=grp.reduce((s,g)=>s+g.x,0)/grp.length;
-    const cy=grp.reduce((s,g)=>s+g.y,0)/grp.length;
-    clusters.push({kids:grp.map(g=>g.kid), x:cx, y:cy});
-  });
-  return clusters;
+  return pts;
 }
 
-// ── RENDER ───────────────────────────────────────────────────
-// PIN_R: radius of the pin head in SVG units at zoom=1
-// We divide by currentK so pins stay a consistent visual size
-const BASE_PIN_R = 3.8;
-const BASE_CLUSTER_R = 11;
-
+// ── PIN PATH ─────────────────────────────────────────────────
 function pinPath(r){
-  // Exact original pin scaled to radius r
-  // Original viewBox 0 0 11 16, tip at bottom (5.5,15), head center at (5.5,5.5)
-  // We scale so head radius = r, tip at (0,0)
-  // Original head radius = 4.5, scale factor = r/4.5
-  // Translate: subtract (5.5, 15) so tip is at origin, then scale
   const s = r / 4.5;
   function tx(x){ return (x - 5.5) * s; }
   function ty(y){ return (y - 15) * s; }
   return `M${tx(5.5)},${ty(1)} C${tx(3.01)},${ty(1)} ${tx(1)},${ty(3.01)} ${tx(1)},${ty(5.5)} C${tx(1)},${ty(8.86)} ${tx(5.5)},${ty(15)} ${tx(5.5)},${ty(15)} C${tx(5.5)},${ty(15)} ${tx(10)},${ty(8.86)} ${tx(10)},${ty(5.5)} C${tx(10)},${ty(3.01)} ${tx(7.99)},${ty(1)} ${tx(5.5)},${ty(1)} Z`;
 }
 
+// ── RENDER ───────────────────────────────────────────────────
 function renderMarkers(kids, animate){
   window._allKids = kids;
   const layer = d3.select('#pins-group');
   layer.selectAll('*').remove();
 
-  const clusters = buildClusters(kids);
-  const pr = BASE_PIN_R / currentK;  // pin head radius in SVG units
-  const cr = BASE_CLUSTER_R / currentK; // cluster radius in SVG units
-  const strokeW = 0.9 / currentK;
+  const positions = buildPinPositions(kids);
+
+  // pr = pin head radius in SVG units — fixed visual size regardless of zoom
+  const pr = getPinR();
+  const strokeW = Math.max(0.5, 1.2 / currentK);
   const dotR = pr * 0.38;
-  const fontSize = Math.max(3.5, 8 / currentK);
 
-  // Render single pins first, then clusters on top
-  const singles = clusters.filter(cl=>cl.kids.length===1);
-  const groups  = clusters.filter(cl=>cl.kids.length>1);
-  const ordered = [...singles, ...groups];
+  // Hit target radius — generously sized for mobile tap
+  const hitR = isMobile ? Math.max(pr * 2.5, 10 / currentK) : pr * 2.2;
 
-  ordered.forEach((cl, ci)=>{
+  positions.forEach((pt, ci)=>{
     const delay = animate ? ci * 22 : 0;
+    const kid = pt.kid;
 
-    if(cl.kids.length===1){
-      const kid = cl.kids[0];
-      const g = layer.append('g')
-        .attr('transform',`translate(${cl.x},${cl.y})`)
-        .style('cursor','pointer')
-        .style('opacity','0');
+    const g = layer.append('g')
+      .attr('transform',`translate(${pt.x},${pt.y})`)
+      .style('cursor','pointer')
+      .style('opacity','0');
 
-      // Teardrop pin — tip at (0,0), body above
-      g.append('path')
-        .attr('d', pinPath(pr))
-        .attr('fill','#ffffff')
-        .attr('stroke','#004270')
-        .attr('stroke-width', strokeW)
-        .attr('stroke-linejoin','round');
+    // Teardrop pin — tip at (0,0), body above
+    g.append('path')
+      .attr('d', pinPath(pr))
+      .attr('fill','#ffffff')
+      .attr('stroke','#004270')
+      .attr('stroke-width', strokeW)
+      .attr('stroke-linejoin','round');
 
-      // Center dot
-      g.append('circle')
-        .attr('cx',0).attr('cy',-pr*2.11)
-        .attr('r', dotR)
-        .attr('fill','#004270');
+    // Center dot
+    g.append('circle')
+      .attr('cx',0).attr('cy',-pr*2.11)
+      .attr('r', dotR)
+      .attr('fill','#004270');
 
-      // Invisible hit area — generously sized
-      g.append('circle')
-        .attr('cx',0).attr('cy',-pr*2.11)
-        .attr('r', pr*2.2)
-        .attr('fill','transparent')
-        .attr('stroke','none');
+    // Invisible hit area — generously sized for mobile
+    g.append('circle')
+      .attr('cx',0).attr('cy',-pr*1.5)
+      .attr('r', hitR)
+      .attr('fill','transparent')
+      .attr('stroke','none');
 
-      g.on('click',(e)=>{ e.stopPropagation(); openModal(kid); })
-       .on('mouseover', function(){ d3.select(this).select('path').attr('transform',`scale(1.3) translate(0,${pr*0.15})`); })
-       .on('mouseout',  function(){ d3.select(this).select('path').attr('transform',''); });
+    g.on('click',(e)=>{ e.stopPropagation(); openModal(kid); })
+     .on('mouseover', function(){ d3.select(this).select('path').attr('transform',`scale(1.25) translate(0,${pr*0.1})`); })
+     .on('mouseout',  function(){ d3.select(this).select('path').attr('transform',''); });
 
-      setTimeout(()=>{
-        g.style('opacity','1');
-        if(animate){
-          // Ripple in SVG
-          const ripple = layer.insert('circle','g')
-            .attr('cx',cl.x).attr('cy',cl.y)
-            .attr('r', pr*0.5)
-            .attr('fill','none')
-            .attr('stroke','#d0e8f5')
-            .attr('stroke-width', strokeW)
-            .style('opacity','0.6');
-          ripple.transition().duration(900).ease(d3.easeCubicOut)
-            .attr('r', pr*2.8)
-            .style('opacity','0')
-            .remove();
-        }
-      }, delay);
-
-    } else {
-      // Cluster badge
-      const g = layer.append('g')
-        .attr('transform',`translate(${cl.x},${cl.y})`)
-        .style('cursor','pointer')
-        .style('opacity','0');
-
-      g.append('circle')
-        .attr('r', cr)
-        .attr('fill','#0378ad')
-        .attr('stroke','#ffffff')
-        .attr('stroke-width', strokeW*1.5);
-
-      g.append('text')
-        .attr('text-anchor','middle')
-        .attr('dominant-baseline','central')
-        .attr('fill','#ffffff')
-        .attr('font-family','Franklin Gothic Medium,Franklin Gothic,ITC Franklin Gothic,Source Sans 3,Arial Narrow,Arial,sans-serif')
-        .attr('font-weight','700')
-        .attr('font-size', fontSize)
-        .text(cl.kids.length);
-
-      // Hit area
-      g.append('circle')
-        .attr('r', cr*1.3)
-        .attr('fill','transparent').attr('stroke','none');
-
-      g.on('click',(e)=>{
-        e.stopPropagation();
-        // Zoom to double current scale, centered on this cluster
-        const newK = Math.min(currentK*2.5, 12);
-        // Get current transform
-        const t = d3.zoomTransform(svg.node());
-        // Center the cluster in the viewport
-        const svgEl = document.getElementById('us-map');
-        const rect = svgEl.getBoundingClientRect();
-        const newTx = rect.width/2 - cl.x * newK;
-        const newTy = (rect.width*(SVG_H/SVG_W))/2 - cl.y * newK;
-        svg.transition().duration(450).call(
-          zoom.transform,
-          d3.zoomIdentity.translate(newTx, newTy).scale(newK)
-        );
-      })
-      .on('mouseover', function(){ d3.select(this).select('circle').attr('r', cr*1.12); })
-      .on('mouseout',  function(){ d3.select(this).select('circle').attr('r', cr); });
-
-      setTimeout(()=>{ g.style('opacity','1'); }, delay);
-    }
+    setTimeout(()=>{
+      g.style('opacity','1');
+      if(animate){
+        const ripple = layer.insert('circle','g')
+          .attr('cx',pt.x).attr('cy',pt.y)
+          .attr('r', pr*0.5)
+          .attr('fill','none')
+          .attr('stroke','#d0e8f5')
+          .attr('stroke-width', strokeW)
+          .style('opacity','0.6');
+        ripple.transition().duration(900).ease(d3.easeCubicOut)
+          .attr('r', pr*2.8)
+          .style('opacity','0')
+          .remove();
+      }
+    }, delay);
   });
 }
 
@@ -560,17 +513,11 @@ function openModal(kid){
   document.getElementById('modal-age').textContent = kid.age;
   document.getElementById('modal-location').textContent =
     kid.city&&kid.state ? kid.city+', '+kid.state : kid.state||'';
-  const enc = encodeURIComponent(kid.name);
-  // Build button — will use postMessage to fill Virtuous form on parent page
   const kidLabel = kid.name + (kid.city ? ', ' + kid.city : '') + (kid.state ? ', ' + kid.state : '');
   document.getElementById('btn-build').onclick = function(e){
     e.preventDefault();
-    window.parent.postMessage({
-      type: 'RSF_FILL_FORM',
-      kiddo: kidLabel
-    }, '*');
+    window.parent.postMessage({ type: 'RSF_FILL_FORM', kiddo: kidLabel }, '*');
   };
-  // GoFundMe blocks iframes — break out to parent tab
   document.getElementById('btn-sponsor').onclick = function(e){
     e.preventDefault();
     window.parent.location.href = URL_SPONSOR;
@@ -594,8 +541,8 @@ fetch('./zip_centroids.json')
     return fetch('./kids.json');
   })
   .then(r=>{ if(!r.ok) throw new Error(); return r.json(); })
-  .then(kids=>{
-    const list = Array.isArray(kids)&&kids.length>0 ? kids : [];
+  .then(raw=>{
+    const list = Array.isArray(raw)&&raw.length>0 ? deduplicateKids(raw) : [];
     pendingKids=list;
     _resolveKidCount(list.length);
     const abbrToFips={
@@ -610,7 +557,6 @@ fetch('./zip_centroids.json')
     const activeSet=new Set();
     list.forEach(k=>{ const f=abbrToFips[k.state]; if(f) activeSet.add(f); });
     window._kidsForIllumination=activeSet;
-    // Countdown will trigger illumination after splash fades
   })
   .catch(()=>{
     pendingKids=[];
@@ -623,7 +569,7 @@ new ResizeObserver(()=>{
   if(window._allKids) renderMarkers(window._allKids,false);
 }).observe(document.getElementById('map-wrap'));
 
-// ── COUNTDOWN ────────────────────────────────────────────────
+// ── COUNTDOWN + SPLASH ───────────────────────────────────────
 (async function(){
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const numEl=document.getElementById('counter-num');
@@ -651,15 +597,17 @@ new ResizeObserver(()=>{
 
   document.getElementById('num-clip').style.visibility = 'hidden';
   document.getElementById('label-clip').style.visibility = 'hidden';
+
+  // Logo draws itself; the moment it finishes we immediately drop the counter in
   await runLogoIntro();
-  await sleep(300);
+
+  // No pause — immediately show counter
   document.getElementById('num-clip').style.visibility = 'visible';
   document.getElementById('label-clip').style.visibility = 'visible';
   numEl.classList.add('drop');
-  await sleep(400);
+
   const target=await _kidCountReady;
   await countUp(target,2200);
-  await sleep(60);
   labelEl.classList.add('rise');
   await sleep(2800);
   splash.classList.add('fade-out');
