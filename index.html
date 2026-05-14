@@ -9,13 +9,15 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#004270;--blue:#0378ad;--white:#fff;--bg:#2596be;
+  --navy:#004270;--blue:#0378ad;--white:#fff;--bg:#f3f9fd;
   --ff:'Franklin Gothic Medium','Franklin Gothic','ITC Franklin Gothic','Source Sans 3','Arial Narrow',Arial,sans-serif;
 }
 html,body{width:100%;height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden;font-family:var(--ff)}
+/* Ensure the page is exactly as tall as the map SVG — no extra space below */
+body{display:flex;flex-direction:column;}
 
-#map-wrap{position:relative;width:100%;max-width:1200px;margin:0 auto;user-select:none;-webkit-user-select:none}
-svg#us-map{width:100%;height:auto;display:block;cursor:grab;touch-action:none}
+#map-wrap{position:relative;width:100%;max-width:1200px;margin:0 auto;user-select:none;-webkit-user-select:none;flex:1;display:flex;flex-direction:column;}
+svg#us-map{width:100%;height:auto;display:block;flex:1;cursor:grab;touch-action:none}
 svg#us-map:active{cursor:grabbing}
 .state{stroke:#002d50;stroke-width:0.5;stroke-linejoin:round}
 
@@ -75,10 +77,10 @@ svg#us-map:active{cursor:grabbing}
 #splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);pointer-events:none}
 #splash.fade-out{opacity:0;transition:opacity 1.2s ease;pointer-events:none}
 #num-clip{overflow:visible;line-height:1;width:100%;text-align:center;padding:0 20px}
-#counter-num{display:block;font-size:clamp(72px,16vw,180px);font-weight:900;letter-spacing:-0.04em;color:#fff;font-variant-numeric:tabular-nums;line-height:1;transform:translateY(110%);transition:transform 0s;text-align:center;will-change:transform;white-space:nowrap}
+#counter-num{display:block;font-size:clamp(72px,16vw,180px);font-weight:900;letter-spacing:-0.04em;color:var(--navy);font-variant-numeric:tabular-nums;line-height:1;transform:translateY(110%);transition:transform 0s;text-align:center;will-change:transform;white-space:nowrap}
 #counter-num.drop{transform:translateY(0);transition:transform 1s cubic-bezier(0.16,1,0.3,1)}
 #label-clip{overflow:hidden;line-height:1;margin-top:.1em;width:100%;text-align:center;padding:0 20px}
-#counter-label{display:block;font-size:clamp(13px,2.4vw,32px);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;line-height:1;transform:translateY(110%);transition:transform 0s;text-align:center;white-space:nowrap;will-change:transform}
+#counter-label{display:block;font-size:clamp(13px,2.4vw,32px);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);line-height:1;transform:translateY(110%);transition:transform 0s;text-align:center;white-space:nowrap;will-change:transform}
 #counter-label.rise{transform:translateY(0);transition:transform 0.85s cubic-bezier(0.16,1,0.3,1)}
 #map-wrap{opacity:0;transition:opacity 1.2s ease}
 #map-wrap.visible{opacity:1}
@@ -152,7 +154,7 @@ function runLogoIntro(){
     const els = paths.map(d => {
       const p = document.createElementNS(svgNS,'path');
       p.setAttribute('d',d);
-      p.style.cssText = 'fill:none;stroke:#ffffff;stroke-width:28;stroke-linecap:round;stroke-linejoin:round;';
+      p.style.cssText = 'fill:none;stroke:#004270;stroke-width:28;stroke-linecap:round;stroke-linejoin:round;';
       svg.appendChild(p);
       return p;
     });
@@ -173,7 +175,7 @@ function runLogoIntro(){
     paths.forEach(d => {
       const p = document.createElementNS(svgNS,'path');
       p.setAttribute('d',d);
-      p.style.cssText = 'fill:#ffffff;stroke:none;';
+      p.style.cssText = 'fill:#004270;stroke:none;';
       fillGroup.appendChild(p);
     });
     svg.appendChild(fillGroup);
@@ -256,27 +258,6 @@ const zoom = d3.zoom()
 
 svg.call(zoom);
 
-// Double-click to zoom in (mobile: double-tap)
-svg.on('dblclick.zoom', function(event){
-  event.preventDefault();
-  const t = d3.zoomTransform(svg.node());
-  const newK = Math.min(currentK * 2, 12);
-  const coords = d3.pointer(event, svg.node());
-  // Convert screen coords to SVG coords
-  const svgEl = document.getElementById('us-map');
-  const rect = svgEl.getBoundingClientRect();
-  const scaleX = SVG_W / rect.width;
-  const scaleY = SVG_H / rect.height;
-  const svgX = (event.clientX - rect.left) * scaleX;
-  const svgY = (event.clientY - rect.top) * scaleY;
-  svg.transition().duration(350).call(
-    zoom.transform,
-    d3.zoomIdentity
-      .translate(SVG_W/2 - svgX * newK, SVG_H/2 - svgY * newK)
-      .scale(newK)
-  );
-});
-
 // Zoom buttons
 document.getElementById('btn-zoom-in').addEventListener('click', ()=>{
   svg.transition().duration(320).call(zoom.scaleBy, 2);
@@ -337,14 +318,11 @@ function toSVG(lat, lon){
 }
 
 // ── PIN SIZE ─────────────────────────────────────────────────
-// On mobile we use a larger base pin so it stays tappable at all zoom levels.
-// The pin is rendered in SVG units and scaled by 1/currentK so it stays
-// visually constant size regardless of zoom — like a real map pin.
-const BASE_PIN_R = isMobile ? 7 : 4.5;
-
-// Minimum pin radius in SVG units — never shrink below this so pins
-// remain tappable even when zoomed out on mobile.
-const MIN_PIN_R = isMobile ? 6 : 3;
+// Pins are drawn in SVG units divided by currentK so they stay a
+// consistent visual size as you zoom. On mobile we use a slightly
+// larger base and a floor so they never shrink below tappable.
+const BASE_PIN_R = isMobile ? 5.5 : 4.2;
+const MIN_PIN_R  = isMobile ? 4.5 : 3.0;
 
 function getPinR(){
   return Math.max(MIN_PIN_R, BASE_PIN_R / currentK);
@@ -443,7 +421,7 @@ function renderMarkers(kids, animate){
   const hitR = isMobile ? Math.max(pr * 2.5, 10 / currentK) : pr * 2.2;
 
   positions.forEach((pt, ci)=>{
-    const delay = animate ? ci * 22 : 0;
+    const delay = animate ? ci * 8 : 0;
     const kid = pt.kid;
 
     const g = layer.append('g')
