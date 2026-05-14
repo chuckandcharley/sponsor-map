@@ -501,8 +501,9 @@ function renderMarkers(kids, animate){
     // shape is exactly what users expect.
 
     g.on('click',(e)=>{
-       if(isOpen){ closeModal(); return; } // modal open — treat any click as close
+       if(isOpen){ closeModal(); return; }
        e.stopPropagation();
+       highlightPin(g.node());
        openModal(kid);
      })
      .on('mouseover', function(){ d3.select(this).select('path').attr('transform','scale(1.18)'); })
@@ -523,26 +524,28 @@ function renderMarkers(kids, animate){
          .duration(340)
          .ease(d3.easeBackOut.overshoot(1.4))
          .attr('transform',`translate(${pt.x},${pt.y})`);
-
-      // Ink-drop bloom — appended after pin lands so it's always on top
-      setTimeout(()=>{
-        const drop = layer.append('circle')
-          .attr('cx', pt.x).attr('cy', pt.y)
-          .attr('r', pr * 0.8)
-          .attr('fill','rgba(0,66,112,0.35)')
-          .style('pointer-events','none');
-        drop.transition().duration(550).ease(d3.easeCubicOut)
-          .attr('r', pr * 3.8)
-          .style('opacity','0')
-          .remove();
-      }, 360);
     }, delay);
   });
 }
 
 // ── MODAL ────────────────────────────────────────────────────
 const card = document.getElementById('modal-card');
-let isOpen=false;
+let isOpen = false;
+let _selectedPin = null; // reference to the currently highlighted pin path
+
+function highlightPin(gNode){
+  clearHighlight();
+  _selectedPin = gNode;
+  d3.select(gNode).select('path').attr('fill','#f0a500');
+  d3.select(gNode).select('circle').attr('fill','#c47800');
+}
+function clearHighlight(){
+  if(_selectedPin){
+    d3.select(_selectedPin).select('path').attr('fill','#ffffff');
+    d3.select(_selectedPin).select('circle').attr('fill','#004270');
+    _selectedPin = null;
+  }
+}
 
 function hidePins(){
   const pg = document.getElementById('pins-group');
@@ -576,6 +579,7 @@ function openModal(kid){
 function closeModal(){
   if(!isOpen) return; isOpen=false;
   card.classList.remove('active');
+  clearHighlight();
   setTimeout(showPins, 230);
 }
 document.getElementById('map-wrap').addEventListener('click',()=>{ if(isOpen) closeModal(); });
