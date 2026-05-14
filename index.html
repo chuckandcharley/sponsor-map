@@ -237,19 +237,23 @@ const pathGen = d3.geoPath().projection(projection);
 // ── D3 ZOOM ─────────────────────────────────────────────────
 let currentK = 1;
 const svg = d3.select('#us-map');
+const svgEl = document.getElementById('us-map');
 const zoomGroup = d3.select('#zoom-group');
 
 let lastReclusterK = 1;
 
 // ── INERTIA / MOMENTUM PAN ───────────────────────────────────
-// We implement a simple velocity tracker on pointermove so that when the
-// user lifts their finger the map coasts to a stop rather than snapping.
 let _velX = 0, _velY = 0, _lastPt = null, _lastT = 0, _inertiaRaf = null;
+let _touchCount = 0; // track how many fingers are down — skip inertia during pinch
 function _cancelInertia(){ if(_inertiaRaf){ cancelAnimationFrame(_inertiaRaf); _inertiaRaf=null; } }
 
+// The key fix: D3 zoom needs its extent set in the SVG's own coordinate space
+// (0,0 → SVG_W,SVG_H), not screen pixels. Without this, pinch centroid
+// calculations are in the wrong space and snap to map edges/corners.
 const zoom = d3.zoom()
   .scaleExtent([1, 12])
-  .translateExtent([[0,0],[SVG_W,SVG_H]])
+  .extent([[0, 0], [SVG_W, SVG_H]])
+  .translateExtent([[0, 0], [SVG_W, SVG_H]])
   .filter(event => {
     if(event.type === 'wheel') return false;
     return true;
@@ -268,9 +272,14 @@ const zoom = d3.zoom()
 
 svg.call(zoom);
 
-// Track velocity during drag for inertia
-svg.on('pointerdown.inertia', ()=>{ _cancelInertia(); _velX=0; _velY=0; _lastPt=null; })
+// Track velocity during drag for inertia — but not during pinch (2+ fingers)
+svg.on('pointerdown.inertia', ()=>{
+      _touchCount++;
+      _cancelInertia(); _velX=0; _velY=0; _lastPt=null;
+   })
    .on('pointermove.inertia', event=>{
+      // Skip inertia tracking entirely when pinching
+      if(_touchCount > 1) return;
       if(event.buttons === 0 && event.pointerType !== 'touch') return;
       const now = performance.now();
       if(_lastPt){
@@ -281,8 +290,10 @@ svg.on('pointerdown.inertia', ()=>{ _cancelInertia(); _velX=0; _velY=0; _lastPt=
       _lastPt = [event.clientX, event.clientY];
       _lastT = now;
    })
-   .on('pointerup.inertia pointercancel.inertia', ()=>{
-      // Only coast if we have some meaningful velocity
+   .on('pointerup.inertia pointercancel.inertia', event=>{
+      _touchCount = Math.max(0, _touchCount - 1);
+      // Don't coast after a pinch gesture — only after a single-finger pan
+      if(_touchCount > 0) return;
       if(Math.abs(_velX) < 0.1 && Math.abs(_velY) < 0.1) return;
       const FRICTION = 0.88;
       function coast(){
