@@ -13,7 +13,6 @@
   --ff:'Franklin Gothic Medium','Franklin Gothic','ITC Franklin Gothic','Source Sans 3','Arial Narrow',Arial,sans-serif;
 }
 html,body{width:100%;height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden;font-family:var(--ff)}
-/* Ensure the page is exactly as tall as the map SVG — no extra space below */
 body{display:flex;flex-direction:column;}
 
 #map-wrap{position:relative;width:100%;max-width:1200px;margin:0 auto;user-select:none;-webkit-user-select:none;flex:1;display:flex;flex-direction:column;}
@@ -36,27 +35,12 @@ svg#us-map:active{cursor:grabbing}
 }
 #modal-card.active{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1);}
 @media(max-width:600px){
-  #modal-card{
-    position:fixed;
-    left:50%;top:50%;
-    width:82vw;
-    max-width:320px;
-  }
-}
-#modal-meta{
-  font-size:11px;
-  color:rgba(255,255,255,0.55);
-  margin-top:5px;
-  letter-spacing:.02em;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  #modal-card{position:fixed;left:50%;top:50%;width:82vw;max-width:320px;}
 }
 #modal-top{background:var(--navy);padding:20px 20px 16px;}
 #modal-waiting{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;}
 #modal-name{font-size:22px;font-weight:700;color:#fff;line-height:1.15;margin:0;}
-#modal-meta{font-size:11px;color:rgba(255,255,255,0.55);margin-top:5px;letter-spacing:.02em;}
-
+#modal-meta{font-size:11px;color:rgba(255,255,255,0.55);margin-top:5px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #modal-footer{padding:14px 20px 18px;display:flex;flex-direction:column;gap:8px;background:#fff;}
 
 .btn{display:block;width:100%;padding:11px 10px;border-radius:8px;font-size:11px;font-weight:700;font-family:var(--ff);letter-spacing:.06em;text-transform:uppercase;text-align:center;text-decoration:none;cursor:pointer;border:2px solid transparent;transition:background .15s,transform .1s,box-shadow .15s;-webkit-tap-highlight-color:transparent;}
@@ -67,11 +51,10 @@ svg#us-map:active{cursor:grabbing}
 .btn-secondary:hover{background:#f0f7fc;border-color:var(--navy);}
 
 /* Zoom buttons */
-#zoom-controls{position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;gap:4px;z-index:30;transition:opacity .22s ease}
+#zoom-controls{position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;gap:4px;z-index:30;transition:opacity .3s ease;}
 .zoom-btn{width:32px;height:32px;background:#fff;border:1.5px solid #cde4f0;border-radius:8px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,42,70,.12);transition:background .12s,transform .1s;-webkit-tap-highlight-color:transparent;font-family:var(--ff)}
 .zoom-btn:hover{background:#f0f7fc}
 .zoom-btn:active{transform:scale(.93)}
-#zoom-hint{position:absolute;bottom:16px;left:16px;font-size:10px;color:rgba(0,66,112,.45);letter-spacing:.08em;text-transform:uppercase;z-index:30;pointer-events:none}
 
 /* Splash */
 #splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);pointer-events:none}
@@ -118,7 +101,6 @@ svg#us-map:active{cursor:grabbing}
         </div>
       </div>
     </div>
-
     <div id="modal-footer">
       <a id="btn-build" href="#" class="btn btn-primary">I Want to Build This</a>
       <a id="btn-sponsor" href="#" class="btn btn-secondary">Fund This Build</a>
@@ -135,9 +117,10 @@ svg#us-map:active{cursor:grabbing}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
-// ── DETECT MOBILE ──────────────────────────────────────────
+// ── DETECT MOBILE ─────────────────────────────────────────────
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
 
+// ── LOGO INTRO ────────────────────────────────────────────────
 function runLogoIntro(){
   return new Promise(resolve => {
     const svgNS = 'http://www.w3.org/2000/svg';
@@ -193,9 +176,7 @@ function runLogoIntro(){
         el.style.strokeDashoffset = '0';
       }, i * STAGGER + 80);
     });
-    const totalDraw = els.length * STAGGER + DRAW_MS + 80;
-    // Resolve immediately when drawing finishes — no extra pause
-    setTimeout(resolve, totalDraw);
+    setTimeout(resolve, els.length * STAGGER + DRAW_MS + 80);
   });
 }
 </script>
@@ -207,15 +188,11 @@ const PALETTE=['#004270','#00527f','#01618e','#01719e','#0378ad','#0266a5'];
 const URL_BUILD   = 'VIRTUOUS_FORM_URL_HERE';
 const URL_SPONSOR = 'https://give.rocsolidfoundation.org/campaign/799349/donate';
 
-// ── DEDUPLICATE KIDS ─────────────────────────────────────────
-// Deduplicates by name (case-insensitive trim). If a kid appears multiple
-// times in the JSON only the first occurrence is kept for rendering and counting.
+// ── DEDUPLICATE ───────────────────────────────────────────────
 function deduplicateKids(kids){
   const seen = new Set();
   const out = [];
   for(const k of kids){
-    // Only suppress a record if name AND age AND state all match —
-    // so two real kids who happen to share a name aren't collapsed.
     const key = [
       (k.name  ||'').trim().toLowerCase(),
       (k.age   ||'').toString().trim().toLowerCase(),
@@ -234,36 +211,28 @@ const _kidCountReady = new Promise(r=>{ _resolveKidCount=r; });
 const projection = d3.geoAlbersUsa().scale(1280).translate([SVG_W/2, SVG_H/2]);
 const pathGen = d3.geoPath().projection(projection);
 
-// ── D3 ZOOM ─────────────────────────────────────────────────
+// ── ZOOM ──────────────────────────────────────────────────────
 let currentK = 1;
 const svg = d3.select('#us-map');
 const svgEl = document.getElementById('us-map');
 const zoomGroup = d3.select('#zoom-group');
-
 let lastReclusterK = 1;
 
-// ── INERTIA / MOMENTUM PAN ───────────────────────────────────
-let _velX = 0, _velY = 0, _lastPt = null, _lastT = 0, _inertiaRaf = null;
-let _touchCount = 0; // track how many fingers are down — skip inertia during pinch
+// ── INERTIA ───────────────────────────────────────────────────
+let _velX=0, _velY=0, _lastPt=null, _lastT=0, _inertiaRaf=null, _touchCount=0;
 function _cancelInertia(){ if(_inertiaRaf){ cancelAnimationFrame(_inertiaRaf); _inertiaRaf=null; } }
 
-// The key fix: D3 zoom needs its extent set in the SVG's own coordinate space
-// (0,0 → SVG_W,SVG_H), not screen pixels. Without this, pinch centroid
-// calculations are in the wrong space and snap to map edges/corners.
 const zoom = d3.zoom()
-  .scaleExtent([1, 12])
-  .extent([[0, 0], [SVG_W, SVG_H]])
-  .translateExtent([[0, 0], [SVG_W, SVG_H]])
-  .filter(event => {
-    if(event.type === 'wheel') return false;
-    return true;
-  })
+  .scaleExtent([1,12])
+  .extent([[0,0],[SVG_W,SVG_H]])
+  .translateExtent([[0,0],[SVG_W,SVG_H]])
+  .filter(event=>{ if(event.type==='wheel') return false; return true; })
   .on('zoom', event=>{
     currentK = event.transform.k;
     zoomGroup.attr('transform', event.transform);
     clearTimeout(window._reclusterTimer);
     window._reclusterTimer = setTimeout(()=>{
-      if(window._allKids && Math.abs(currentK - lastReclusterK)/lastReclusterK > 0.15){
+      if(window._allKids && Math.abs(currentK-lastReclusterK)/lastReclusterK > 0.15){
         lastReclusterK = currentK;
         renderMarkers(window._allKids, false);
       }
@@ -272,270 +241,118 @@ const zoom = d3.zoom()
 
 svg.call(zoom);
 
-// Track velocity during drag for inertia — but not during pinch (2+ fingers)
-svg.on('pointerdown.inertia', ()=>{
-      _touchCount++;
-      _cancelInertia(); _velX=0; _velY=0; _lastPt=null;
-   })
+svg.on('pointerdown.inertia', ()=>{ _touchCount++; _cancelInertia(); _velX=0; _velY=0; _lastPt=null; })
    .on('pointermove.inertia', event=>{
-      // Skip inertia tracking entirely when pinching
-      if(_touchCount > 1) return;
-      if(event.buttons === 0 && event.pointerType !== 'touch') return;
-      const now = performance.now();
-      if(_lastPt){
-        const dt = Math.max(now - _lastT, 1);
-        _velX = (event.clientX - _lastPt[0]) / dt;
-        _velY = (event.clientY - _lastPt[1]) / dt;
-      }
-      _lastPt = [event.clientX, event.clientY];
-      _lastT = now;
+      if(_touchCount>1) return;
+      if(event.buttons===0 && event.pointerType!=='touch') return;
+      const now=performance.now();
+      if(_lastPt){ const dt=Math.max(now-_lastT,1); _velX=(event.clientX-_lastPt[0])/dt; _velY=(event.clientY-_lastPt[1])/dt; }
+      _lastPt=[event.clientX,event.clientY]; _lastT=now;
    })
-   .on('pointerup.inertia pointercancel.inertia', event=>{
-      _touchCount = Math.max(0, _touchCount - 1);
-      if(_touchCount > 0) return;
-      if(Math.abs(_velX) < 0.1 && Math.abs(_velY) < 0.1) return;
-      // Cap velocity so fast flicks don't slingshot across the map
-      const MAX_VEL = 0.6;
-      _velX = Math.max(-MAX_VEL, Math.min(MAX_VEL, _velX));
-      _velY = Math.max(-MAX_VEL, Math.min(MAX_VEL, _velY));
-      const FRICTION = 0.78; // higher = stops faster
-      const SCALE = 10;      // lower = shorter glide distance
-      function coast(){
-        _velX *= FRICTION; _velY *= FRICTION;
-        if(Math.abs(_velX) < 0.01 && Math.abs(_velY) < 0.01){ _inertiaRaf=null; return; }
-        svg.call(zoom.translateBy, _velX * SCALE, _velY * SCALE);
-        _inertiaRaf = requestAnimationFrame(coast);
-      }
-      _inertiaRaf = requestAnimationFrame(coast);
+   .on('pointerup.inertia pointercancel.inertia', ()=>{
+      _touchCount=Math.max(0,_touchCount-1);
+      if(_touchCount>0) return;
+      if(Math.abs(_velX)<0.1 && Math.abs(_velY)<0.1) return;
+      const MAX_VEL=0.6;
+      _velX=Math.max(-MAX_VEL,Math.min(MAX_VEL,_velX));
+      _velY=Math.max(-MAX_VEL,Math.min(MAX_VEL,_velY));
+      const FRICTION=0.78, SCALE=10;
+      function coast(){ _velX*=FRICTION; _velY*=FRICTION; if(Math.abs(_velX)<0.01&&Math.abs(_velY)<0.01){_inertiaRaf=null;return;} svg.call(zoom.translateBy,_velX*SCALE,_velY*SCALE); _inertiaRaf=requestAnimationFrame(coast); }
+      _inertiaRaf=requestAnimationFrame(coast);
    });
 
-// Zoom buttons
-document.getElementById('btn-zoom-in').addEventListener('click', ()=>{
-  svg.transition().duration(320).call(zoom.scaleBy, 2);
-});
-document.getElementById('btn-zoom-out').addEventListener('click', ()=>{
-  svg.transition().duration(320).call(zoom.scaleBy, 0.5);
-});
-document.getElementById('btn-zoom-reset').addEventListener('click', ()=>{
-  svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
-});
+document.getElementById('btn-zoom-in').addEventListener('click',()=>{ svg.transition().duration(320).call(zoom.scaleBy,2); });
+document.getElementById('btn-zoom-out').addEventListener('click',()=>{ svg.transition().duration(320).call(zoom.scaleBy,0.5); });
+document.getElementById('btn-zoom-reset').addEventListener('click',()=>{ svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity); });
 
-// ── STATE MAP ────────────────────────────────────────────────
+// ── STATE MAP ─────────────────────────────────────────────────
 let mapReady=false, pendingKids=null;
 window._statePaths={};
 
 fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
   .then(r=>r.json()).then(us=>{
-    const stateFeatures = topojson.feature(us, us.objects.states).features
-      .filter(d=> String(d.id)!==ALASKA && d.id!==10 && String(d.id)!=='15');
-
-    const g = d3.select('#states-group');
-    g.selectAll('path.state')
-      .data(stateFeatures).enter().append('path')
-      .attr('class','state')
-      .attr('d', pathGen)
+    const stateFeatures=topojson.feature(us,us.objects.states).features
+      .filter(d=>String(d.id)!==ALASKA && d.id!==10 && String(d.id)!=='15');
+    const g=d3.select('#states-group');
+    g.selectAll('path.state').data(stateFeatures).enter().append('path')
+      .attr('class','state').attr('d',pathGen)
       .attr('fill',(d,i)=>PALETTE[i%PALETTE.length])
-      .each(function(d){
-        window._statePaths[d.id]=this;
-        this.style.opacity='0';
-        this.style.transition='none';
-      });
-
-    const border = g.append('path')
-      .datum(topojson.mesh(us, us.objects.states,
-        (a,b)=>a!==b && String(a.id)!==ALASKA && a.id!==10 && a.id!==HAWAII
-                     && String(b.id)!==ALASKA && b.id!==10 && String(b.id)!=='15'))
-      .attr('fill','none').attr('stroke','#002d50')
-      .attr('stroke-width','0.3').attr('d',pathGen)
-      .style('opacity','0');
-
-    window._illuminateMap = activeSet=>{
-      stateFeatures.forEach((d,i)=>{
-        const el=window._statePaths[d.id]; if(!el) return;
-        el.style.transition='none';
-        el.style.opacity='1';
-      });
+      .each(function(d){ window._statePaths[d.id]=this; this.style.opacity='0'; this.style.transition='none'; });
+    const border=g.append('path')
+      .datum(topojson.mesh(us,us.objects.states,(a,b)=>a!==b&&String(a.id)!==ALASKA&&a.id!==10&&a.id!==HAWAII&&String(b.id)!==ALASKA&&b.id!==10&&String(b.id)!=='15'))
+      .attr('fill','none').attr('stroke','#002d50').attr('stroke-width','0.3').attr('d',pathGen).style('opacity','0');
+    window._illuminateMap=activeSet=>{
+      stateFeatures.forEach((d,i)=>{ const el=window._statePaths[d.id]; if(!el) return; el.style.transition='none'; el.style.opacity='1'; });
       border.style('opacity','1');
-      setTimeout(()=>{ mapReady=true; if(pendingKids) renderMarkers(pendingKids,true); }, 500);
+      setTimeout(()=>{ mapReady=true; if(pendingKids) renderMarkers(pendingKids,true); },500);
     };
   }).catch(()=>{ mapReady=true; if(pendingKids) renderMarkers(pendingKids,true); });
 
-// ── CENTROIDS ────────────────────────────────────────────────
+// ── CENTROIDS ─────────────────────────────────────────────────
 let centroids={};
+function toSVG(lat,lon){ const pt=projection([lon,lat]); return pt?{x:pt[0],y:pt[1]}:null; }
 
-function toSVG(lat, lon){
-  const pt = projection([lon, lat]);
-  return pt ? {x:pt[0], y:pt[1]} : null;
-}
+// ── PIN SIZE ──────────────────────────────────────────────────
+const BASE_PIN_R=isMobile?5.5:4.2;
+const MIN_PIN_R=isMobile?4.5:3.0;
+function getPinR(){ return Math.max(MIN_PIN_R,BASE_PIN_R/currentK); }
 
-// ── PIN SIZE ─────────────────────────────────────────────────
-// Pins are drawn in SVG units divided by currentK so they stay a
-// consistent visual size as you zoom. On mobile we use a slightly
-// larger base and a floor so they never shrink below tappable.
-const BASE_PIN_R = isMobile ? 5.5 : 4.2;
-const MIN_PIN_R  = isMobile ? 4.5 : 3.0;
-
-function getPinR(){
-  return Math.max(MIN_PIN_R, BASE_PIN_R / currentK);
-}
-
-// ── CLUSTER / SPREAD LOGIC ───────────────────────────────────
-// No more cluster badges — we just spread overlapping pins so none overlap.
-// Returns array of {kid, x, y} — one entry per kid.
+// ── SPREAD LOGIC ──────────────────────────────────────────────
 function buildPinPositions(kids){
-  const pts = [];
+  const pts=[];
   kids.forEach(k=>{
     if(k.state==='AK'||k.state==='HI') return;
-    const c = centroids[k.zip];
-    let pos = null;
-    if(c) pos = toSVG(c[0], c[1]);
-    else if(k.lat!=null&&k.lon!=null) pos = toSVG(k.lat, k.lon);
+    const c=centroids[k.zip];
+    let pos=null;
+    if(c) pos=toSVG(c[0],c[1]);
+    else if(k.lat!=null&&k.lon!=null) pos=toSVG(k.lat,k.lon);
     if(!pos) return;
-    pts.push({kid:k, x:pos.x, y:pos.y});
+    pts.push({kid:k,x:pos.x,y:pos.y});
   });
-
-  // Diameter of a pin in SVG units at current zoom
-  const pr = getPinR();
-  const minDist = pr * 2.4; // minimum center-to-center distance
-
-  // isOnLand helper (reuse SVG point check)
-  const svgEl = document.getElementById('us-map');
-  const svgPt = svgEl.createSVGPoint();
-  const statePaths = Array.from(document.querySelectorAll('#states-group path.state'));
-  function isOnLand(ax, ay){
-    svgPt.x = ax; svgPt.y = ay;
-    for(let sp of statePaths){ if(sp.isPointInFill(svgPt)) return true; }
-    return false;
-  }
-
-  // Iterative repulsion — nudge overlapping pins apart
-  // Run multiple passes so pins fully separate even in dense areas
-  const MAX_PASSES = 12;
-  for(let pass = 0; pass < MAX_PASSES; pass++){
-    let moved = false;
-    for(let i = 0; i < pts.length; i++){
-      for(let j = i+1; j < pts.length; j++){
-        const dx = pts[j].x - pts[i].x;
-        const dy = pts[j].y - pts[i].y;
-        const dist = Math.sqrt(dx*dx+dy*dy);
-        if(dist < minDist && dist > 0){
-          moved = true;
-          const overlap = (minDist - dist) / 2;
-          const nx = dx/dist, ny = dy/dist;
-          // Try moving j away from i
-          const jx = pts[j].x + nx*overlap;
-          const jy = pts[j].y + ny*overlap;
-          if(isOnLand(jx, jy)){ pts[j].x=jx; pts[j].y=jy; }
-          else {
-            // If that direction goes into water, try moving i the other way
-            const ix = pts[i].x - nx*overlap;
-            const iy = pts[i].y - ny*overlap;
-            if(isOnLand(ix, iy)){ pts[i].x=ix; pts[i].y=iy; }
-            // If both are water, try perpendicular nudge
-            else {
-              const px2 = -ny*overlap, py2 = nx*overlap;
-              const jx2 = pts[j].x + px2, jy2 = pts[j].y + py2;
-              if(isOnLand(jx2, jy2)){ pts[j].x=jx2; pts[j].y=jy2; }
-            }
+  const pr=getPinR();
+  const minDist=pr*2.4;
+  const svgPt=svgEl.createSVGPoint();
+  const statePaths=Array.from(document.querySelectorAll('#states-group path.state'));
+  function isOnLand(ax,ay){ svgPt.x=ax;svgPt.y=ay; for(let sp of statePaths){ if(sp.isPointInFill(svgPt)) return true; } return false; }
+  const MAX_PASSES=12;
+  for(let pass=0;pass<MAX_PASSES;pass++){
+    let moved=false;
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[j].x-pts[i].x, dy=pts[j].y-pts[i].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<minDist&&dist>0){
+          moved=true;
+          const overlap=(minDist-dist)/2, nx=dx/dist, ny=dy/dist;
+          const jx=pts[j].x+nx*overlap, jy=pts[j].y+ny*overlap;
+          if(isOnLand(jx,jy)){pts[j].x=jx;pts[j].y=jy;}
+          else{ const ix=pts[i].x-nx*overlap,iy=pts[i].y-ny*overlap;
+            if(isOnLand(ix,iy)){pts[i].x=ix;pts[i].y=iy;}
+            else{ const px2=-ny*overlap,py2=nx*overlap; const jx2=pts[j].x+px2,jy2=pts[j].y+py2; if(isOnLand(jx2,jy2)){pts[j].x=jx2;pts[j].y=jy2;} }
           }
         }
       }
     }
     if(!moved) break;
   }
-
   return pts;
 }
 
-// ── PIN PATH ─────────────────────────────────────────────────
+// ── PIN PATH ──────────────────────────────────────────────────
 function pinPath(r){
-  const s = r / 4.5;
-  function tx(x){ return (x - 5.5) * s; }
-  function ty(y){ return (y - 15) * s; }
+  const s=r/4.5;
+  function tx(x){return(x-5.5)*s;} function ty(y){return(y-15)*s;}
   return `M${tx(5.5)},${ty(1)} C${tx(3.01)},${ty(1)} ${tx(1)},${ty(3.01)} ${tx(1)},${ty(5.5)} C${tx(1)},${ty(8.86)} ${tx(5.5)},${ty(15)} ${tx(5.5)},${ty(15)} C${tx(5.5)},${ty(15)} ${tx(10)},${ty(8.86)} ${tx(10)},${ty(5.5)} C${tx(10)},${ty(3.01)} ${tx(7.99)},${ty(1)} ${tx(5.5)},${ty(1)} Z`;
 }
 
-// ── RENDER ───────────────────────────────────────────────────
-function renderMarkers(kids, animate){
-  window._allKids = kids;
-  const layer = d3.select('#pins-group');
-  layer.selectAll('*').remove();
-
-  const positions = buildPinPositions(kids);
-
-  // pr = pin head radius in SVG units — fixed visual size regardless of zoom
-  const pr = getPinR();
-  const strokeW = Math.max(0.5, 1.2 / currentK);
-  const dotR = pr * 0.38;
-
-  positions.forEach((pt, ci)=>{
-    const delay = animate ? ci * 8 : 0;
-    const kid = pt.kid;
-
-    const g = layer.append('g')
-      // Always start at final position — only offset visually during drop animation
-      .attr('transform',`translate(${pt.x},${pt.y})`)
-      .style('cursor','pointer')
-      .style('opacity', animate ? '0' : '1');
-
-    // Teardrop pin — tip at (0,0), body above.
-    // pointer-events:all on the path means clicks register on the exact
-    // visible shape, not a bounding box or invisible circle overlay.
-    g.append('path')
-      .attr('d', pinPath(pr))
-      .attr('fill','#ffffff')
-      .attr('stroke','#004270')
-      .attr('stroke-width', strokeW)
-      .attr('stroke-linejoin','round')
-      .style('pointer-events','all');
-
-    // Center dot — also clickable, same shape region
-    g.append('circle')
-      .attr('cx',0).attr('cy',-pr*2.11)
-      .attr('r', dotR)
-      .attr('fill','#004270')
-      .style('pointer-events','all');
-
-    // No invisible hit-area circle — the path itself is the target.
-    // On mobile the pin is large enough; on desktop hovering the visible
-    // shape is exactly what users expect.
-
-    g.on('click',(e)=>{
-       if(isOpen){ closeModal(); return; }
-       e.stopPropagation();
-       highlightPin(g.node());
-       openModal(kid);
-     })
-     .on('mouseover', function(){ d3.select(this).select('path').attr('transform','scale(1.18)'); })
-     .on('mouseout',  function(){ d3.select(this).select('path').attr('transform',''); });
-
-    if(!animate){
-      // No animation on re-render (zoom/resize) — pins are already positioned
-      return;
-    }
-
-    // Drop-in entrance: pin starts above, fades in, falls with a gentle overshoot
-    const dropSVG = pr * 4;
-    g.attr('transform',`translate(${pt.x},${pt.y - dropSVG})`);
-
-    setTimeout(()=>{
-      g.style('opacity','1')
-       .transition()
-         .duration(340)
-         .ease(d3.easeBackOut.overshoot(1.4))
-         .attr('transform',`translate(${pt.x},${pt.y})`);
-    }, delay);
-  });
-}
-
-// ── MODAL ────────────────────────────────────────────────────
-const card = document.getElementById('modal-card');
-let isOpen = false;
-let _selectedPin = null; // reference to the currently highlighted pin path
+// ── MODAL STATE ───────────────────────────────────────────────
+const card=document.getElementById('modal-card');
+let isOpen=false;
+let _selectedPin=null;
 
 function highlightPin(gNode){
   clearHighlight();
-  _selectedPin = gNode;
+  _selectedPin=gNode;
   d3.select(gNode).select('path').attr('fill','#f0a500');
   d3.select(gNode).select('circle').attr('fill','#c47800');
 }
@@ -543,63 +360,112 @@ function clearHighlight(){
   if(_selectedPin){
     d3.select(_selectedPin).select('path').attr('fill','#ffffff');
     d3.select(_selectedPin).select('circle').attr('fill','#004270');
-    _selectedPin = null;
+    _selectedPin=null;
   }
 }
 
+// Fade all pins except selected out, fade zoom controls out
 function hidePins(){
-  // Hide every pin except the selected one — that stays visible and amber
-  // so the user always knows which kid the modal refers to
   d3.select('#pins-group').selectAll('g').each(function(){
-    if(this !== _selectedPin){
-      d3.select(this).style('opacity','0').style('pointer-events','none');
+    if(this!==_selectedPin){
+      d3.select(this).style('pointer-events','none')
+        .transition().duration(300).style('opacity','0');
     }
   });
-  d3.select('#zoom-controls').style('opacity','0').style('pointer-events','none');
+  d3.select('#zoom-controls')
+    .transition().duration(300).style('opacity','0').style('pointer-events','none');
 }
+// Fade everything back in
 function showPins(){
   d3.select('#pins-group').selectAll('g')
     .style('pointer-events','all')
-    .transition().duration(220).style('opacity','1');
-  d3.select('#zoom-controls').transition().duration(220).style('opacity','1').style('pointer-events','all');
+    .transition().duration(300).style('opacity','1');
+  d3.select('#zoom-controls')
+    .transition().duration(300).style('opacity','1').style('pointer-events','all');
 }
 
 function openModal(kid){
   if(isOpen) return; isOpen=true;
   _cancelInertia();
-  document.getElementById('modal-name').textContent = kid.name;
-  document.getElementById('modal-age').textContent = kid.age;
-  document.getElementById('modal-location').textContent =
-    kid.city&&kid.state ? kid.city+', '+kid.state : kid.state||'';
-  const kidLabel = kid.name + (kid.city ? ', ' + kid.city : '') + (kid.state ? ', ' + kid.state : '');
-  document.getElementById('btn-build').onclick = function(e){
-    e.preventDefault();
-    window.parent.postMessage({ type: 'RSF_FILL_FORM', kiddo: kidLabel }, '*');
-  };
-  document.getElementById('btn-sponsor').onclick = function(e){
-    e.preventDefault();
-    window.parent.location.href = URL_SPONSOR;
-  };
-  // Brief pause so the amber pin is visible before everything else hides
-  setTimeout(()=>{
-    hidePins();
-    setTimeout(()=> card.classList.add('active'), 120);
-  }, 600);
+  document.getElementById('modal-name').textContent=kid.name;
+  document.getElementById('modal-age').textContent=kid.age;
+  document.getElementById('modal-location').textContent=kid.city&&kid.state?kid.city+', '+kid.state:kid.state||'';
+  const kidLabel=kid.name+(kid.city?', '+kid.city:'')+(kid.state?', '+kid.state:'');
+  document.getElementById('btn-build').onclick=function(e){ e.preventDefault(); window.parent.postMessage({type:'RSF_FILL_FORM',kiddo:kidLabel},'*'); };
+  document.getElementById('btn-sponsor').onclick=function(e){ e.preventDefault(); window.parent.location.href=URL_SPONSOR; };
+  // Others fade immediately; modal follows once fade is done
+  hidePins();
+  setTimeout(()=>card.classList.add('active'), 320);
 }
 function closeModal(){
   if(!isOpen) return; isOpen=false;
   card.classList.remove('active');
-  // Hold on the amber pin alone for a beat, then restore everything
+  // Brief moment with just the amber pin glowing, then clear and restore all
   setTimeout(()=>{
     clearHighlight();
-    setTimeout(showPins, 80);
-  }, 700);
+    showPins();
+  }, 500);
 }
+
 document.getElementById('map-wrap').addEventListener('click',()=>{ if(isOpen) closeModal(); });
 card.addEventListener('click',e=>e.stopPropagation());
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 
-// ── DATA FETCH ───────────────────────────────────────────────
+// ── RENDER ────────────────────────────────────────────────────
+function renderMarkers(kids, animate){
+  window._allKids=kids;
+  const layer=d3.select('#pins-group');
+  layer.selectAll('*').remove();
+  const positions=buildPinPositions(kids);
+  const pr=getPinR();
+  const strokeW=Math.max(0.5,1.2/currentK);
+  const dotR=pr*0.38;
+
+  positions.forEach((pt,ci)=>{
+    const delay=animate?ci*8:0;
+    const kid=pt.kid;
+
+    const g=layer.append('g')
+      .attr('transform',`translate(${pt.x},${pt.y})`)
+      .style('cursor','pointer')
+      .style('opacity', animate?'0':'1');
+
+    g.append('path')
+      .attr('d',pinPath(pr))
+      .attr('fill','#ffffff')
+      .attr('stroke','#004270')
+      .attr('stroke-width',strokeW)
+      .attr('stroke-linejoin','round')
+      .style('pointer-events','all');
+
+    g.append('circle')
+      .attr('cx',0).attr('cy',-pr*2.11)
+      .attr('r',dotR)
+      .attr('fill','#004270')
+      .style('pointer-events','all');
+
+    g.on('click',(e)=>{
+       if(isOpen){ closeModal(); return; }
+       e.stopPropagation();
+       highlightPin(g.node());
+       openModal(kid);
+     })
+     .on('mouseover',function(){ d3.select(this).select('path').attr('transform','scale(1.18)'); })
+     .on('mouseout', function(){ d3.select(this).select('path').attr('transform',''); });
+
+    if(!animate) return;
+
+    const dropSVG=pr*4;
+    g.attr('transform',`translate(${pt.x},${pt.y-dropSVG})`);
+    setTimeout(()=>{
+      g.style('opacity','1')
+       .transition().duration(340).ease(d3.easeBackOut.overshoot(1.4))
+       .attr('transform',`translate(${pt.x},${pt.y})`);
+    }, delay);
+  });
+}
+
+// ── DATA FETCH ────────────────────────────────────────────────
 fetch('./zip_centroids.json')
   .then(r=>r.ok?r.json():{}).catch(()=>({}))
   .then(c=>{
@@ -608,34 +474,21 @@ fetch('./zip_centroids.json')
   })
   .then(r=>{ if(!r.ok) throw new Error(); return r.json(); })
   .then(raw=>{
-    const list = Array.isArray(raw)&&raw.length>0 ? deduplicateKids(raw) : [];
+    const list=Array.isArray(raw)&&raw.length>0?deduplicateKids(raw):[];
     pendingKids=list;
     _resolveKidCount(list.length);
-    const abbrToFips={
-      'AL':'01','AZ':'04','AR':'05','CA':'06','CO':'08','CT':'09','DE':'10',
-      'FL':'12','GA':'13','ID':'16','IL':'17','IN':'18','IA':'19','KS':'20',
-      'KY':'21','LA':'22','ME':'23','MD':'24','MA':'25','MI':'26','MN':'27',
-      'MS':'28','MO':'29','MT':'30','NE':'31','NV':'32','NH':'33','NJ':'34',
-      'NM':'35','NY':'36','NC':'37','ND':'38','OH':'39','OK':'40','OR':'41',
-      'PA':'42','RI':'44','SC':'45','SD':'46','TN':'47','TX':'48','UT':'49',
-      'VT':'50','VA':'51','WA':'53','WV':'54','WI':'55','WY':'56','DC':'11'
-    };
+    const abbrToFips={'AL':'01','AZ':'04','AR':'05','CA':'06','CO':'08','CT':'09','DE':'10','FL':'12','GA':'13','ID':'16','IL':'17','IN':'18','IA':'19','KS':'20','KY':'21','LA':'22','ME':'23','MD':'24','MA':'25','MI':'26','MN':'27','MS':'28','MO':'29','MT':'30','NE':'31','NV':'32','NH':'33','NJ':'34','NM':'35','NY':'36','NC':'37','ND':'38','OH':'39','OK':'40','OR':'41','PA':'42','RI':'44','SC':'45','SD':'46','TN':'47','TX':'48','UT':'49','VT':'50','VA':'51','WA':'53','WV':'54','WI':'55','WY':'56','DC':'11'};
     const activeSet=new Set();
     list.forEach(k=>{ const f=abbrToFips[k.state]; if(f) activeSet.add(f); });
     window._kidsForIllumination=activeSet;
   })
-  .catch(()=>{
-    pendingKids=[];
-    _resolveKidCount(0);
-    window._kidsForIllumination=new Set();
-  });
+  .catch(()=>{ pendingKids=[]; _resolveKidCount(0); window._kidsForIllumination=new Set(); });
 
-// ── RESIZE ───────────────────────────────────────────────────
-new ResizeObserver(()=>{
-  if(window._allKids) renderMarkers(window._allKids,false);
-}).observe(document.getElementById('map-wrap'));
+// ── RESIZE ────────────────────────────────────────────────────
+new ResizeObserver(()=>{ if(window._allKids) renderMarkers(window._allKids,false); })
+  .observe(document.getElementById('map-wrap'));
 
-// ── COUNTDOWN + SPLASH ───────────────────────────────────────
+// ── COUNTDOWN + SPLASH ────────────────────────────────────────
 (async function(){
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const numEl=document.getElementById('counter-num');
@@ -646,33 +499,24 @@ new ResizeObserver(()=>{
   function countUp(target,duration){
     return new Promise(res=>{
       const start=performance.now();
-      const logoSvg = document.querySelector('#splash svg');
-      const clipRect = logoSvg ? logoSvg.querySelector('#logo-fill-rect') : null;
+      const logoSvg=document.querySelector('#splash svg');
+      const clipRect=logoSvg?logoSvg.querySelector('#logo-fill-rect'):null;
       (function tick(now){
         const p=Math.min((now-start)/duration,1);
         const eased=1-Math.pow(1-p,4);
         numEl.textContent=Math.round(eased*target);
-        if(clipRect){
-          // viewBox top is -40, total height 2128 — fill rises from bottom (2088) to top (-40)
-          const fillY = -40 + 2128 * (1 - eased);
-          clipRect.setAttribute('y', fillY);
-        }
+        if(clipRect){ const fillY=-40+2128*(1-eased); clipRect.setAttribute('y',fillY); }
         if(p<1) requestAnimationFrame(tick); else res();
       })(performance.now());
     });
   }
 
-  document.getElementById('num-clip').style.visibility = 'hidden';
-  document.getElementById('label-clip').style.visibility = 'hidden';
-
-  // Logo draws itself; the moment it finishes we immediately drop the counter in
+  document.getElementById('num-clip').style.visibility='hidden';
+  document.getElementById('label-clip').style.visibility='hidden';
   await runLogoIntro();
-
-  // No pause — immediately show counter
-  document.getElementById('num-clip').style.visibility = 'visible';
-  document.getElementById('label-clip').style.visibility = 'visible';
+  document.getElementById('num-clip').style.visibility='visible';
+  document.getElementById('label-clip').style.visibility='visible';
   numEl.classList.add('drop');
-
   const target=await _kidCountReady;
   await countUp(target,2200);
   labelEl.classList.add('rise');
@@ -681,9 +525,7 @@ new ResizeObserver(()=>{
   await sleep(1300);
   splash.style.display='none';
   mapWrap.classList.add('visible');
-  if(window._illuminateMap && window._kidsForIllumination){
-    window._illuminateMap(window._kidsForIllumination);
-  }
+  if(window._illuminateMap&&window._kidsForIllumination){ window._illuminateMap(window._kidsForIllumination); }
 })();
 </script>
 </body>
