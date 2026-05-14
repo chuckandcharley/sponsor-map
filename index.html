@@ -548,12 +548,19 @@ function clearHighlight(){
 }
 
 function hidePins(){
-  const pg = document.getElementById('pins-group');
-  pg.style.opacity = '0';
+  // Hide every pin except the selected one — that stays visible and amber
+  // so the user always knows which kid the modal refers to
+  d3.select('#pins-group').selectAll('g').each(function(){
+    if(this !== _selectedPin){
+      d3.select(this).style('opacity','0').style('pointer-events','none');
+    }
+  });
   d3.select('#zoom-controls').style('opacity','0').style('pointer-events','none');
 }
 function showPins(){
-  d3.select('#pins-group').transition().duration(220).style('opacity','1');
+  d3.select('#pins-group').selectAll('g')
+    .style('pointer-events','all')
+    .transition().duration(220).style('opacity','1');
   d3.select('#zoom-controls').transition().duration(220).style('opacity','1').style('pointer-events','all');
 }
 
