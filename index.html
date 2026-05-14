@@ -369,11 +369,11 @@ function hidePins(){
   d3.select('#pins-group').selectAll('g').each(function(){
     if(this!==_selectedPin){
       d3.select(this).style('pointer-events','none')
-        .transition().duration(300).style('opacity','0');
+        .transition().duration(200).style('opacity','0');
     }
   });
   d3.select('#zoom-controls')
-    .transition().duration(300).style('opacity','0').style('pointer-events','none');
+    .transition().duration(200).style('opacity','0').style('pointer-events','none');
 }
 // Fade everything back in
 function showPins(){
@@ -393,9 +393,9 @@ function openModal(kid){
   const kidLabel=kid.name+(kid.city?', '+kid.city:'')+(kid.state?', '+kid.state:'');
   document.getElementById('btn-build').onclick=function(e){ e.preventDefault(); window.parent.postMessage({type:'RSF_FILL_FORM',kiddo:kidLabel},'*'); };
   document.getElementById('btn-sponsor').onclick=function(e){ e.preventDefault(); window.parent.location.href=URL_SPONSOR; };
-  // Others fade immediately; modal follows once fade is done
+  // 200ms fade, then 400ms hold on the lone amber pin, then modal slides in
   hidePins();
-  setTimeout(()=>card.classList.add('active'), 320);
+  setTimeout(()=>card.classList.add('active'), 600);
 }
 function closeModal(){
   if(!isOpen) return; isOpen=false;
