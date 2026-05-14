@@ -292,14 +292,18 @@ svg.on('pointerdown.inertia', ()=>{
    })
    .on('pointerup.inertia pointercancel.inertia', event=>{
       _touchCount = Math.max(0, _touchCount - 1);
-      // Don't coast after a pinch gesture — only after a single-finger pan
       if(_touchCount > 0) return;
       if(Math.abs(_velX) < 0.1 && Math.abs(_velY) < 0.1) return;
-      const FRICTION = 0.88;
+      // Cap velocity so fast flicks don't slingshot across the map
+      const MAX_VEL = 0.6;
+      _velX = Math.max(-MAX_VEL, Math.min(MAX_VEL, _velX));
+      _velY = Math.max(-MAX_VEL, Math.min(MAX_VEL, _velY));
+      const FRICTION = 0.78; // higher = stops faster
+      const SCALE = 10;      // lower = shorter glide distance
       function coast(){
         _velX *= FRICTION; _velY *= FRICTION;
-        if(Math.abs(_velX) < 0.02 && Math.abs(_velY) < 0.02){ _inertiaRaf=null; return; }
-        svg.call(zoom.translateBy, _velX * 16, _velY * 16);
+        if(Math.abs(_velX) < 0.01 && Math.abs(_velY) < 0.01){ _inertiaRaf=null; return; }
+        svg.call(zoom.translateBy, _velX * SCALE, _velY * SCALE);
         _inertiaRaf = requestAnimationFrame(coast);
       }
       _inertiaRaf = requestAnimationFrame(coast);
