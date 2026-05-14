@@ -234,13 +234,17 @@ const svg = d3.select('#us-map');
 const zoomGroup = d3.select('#zoom-group');
 
 let lastReclusterK = 1;
+
+// ── INERTIA / MOMENTUM PAN ───────────────────────────────────
+// We implement a simple velocity tracker on pointermove so that when the
+// user lifts their finger the map coasts to a stop rather than snapping.
+let _velX = 0, _velY = 0, _lastPt = null, _lastT = 0, _inertiaRaf = null;
+function _cancelInertia(){ if(_inertiaRaf){ cancelAnimationFrame(_inertiaRaf); _inertiaRaf=null; } }
+
 const zoom = d3.zoom()
   .scaleExtent([1, 12])
   .translateExtent([[0,0],[SVG_W,SVG_H]])
-  // Disable scroll wheel zoom to prevent accidental zoom while scrolling the page
   .filter(event => {
-    // Allow: touch gestures (pinch), button-triggered, dblclick
-    // Disallow: scroll wheel
     if(event.type === 'wheel') return false;
     return true;
   })
@@ -257,6 +261,32 @@ const zoom = d3.zoom()
   });
 
 svg.call(zoom);
+
+// Track velocity during drag for inertia
+svg.on('pointerdown.inertia', ()=>{ _cancelInertia(); _velX=0; _velY=0; _lastPt=null; })
+   .on('pointermove.inertia', event=>{
+      if(event.buttons === 0 && event.pointerType !== 'touch') return;
+      const now = performance.now();
+      if(_lastPt){
+        const dt = Math.max(now - _lastT, 1);
+        _velX = (event.clientX - _lastPt[0]) / dt;
+        _velY = (event.clientY - _lastPt[1]) / dt;
+      }
+      _lastPt = [event.clientX, event.clientY];
+      _lastT = now;
+   })
+   .on('pointerup.inertia pointercancel.inertia', ()=>{
+      // Only coast if we have some meaningful velocity
+      if(Math.abs(_velX) < 0.1 && Math.abs(_velY) < 0.1) return;
+      const FRICTION = 0.88;
+      function coast(){
+        _velX *= FRICTION; _velY *= FRICTION;
+        if(Math.abs(_velX) < 0.02 && Math.abs(_velY) < 0.02){ _inertiaRaf=null; return; }
+        svg.call(zoom.translateBy, _velX * 16, _velY * 16);
+        _inertiaRaf = requestAnimationFrame(coast);
+      }
+      _inertiaRaf = requestAnimationFrame(coast);
+   });
 
 // Zoom buttons
 document.getElementById('btn-zoom-in').addEventListener('click', ()=>{
@@ -417,15 +447,17 @@ function renderMarkers(kids, animate){
   const strokeW = Math.max(0.5, 1.2 / currentK);
   const dotR = pr * 0.38;
 
-  // Hit target radius — generously sized for mobile tap
-  const hitR = isMobile ? Math.max(pr * 2.5, 10 / currentK) : pr * 2.2;
+  // Hit target — matches the visible pin size, not oversized
+  const hitR = pr * 1.8;
 
   positions.forEach((pt, ci)=>{
     const delay = animate ? ci * 8 : 0;
     const kid = pt.kid;
 
+    // Pin drops from slightly above its resting spot
+    const dropOffset = pr * 3; // SVG units above final position
     const g = layer.append('g')
-      .attr('transform',`translate(${pt.x},${pt.y})`)
+      .attr('transform',`translate(${pt.x},${pt.y - dropOffset})`)
       .style('cursor','pointer')
       .style('opacity','0');
 
@@ -443,31 +475,38 @@ function renderMarkers(kids, animate){
       .attr('r', dotR)
       .attr('fill','#004270');
 
-    // Invisible hit area — generously sized for mobile
+    // Hit area — accurate to the visible pin
     g.append('circle')
-      .attr('cx',0).attr('cy',-pr*1.5)
+      .attr('cx',0).attr('cy',-pr*1.8)
       .attr('r', hitR)
       .attr('fill','transparent')
       .attr('stroke','none');
 
     g.on('click',(e)=>{ e.stopPropagation(); openModal(kid); })
-     .on('mouseover', function(){ d3.select(this).select('path').attr('transform',`scale(1.25) translate(0,${pr*0.1})`); })
+     .on('mouseover', function(){ d3.select(this).select('path').attr('transform',`scale(1.2)`); })
      .on('mouseout',  function(){ d3.select(this).select('path').attr('transform',''); });
 
     setTimeout(()=>{
-      g.style('opacity','1');
+      // Fade in and drop into place
+      g.style('opacity','1')
+       .transition().duration(280).ease(d3.easeBounceOut)
+       .attr('transform',`translate(${pt.x},${pt.y})`);
+
       if(animate){
-        const ripple = layer.insert('circle','g')
-          .attr('cx',pt.x).attr('cy',pt.y)
-          .attr('r', pr*0.5)
-          .attr('fill','none')
-          .attr('stroke','#d0e8f5')
-          .attr('stroke-width', strokeW)
-          .style('opacity','0.6');
-        ripple.transition().duration(900).ease(d3.easeCubicOut)
-          .attr('r', pr*2.8)
-          .style('opacity','0')
-          .remove();
+        // Ripple fires after the pin lands (~280ms)
+        setTimeout(()=>{
+          const ripple = layer.insert('circle','g')
+            .attr('cx',pt.x).attr('cy',pt.y)
+            .attr('r', pr * 0.6)
+            .attr('fill','none')
+            .attr('stroke','rgba(0,66,112,0.35)')
+            .attr('stroke-width', strokeW * 1.2)
+            .style('pointer-events','none');
+          ripple.transition().duration(700).ease(d3.easeCubicOut)
+            .attr('r', pr * 3.2)
+            .style('opacity','0')
+            .remove();
+        }, 290);
       }
     }, delay);
   });
@@ -477,16 +516,17 @@ function renderMarkers(kids, animate){
 const card = document.getElementById('modal-card');
 let isOpen=false;
 
-function fadePinsOut(cb){
-  d3.select('#pins-group').transition().duration(180).style('opacity','0');
-  setTimeout(cb,200);
+function hidePins(){
+  // Use visibility so pins are truly non-interactive while modal is open
+  d3.select('#pins-group').style('opacity','0').style('pointer-events','none');
 }
-function fadePinsIn(){
-  d3.select('#pins-group').transition().duration(200).style('opacity','1');
+function showPins(){
+  d3.select('#pins-group').transition().duration(220).style('opacity','1').style('pointer-events','all');
 }
 
 function openModal(kid){
   if(isOpen) return; isOpen=true;
+  _cancelInertia();
   document.getElementById('modal-name').textContent = kid.name;
   document.getElementById('modal-age').textContent = kid.age;
   document.getElementById('modal-location').textContent =
@@ -500,12 +540,13 @@ function openModal(kid){
     e.preventDefault();
     window.parent.location.href = URL_SPONSOR;
   };
-  fadePinsOut(()=>card.classList.add('active'));
+  hidePins();
+  setTimeout(()=>card.classList.add('active'), 60);
 }
 function closeModal(){
   if(!isOpen) return; isOpen=false;
   card.classList.remove('active');
-  setTimeout(fadePinsIn,230);
+  setTimeout(showPins, 230);
 }
 document.getElementById('map-wrap').addEventListener('click',()=>{ if(isOpen) closeModal(); });
 card.addEventListener('click',e=>e.stopPropagation());
