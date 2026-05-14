@@ -496,7 +496,11 @@ function renderMarkers(kids, animate){
     // On mobile the pin is large enough; on desktop hovering the visible
     // shape is exactly what users expect.
 
-    g.on('click',(e)=>{ e.stopPropagation(); openModal(kid); })
+    g.on('click',(e)=>{
+       if(isOpen){ closeModal(); return; } // modal open — treat any click as close
+       e.stopPropagation();
+       openModal(kid);
+     })
      .on('mouseover', function(){ d3.select(this).select('path').attr('transform','scale(1.18)'); })
      .on('mouseout',  function(){ d3.select(this).select('path').attr('transform',''); });
 
@@ -541,15 +545,9 @@ let isOpen=false;
 function hidePins(){
   const pg = document.getElementById('pins-group');
   pg.style.opacity = '0';
-  pg.style.pointerEvents = 'none';
-  // Also disable on the SVG itself so path-level pointer-events:all can't override
-  svgEl.style.pointerEvents = 'none';
   d3.select('#zoom-controls').style('opacity','0').style('pointer-events','none');
 }
 function showPins(){
-  const pg = document.getElementById('pins-group');
-  pg.style.pointerEvents = 'all';
-  svgEl.style.pointerEvents = 'all';
   d3.select('#pins-group').transition().duration(220).style('opacity','1');
   d3.select('#zoom-controls').transition().duration(220).style('opacity','1').style('pointer-events','all');
 }
