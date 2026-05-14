@@ -67,7 +67,7 @@ svg#us-map:active{cursor:grabbing}
 .btn-secondary:hover{background:#f0f7fc;border-color:var(--navy);}
 
 /* Zoom buttons */
-#zoom-controls{position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;gap:4px;z-index:30}
+#zoom-controls{position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;gap:4px;z-index:30;transition:opacity .22s ease}
 .zoom-btn{width:32px;height:32px;background:#fff;border:1.5px solid #cde4f0;border-radius:8px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,42,70,.12);transition:background .12s,transform .1s;-webkit-tap-highlight-color:transparent;font-family:var(--ff)}
 .zoom-btn:hover{background:#f0f7fc}
 .zoom-btn:active{transform:scale(.93)}
@@ -447,67 +447,72 @@ function renderMarkers(kids, animate){
   const strokeW = Math.max(0.5, 1.2 / currentK);
   const dotR = pr * 0.38;
 
-  // Hit target — matches the visible pin size, not oversized
-  const hitR = pr * 1.8;
-
   positions.forEach((pt, ci)=>{
     const delay = animate ? ci * 8 : 0;
     const kid = pt.kid;
 
-    // Pin drops from slightly above its resting spot
-    const dropOffset = pr * 3; // SVG units above final position
     const g = layer.append('g')
-      .attr('transform',`translate(${pt.x},${pt.y - dropOffset})`)
+      // Always start at final position — only offset visually during drop animation
+      .attr('transform',`translate(${pt.x},${pt.y})`)
       .style('cursor','pointer')
-      .style('opacity','0');
+      .style('opacity', animate ? '0' : '1');
 
-    // Teardrop pin — tip at (0,0), body above
+    // Teardrop pin — tip at (0,0), body above.
+    // pointer-events:all on the path means clicks register on the exact
+    // visible shape, not a bounding box or invisible circle overlay.
     g.append('path')
       .attr('d', pinPath(pr))
       .attr('fill','#ffffff')
       .attr('stroke','#004270')
       .attr('stroke-width', strokeW)
-      .attr('stroke-linejoin','round');
+      .attr('stroke-linejoin','round')
+      .style('pointer-events','all');
 
-    // Center dot
+    // Center dot — also clickable, same shape region
     g.append('circle')
       .attr('cx',0).attr('cy',-pr*2.11)
       .attr('r', dotR)
-      .attr('fill','#004270');
+      .attr('fill','#004270')
+      .style('pointer-events','all');
 
-    // Hit area — accurate to the visible pin
-    g.append('circle')
-      .attr('cx',0).attr('cy',-pr*1.8)
-      .attr('r', hitR)
-      .attr('fill','transparent')
-      .attr('stroke','none');
+    // No invisible hit-area circle — the path itself is the target.
+    // On mobile the pin is large enough; on desktop hovering the visible
+    // shape is exactly what users expect.
 
     g.on('click',(e)=>{ e.stopPropagation(); openModal(kid); })
-     .on('mouseover', function(){ d3.select(this).select('path').attr('transform',`scale(1.2)`); })
+     .on('mouseover', function(){ d3.select(this).select('path').attr('transform','scale(1.18)'); })
      .on('mouseout',  function(){ d3.select(this).select('path').attr('transform',''); });
 
-    setTimeout(()=>{
-      // Fade in and drop into place
-      g.style('opacity','1')
-       .transition().duration(280).ease(d3.easeBounceOut)
-       .attr('transform',`translate(${pt.x},${pt.y})`);
+    if(!animate){
+      // No animation on re-render (zoom/resize) — pins are already positioned
+      return;
+    }
 
-      if(animate){
-        // Ripple fires after the pin lands (~280ms)
-        setTimeout(()=>{
-          const ripple = layer.insert('circle','g')
-            .attr('cx',pt.x).attr('cy',pt.y)
-            .attr('r', pr * 0.6)
-            .attr('fill','none')
-            .attr('stroke','rgba(0,66,112,0.35)')
-            .attr('stroke-width', strokeW * 1.2)
-            .style('pointer-events','none');
-          ripple.transition().duration(700).ease(d3.easeCubicOut)
-            .attr('r', pr * 3.2)
-            .style('opacity','0')
-            .remove();
-        }, 290);
-      }
+    // Drop-in entrance: pin starts above, fades in, falls with a gentle overshoot
+    const dropSVG = pr * 4;
+    g.attr('transform',`translate(${pt.x},${pt.y - dropSVG})`);
+
+    setTimeout(()=>{
+      g.style('opacity','1')
+       .transition()
+         .duration(340)
+         .ease(d3.easeBackOut.overshoot(1.4))
+         .attr('transform',`translate(${pt.x},${pt.y})`);
+
+      // Ripple fires after pin lands
+      setTimeout(()=>{
+        const ripple = layer.insert('circle','g')
+          .attr('cx',pt.x).attr('cy',pt.y)
+          .attr('r', pr * 0.5)
+          .attr('fill','none')
+          .attr('stroke','rgba(0,66,112,0.28)')
+          .attr('stroke-width', strokeW * 1.2)
+          .style('pointer-events','none');
+        ripple.transition().duration(650).ease(d3.easeCubicOut)
+          .attr('r', pr * 3.5)
+          .style('opacity','0')
+          .remove();
+      }, 350);
     }, delay);
   });
 }
@@ -517,11 +522,12 @@ const card = document.getElementById('modal-card');
 let isOpen=false;
 
 function hidePins(){
-  // Use visibility so pins are truly non-interactive while modal is open
   d3.select('#pins-group').style('opacity','0').style('pointer-events','none');
+  d3.select('#zoom-controls').style('opacity','0').style('pointer-events','none');
 }
 function showPins(){
   d3.select('#pins-group').transition().duration(220).style('opacity','1').style('pointer-events','all');
+  d3.select('#zoom-controls').transition().duration(220).style('opacity','1').style('pointer-events','all');
 }
 
 function openModal(kid){
