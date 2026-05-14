@@ -214,7 +214,13 @@ function deduplicateKids(kids){
   const seen = new Set();
   const out = [];
   for(const k of kids){
-    const key = (k.name||'').trim().toLowerCase();
+    // Only suppress a record if name AND age AND state all match —
+    // so two real kids who happen to share a name aren't collapsed.
+    const key = [
+      (k.name  ||'').trim().toLowerCase(),
+      (k.age   ||'').toString().trim().toLowerCase(),
+      (k.state ||'').trim().toLowerCase()
+    ].join('|');
     if(!key || seen.has(key)) continue;
     seen.add(key);
     out.push(k);
