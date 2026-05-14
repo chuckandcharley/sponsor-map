@@ -524,18 +524,18 @@ function renderMarkers(kids, animate){
          .ease(d3.easeBackOut.overshoot(1.4))
          .attr('transform',`translate(${pt.x},${pt.y})`);
 
-      // Ink-drop bloom after pin lands — soft filled circle that blooms and fades
+      // Ink-drop bloom — appended after pin lands so it's always on top
       setTimeout(()=>{
-        const drop = layer.insert('circle','g')
+        const drop = layer.append('circle')
           .attr('cx', pt.x).attr('cy', pt.y)
-          .attr('r', pr * 0.3)
-          .attr('fill','rgba(0,66,112,0.22)')
+          .attr('r', pr * 0.8)
+          .attr('fill','rgba(0,66,112,0.35)')
           .style('pointer-events','none');
-        drop.transition().duration(500).ease(d3.easeCubicOut)
-          .attr('r', pr * 2.2)
+        drop.transition().duration(550).ease(d3.easeCubicOut)
+          .attr('r', pr * 3.8)
           .style('opacity','0')
           .remove();
-      }, 350);
+      }, 360);
     }, delay);
   });
 }
