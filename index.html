@@ -580,14 +580,20 @@ function openModal(kid){
     e.preventDefault();
     window.parent.location.href = URL_SPONSOR;
   };
-  hidePins();
-  setTimeout(()=>card.classList.add('active'), 60);
+  // Brief pause so the amber pin is visible before everything else hides
+  setTimeout(()=>{
+    hidePins();
+    setTimeout(()=> card.classList.add('active'), 120);
+  }, 600);
 }
 function closeModal(){
   if(!isOpen) return; isOpen=false;
   card.classList.remove('active');
-  clearHighlight();
-  setTimeout(showPins, 230);
+  // Hold on the amber pin alone for a beat, then restore everything
+  setTimeout(()=>{
+    clearHighlight();
+    setTimeout(showPins, 80);
+  }, 700);
 }
 document.getElementById('map-wrap').addEventListener('click',()=>{ if(isOpen) closeModal(); });
 card.addEventListener('click',e=>e.stopPropagation());
