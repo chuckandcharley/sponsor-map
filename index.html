@@ -24,7 +24,7 @@ svg#us-map:active{cursor:grabbing}
 #modal-card{
   position:absolute;left:50%;top:50%;
   transform:translate(-50%,-50%) scale(0.92);
-  width:clamp(200px,26%,260px);
+  width:260px;
   display:flex;flex-direction:column;
   background:#fff;border-radius:16px;
   font-family:var(--ff);
@@ -34,16 +34,14 @@ svg#us-map:active{cursor:grabbing}
   box-shadow:0 8px 40px rgba(0,42,70,.22),0 2px 8px rgba(0,42,70,.10);
 }
 #modal-card.active{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1);}
-@media(max-width:600px){
-  #modal-card{position:fixed;left:50%;top:50%;width:82vw;max-width:320px;}
-}
+
 #modal-top{background:var(--navy);padding:20px 20px 16px;}
-#modal-waiting{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;}
-#modal-name{font-size:22px;font-weight:700;color:#fff;line-height:1.15;margin:0;}
+#modal-waiting{font-size:7px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;}
+#modal-name{font-size:17px;font-weight:600;letter-spacing:-0.01em;color:#fff;line-height:1.15;margin:0;}
 #modal-meta{font-size:11px;color:rgba(255,255,255,0.55);margin-top:5px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #modal-footer{padding:14px 20px 18px;display:flex;flex-direction:column;gap:8px;background:#fff;}
 
-.btn{display:block;width:100%;padding:11px 10px;border-radius:8px;font-size:11px;font-weight:700;font-family:var(--ff);letter-spacing:.06em;text-transform:uppercase;text-align:center;text-decoration:none;cursor:pointer;border:2px solid transparent;transition:background .15s,transform .1s,box-shadow .15s;-webkit-tap-highlight-color:transparent;}
+.btn{display:block;width:100%;padding:7px 10px;border-radius:6px;font-size:10px;font-weight:700;font-family:var(--ff);letter-spacing:.06em;text-transform:uppercase;text-align:center;text-decoration:none;cursor:pointer;border:2px solid transparent;transition:background .15s,transform .1s,box-shadow .15s;-webkit-tap-highlight-color:transparent;}
 .btn:active{transform:scale(.97);}
 .btn-primary{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 2px 8px rgba(0,42,70,.18);}
 .btn-primary:hover{background:#003258;border-color:#003258;}
@@ -88,7 +86,10 @@ svg#us-map:active{cursor:grabbing}
     <div id="modal-top">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
         <div style="flex:1;min-width:0">
-          <div id="modal-waiting">Waiting for a Sponsor</div>
+          <div id="modal-waiting" style="display:flex;align-items:center;gap:8px;">
+  <button id="modal-close" aria-label="Close" onclick="closeModal()" style="background:none;border:none;padding:0;margin:0;cursor:pointer;font-size:7px;font-weight:700;letter-spacing:.18em;color:rgba(255,255,255,0.45);line-height:1;font-family:var(--ff);transition:color .15s;" onmouseover="this.style.color='rgba(255,255,255,0.85)'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">✕</button>
+  <span>Waiting for a Sponsor</span>
+</div>
           <div id="modal-name">&#8212;</div>
           <div id="modal-meta"><span id="modal-age"></span>&nbsp;&nbsp;·&nbsp;&nbsp;<span id="modal-location"></span></div>
         </div>
