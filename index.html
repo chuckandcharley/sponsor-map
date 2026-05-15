@@ -393,7 +393,7 @@ function openModal(kid){
   document.getElementById('modal-location').textContent=kid.city&&kid.state?kid.city+', '+kid.state:kid.state||'';
   const kidLabel=kid.name+(kid.city?', '+kid.city:'')+(kid.state?', '+kid.state:'');
   document.getElementById('btn-build').onclick=function(e){ e.preventDefault(); window.parent.postMessage({type:'RSF_FILL_FORM',kiddo:kidLabel},'*'); };
-  document.getElementById('btn-sponsor').onclick=function(e){ e.preventDefault(); window.parent.open(URL_SPONSOR,'_blank'); };
+  document.getElementById('btn-sponsor').onclick=function(e){ e.preventDefault(); window.open(URL_SPONSOR,'_blank'); };
   // 200ms fade, then 400ms hold on the lone amber pin, then modal slides in
   hidePins();
   setTimeout(()=>card.classList.add('active'), 600);
