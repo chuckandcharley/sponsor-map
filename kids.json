@@ -1,31 +1,24 @@
 [
   {
-    "name": "Adeline",
-    "age": "4 years old",
-    "city": "Cedar Creek",
+    "name": "Stefon",
+    "age": "7 years old",
+    "city": "San Antonio",
     "state": "TX",
-    "zip": "78612"
+    "zip": "78253"
   },
   {
-    "name": "Caleb",
-    "age": "1 year old",
-    "city": "Naples",
-    "state": "FL",
-    "zip": "34120"
+    "name": "Jazmyne",
+    "age": "9 years old",
+    "city": "Killeen",
+    "state": "TX",
+    "zip": "76542"
   },
   {
-    "name": "Adeline",
-    "age": "4 years old",
-    "city": "Cedar Creek",
+    "name": "Stefon",
+    "age": "7 years old",
+    "city": "San Antonio",
     "state": "TX",
-    "zip": "78612"
-  },
-  {
-    "name": "Adeline",
-    "age": "4 years old",
-    "city": "Cedar Creek",
-    "state": "TX",
-    "zip": "78612"
+    "zip": "78253"
   },
   {
     "name": "Sage",
@@ -33,34 +26,6 @@
     "city": "Shreveport",
     "state": "LA",
     "zip": "71118"
-  },
-  {
-    "name": "Evann",
-    "age": "3 years old",
-    "city": "Houston",
-    "state": "TX",
-    "zip": "77086"
-  },
-  {
-    "name": "Adeline",
-    "age": "4 years old",
-    "city": "Cedar Creek",
-    "state": "TX",
-    "zip": "78612"
-  },
-  {
-    "name": "Fernanda",
-    "age": "9 years old",
-    "city": "San Antonio",
-    "state": "TX",
-    "zip": "78225"
-  },
-  {
-    "name": "Adeline",
-    "age": "4 years old",
-    "city": "Cedar Creek",
-    "state": "TX",
-    "zip": "78612"
   },
   {
     "name": "Wyatt",
@@ -358,7 +323,7 @@
   },
   {
     "name": "Abdul Rasheed",
-    "age": "1 year old",
+    "age": "2 years old",
     "city": "Reynoldsburg",
     "state": "OH",
     "zip": "43068"
@@ -1813,13 +1778,6 @@
     "zip": "30809"
   },
   {
-    "name": "Maverick",
-    "age": "5 years old",
-    "city": "Kimberly",
-    "state": "AL",
-    "zip": "35091"
-  },
-  {
     "name": "Sebastian",
     "age": "4 years old",
     "city": "Waco",
@@ -2245,13 +2203,6 @@
     "city": "Miami",
     "state": "FL",
     "zip": "33142"
-  },
-  {
-    "name": "Miley",
-    "age": "2 years old",
-    "city": "Massillon",
-    "state": "OH",
-    "zip": "44646"
   },
   {
     "name": "Leonardo",
@@ -3183,13 +3134,6 @@
     "city": "Newville",
     "state": "PA",
     "zip": "17241"
-  },
-  {
-    "name": "Matthew",
-    "age": "3 years old",
-    "city": "Hillsboro",
-    "state": "AL",
-    "zip": "35643"
   },
   {
     "name": "Fable",
