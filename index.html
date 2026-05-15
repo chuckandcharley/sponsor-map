@@ -86,9 +86,8 @@ svg#us-map:active{cursor:grabbing}
     <div id="modal-top">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
         <div style="flex:1;min-width:0">
-          <div id="modal-waiting" style="display:flex;align-items:center;gap:8px;">
-  <button id="modal-close" aria-label="Close" onclick="closeModal()" style="background:none;border:none;padding:0;margin:0;cursor:pointer;font-size:7px;font-weight:700;letter-spacing:.18em;color:rgba(255,255,255,0.45);line-height:1;font-family:var(--ff);transition:color .15s;" onmouseover="this.style.color='rgba(255,255,255,0.85)'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">✕</button>
-  <span>Waiting for a Sponsor</span>
+          <div id="modal-waiting">
+    <span>Waiting for a Sponsor</span>
 </div>
           <div id="modal-name">&#8212;</div>
           <div id="modal-meta"><span id="modal-age"></span>&nbsp;&nbsp;·&nbsp;&nbsp;<span id="modal-location"></span></div>
@@ -103,8 +102,9 @@ svg#us-map:active{cursor:grabbing}
       </div>
     </div>
     <div id="modal-footer">
-      <a id="btn-build" href="#" class="btn btn-primary">I Want to Build This</a>
-      <a id="btn-sponsor" href="#" class="btn btn-secondary">Fund This Build</a>
+      <a id="btn-build" href="#" class="btn btn-primary">Sponsor & Build This Playset</a>
+      <a id="btn-sponsor" href="#" class="btn btn-secondary" target="_blank" rel="noopener">I Want to Fund This Playset</a>
+      <button onclick="closeModal()" style="background:none;border:none;padding:4px 0 0;margin:0;cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#b0c4d4;font-family:var(--ff);text-align:center;width:100%;transition:color .15s;display:block;" onmouseover="this.style.color='#004270'" onmouseout="this.style.color='#b0c4d4'">✕ Close</button>
     </div>
   </div>
 
@@ -393,7 +393,7 @@ function openModal(kid){
   document.getElementById('modal-location').textContent=kid.city&&kid.state?kid.city+', '+kid.state:kid.state||'';
   const kidLabel=kid.name+(kid.city?', '+kid.city:'')+(kid.state?', '+kid.state:'');
   document.getElementById('btn-build').onclick=function(e){ e.preventDefault(); window.parent.postMessage({type:'RSF_FILL_FORM',kiddo:kidLabel},'*'); };
-  document.getElementById('btn-sponsor').onclick=function(e){ e.preventDefault(); window.parent.location.href=URL_SPONSOR; };
+  document.getElementById('btn-sponsor').onclick=function(e){ e.preventDefault(); window.parent.open(URL_SPONSOR,'_blank'); };
   // 200ms fade, then 400ms hold on the lone amber pin, then modal slides in
   hidePins();
   setTimeout(()=>card.classList.add('active'), 600);
