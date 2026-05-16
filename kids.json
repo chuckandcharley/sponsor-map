@@ -1,5 +1,12 @@
 [
   {
+    "name": "Cooper",
+    "age": "1 year old",
+    "city": "Mascoutah",
+    "state": "IL",
+    "zip": "62258"
+  },
+  {
     "name": "Jaxson",
     "age": "5 years old",
     "city": "Stanton",
