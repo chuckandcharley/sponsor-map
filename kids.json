@@ -1,5 +1,12 @@
 [
   {
+    "name": "Jaxson",
+    "age": "5 years old",
+    "city": "Stanton",
+    "state": "MI",
+    "zip": "48888"
+  },
+  {
     "name": "Ajai",
     "age": "7 years old",
     "city": "cicero",
