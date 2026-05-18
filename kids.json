@@ -1,5 +1,19 @@
 [
   {
+    "name": "Malka",
+    "age": "Under 1 year old",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11218"
+  },
+  {
+    "name": "Luka",
+    "age": "6 years old",
+    "city": "Hartsville",
+    "state": "SC",
+    "zip": "29550"
+  },
+  {
     "name": "Liam",
     "age": "4 years old",
     "city": "Jasper",
@@ -218,7 +232,7 @@
   },
   {
     "name": "Leo",
-    "age": "3 years old",
+    "age": "4 years old",
     "city": "Hutto",
     "state": "TX",
     "zip": "78634"
@@ -1097,13 +1111,6 @@
     "city": "Lake Mills",
     "state": "WI",
     "zip": "53551"
-  },
-  {
-    "name": "Avalena",
-    "age": "3 years old",
-    "city": "Haverhill",
-    "state": "MA",
-    "zip": "01930"
   },
   {
     "name": "Claire",
