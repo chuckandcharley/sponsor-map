@@ -1,5 +1,12 @@
 [
   {
+    "name": "Leo",
+    "age": "1 year old",
+    "city": "Green Bay",
+    "state": "WI",
+    "zip": "54303"
+  },
+  {
     "name": "Mohammed",
     "age": "2 years old",
     "city": "Rochester",
