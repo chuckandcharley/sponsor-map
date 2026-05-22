@@ -1,5 +1,12 @@
 [
   {
+    "name": "Miqueas",
+    "age": "4 years old",
+    "city": "Reading",
+    "state": "PA",
+    "zip": "19601"
+  },
+  {
     "name": "Annie",
     "age": "8 years old",
     "city": "San Antonio",
