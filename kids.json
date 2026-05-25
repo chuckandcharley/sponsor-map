@@ -1,5 +1,12 @@
 [
   {
+    "name": "Adonis",
+    "age": "4 years old",
+    "city": "Charlotte",
+    "state": "NC",
+    "zip": "28216"
+  },
+  {
     "name": "Roslyn",
     "age": "7 years old",
     "city": "Elgin",
