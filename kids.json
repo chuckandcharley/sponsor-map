@@ -1,5 +1,19 @@
 [
   {
+    "name": "Sofia",
+    "age": "2 years old",
+    "city": "South Mills",
+    "state": "NC",
+    "zip": "27976"
+  },
+  {
+    "name": "Sofia",
+    "age": "2 years old",
+    "city": "South Mills",
+    "state": "NC",
+    "zip": "27976"
+  },
+  {
     "name": "Adonis",
     "age": "4 years old",
     "city": "Charlotte",
@@ -610,7 +624,7 @@
   },
   {
     "name": "Lukas",
-    "age": "9 years old",
+    "age": "10 years old",
     "city": "Middlefield",
     "state": "CT",
     "zip": "06455"
@@ -3529,7 +3543,7 @@
   },
   {
     "name": "Presley",
-    "age": "5 years old",
+    "age": "6 years old",
     "city": "Bossier City",
     "state": "LA",
     "zip": "71112"
