@@ -7,13 +7,6 @@
     "zip": "27976"
   },
   {
-    "name": "Sofia",
-    "age": "2 years old",
-    "city": "South Mills",
-    "state": "NC",
-    "zip": "27976"
-  },
-  {
     "name": "Adonis",
     "age": "4 years old",
     "city": "Charlotte",
@@ -47,13 +40,6 @@
     "city": "Houston",
     "state": "TX",
     "zip": "77020"
-  },
-  {
-    "name": "Carson",
-    "age": "2 years old",
-    "city": "Sanford",
-    "state": "MI",
-    "zip": "48657"
   },
   {
     "name": "Carson",
@@ -105,13 +91,6 @@
     "zip": "19601"
   },
   {
-    "name": "Annie",
-    "age": "8 years old",
-    "city": "San Antonio",
-    "state": "TX",
-    "zip": "78237"
-  },
-  {
     "name": "Dakota",
     "age": "3 years old",
     "city": "Clarksville",
@@ -124,27 +103,6 @@
     "city": "Laredo",
     "state": "TX",
     "zip": "78043"
-  },
-  {
-    "name": "Bennett",
-    "age": "2 years old",
-    "city": "Banner",
-    "state": "KY",
-    "zip": "41603"
-  },
-  {
-    "name": "Graylynn",
-    "age": "2 years old",
-    "city": "Enoree",
-    "state": "SC",
-    "zip": "29335"
-  },
-  {
-    "name": "Graylynn",
-    "age": "2 years old",
-    "city": "Enoree",
-    "state": "SC",
-    "zip": "29335"
   },
   {
     "name": "Myles",
