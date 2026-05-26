@@ -89,10 +89,9 @@ svg#us-map:active{cursor:grabbing}
 /* Photo ring */
 #ring-wrap{
   position:absolute;inset:0;pointer-events:none;z-index:1;
-  display:flex;align-items:center;justify-content:center;
 }
 #ring-rotator{
-  position:relative;
+  position:absolute;
   opacity:0;transition:opacity 0.8s ease;
 }
 #ring-rotator.spinning{animation:ringRotate 22s linear infinite;}
@@ -337,10 +336,18 @@ async function buildRing(){
   const picked=shuffle(filenames).slice(0,PHOTO_COUNT);
   const rotator=document.getElementById('ring-rotator');
 
-  // Size the rotator to the ring diameter so centering works
+  // Size the rotator to the ring diameter
   const diameter=(RING_R+PHOTO_SIZE/2)*2;
   rotator.style.width=diameter+'px';
   rotator.style.height=diameter+'px';
+
+  // Position rotator centered on the logo element, not the whole splash
+  const logoEl=document.getElementById('logo-svg-wrap');
+  const logoRect=logoEl.getBoundingClientRect();
+  const logoCX=logoRect.left+logoRect.width/2;
+  const logoCY=logoRect.top+logoRect.height/2;
+  rotator.style.left=(logoCX-diameter/2)+'px';
+  rotator.style.top=(logoCY-diameter/2)+'px';
 
   ringPhotoEls=picked.map((name,i)=>{
     const angle=(i/PHOTO_COUNT)*Math.PI*2 - Math.PI/2; // start from top
@@ -381,18 +388,20 @@ function dismissLegend(){
   const mapWrap=document.getElementById('map-wrap');
 
   // Kick off bubble build and kid count fetch in parallel with logo draw
-  buildRing(); // starts fetching photos immediately
+  // Fetch photos in background immediately (API call)
+  const ringReadyPromise=buildRing();
 
   await drawLogo();
   await sleep(100);
 
-  const targetCount=await _kidCountReady;
-  runCounterAndRing(targetCount);
-
-  // Fade ring in and start spinning as counter climbs
+  // Wait for ring to be built (usually already done by now), then position and show
+  await ringReadyPromise;
   const rotator=document.getElementById('ring-rotator');
   rotator.style.opacity='1';
   rotator.classList.add('spinning');
+
+  const targetCount=await _kidCountReady;
+  runCounterAndRing(targetCount);
 
   // Extra beat after counter lands so the ring has a moment to shine
   await sleep(COUNTER_MS+1600);
