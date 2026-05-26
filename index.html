@@ -217,34 +217,52 @@ function shuffle(arr){
 
 // ── FETCH PHOTO LIST FROM GITHUB API (no key needed for public repo) ──
 const GITHUB_API = 'https://api.github.com/repos/chuckandcharley/sponsor-map/contents/intro';
-const BUBBLE_COUNT = isMobile ? 10 : 16;
+const BUBBLE_COUNT = isMobile ? 20 : 32;
 
 // Bubble sizes — mix of large, medium, small
 const BUBBLE_SIZES = isMobile
-  ? [80,60,70,55,75,65,58,72,62,68,56]
-  : [110,80,95,70,100,75,85,65,90,72,78,88,62,105,68,82];
+  ? [80,60,70,55,75,65,58,72,62,68,56,74,60,78,64,70,58,66,72,62]
+  : [110,80,95,70,100,75,85,65,90,72,78,88,62,105,68,82,76,92,66,98,74,84,60,96,70,88,64,102,78,86,68,94];
 
-// Pre-calculated positions that orbit around center without overlapping UI
-// Expressed as percentage offsets from center, placed in the outer ring
+// Place bubbles randomly across screen but never inside the exclusion zone
+// around the logo + counter text in the center
 function getBubblePositions(W, H){
   const cx=W/2, cy=H/2;
-  // Safe zone around logo+counter: roughly 260px wide, 200px tall
-  const safeW=isMobile?160:240, safeH=isMobile?140:200;
+  // Exclusion zone — generous rectangle keeping center text clear
+  const exW=isMobile ? W*0.62 : W*0.50;
+  const exH=isMobile ? H*0.52 : H*0.56;
+  const exLeft=cx-exW/2, exRight=cx+exW/2;
+  const exTop=cy-exH/2, exBottom=cy+exH/2;
+  const PAD=10;
+
+  function overlapsExclusion(x,y,size){
+    return x+size>exLeft && x<exRight && y+size>exTop && y<exBottom;
+  }
+  function overlapsAny(x,y,size,placed){
+    for(const p of placed){
+      const gap=12;
+      if(x+size+gap>p.x&&x<p.x+p.size+gap&&y+size+gap>p.y&&y<p.y+p.size+gap) return true;
+    }
+    return false;
+  }
+
   const positions=[];
-  const angles=shuffle([...Array(BUBBLE_COUNT)].map((_,i)=>i*(360/BUBBLE_COUNT)));
-  angles.forEach((angle,i)=>{
+  const MAX_ATTEMPTS=120;
+  for(let i=0;i<BUBBLE_COUNT;i++){
     const size=BUBBLE_SIZES[i%BUBBLE_SIZES.length];
-    const rad=angle*(Math.PI/180);
-    // Orbit radius varies per bubble for organic feel
-    const orbitX=(W*0.34)+(rng()-0.5)*W*0.08;
-    const orbitY=(H*0.30)+(rng()-0.5)*H*0.08;
-    let x=cx+Math.cos(rad)*orbitX-size/2;
-    let y=cy+Math.sin(rad)*orbitY-size/2;
-    // Clamp to screen with padding
-    x=Math.max(8,Math.min(W-size-8,x));
-    y=Math.max(8,Math.min(H-size-8,y));
-    positions.push({x,y,size});
-  });
+    let placed=false;
+    for(let attempt=0;attempt<MAX_ATTEMPTS;attempt++){
+      const x=PAD+rng()*(W-size-PAD*2);
+      const y=PAD+rng()*(H-size-PAD*2);
+      if(overlapsExclusion(x,y,size)) continue;
+      if(overlapsAny(x,y,size,positions)) continue;
+      positions.push({x,y,size});
+      placed=true;
+      break;
+    }
+    // If can't place cleanly after MAX_ATTEMPTS, skip this bubble
+    if(!placed) continue;
+  }
   return positions;
 }
 
