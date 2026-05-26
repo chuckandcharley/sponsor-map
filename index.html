@@ -86,24 +86,29 @@ svg#us-map:active{cursor:grabbing}
 }
 #splash.fade-out{opacity:0;}
 
-/* Bubbles */
-#bubble-layer{position:absolute;inset:0;pointer-events:none;z-index:1;}
-.bubble{
+/* Photo ring */
+#ring-wrap{
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+}
+#ring-rotator{
+  position:relative;
+  opacity:0;transition:opacity 0.8s ease;
+}
+#ring-rotator.spinning{animation:ringRotate 22s linear infinite;}
+@keyframes ringRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.ring-photo{
   position:absolute;border-radius:50%;overflow:hidden;
-  opacity:0;transform:scale(0.5);
-  transition:opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1);
-  box-shadow:0 4px 16px rgba(0,42,70,0.15);
-  border:2.5px solid rgba(255,255,255,0.9);
+  box-shadow:0 3px 14px rgba(0,42,70,0.18);
+  border:2.5px solid rgba(255,255,255,0.92);
+  opacity:0;transition:opacity 0.5s ease;
 }
-.bubble.visible{opacity:1;transform:scale(1);}
-.bubble img{width:100%;height:100%;object-fit:cover;display:block;}
-
-/* Soft vignette so bubbles fade at edges */
-#edge-fade{
-  position:absolute;inset:0;pointer-events:none;z-index:2;
-  background:radial-gradient(ellipse 70% 62% at 50% 50%,
-    transparent 30%,rgba(243,249,253,0.3) 58%,rgba(243,249,253,0.82) 76%,#f3f9fd 100%);
+.ring-photo.visible{opacity:1;}
+.ring-photo img{
+  width:100%;height:100%;object-fit:cover;display:block;
 }
+#ring-rotator.spinning .ring-photo img{animation:ringCounterRotate 22s linear infinite;}
+@keyframes ringCounterRotate{from{transform:rotate(0deg);}to{transform:rotate(-360deg);}}
 
 #splash-ui{
   position:absolute;inset:0;z-index:5;
@@ -132,8 +137,7 @@ svg#us-map:active{cursor:grabbing}
 <body>
 
 <div id="splash">
-  <div id="bubble-layer"></div>
-  <div id="edge-fade"></div>
+  <div id="ring-wrap"><div id="ring-rotator"></div></div>
   <div id="splash-ui">
     <div id="logo-svg-wrap"></div>
     <div id="num-clip"><span id="counter-num">0</span></div>
@@ -217,42 +221,12 @@ function shuffle(arr){
 
 // ── FETCH PHOTO LIST FROM GITHUB API (no key needed for public repo) ──
 const GITHUB_API = 'https://api.github.com/repos/chuckandcharley/sponsor-map/contents/intro';
-// Bubble sizes — mix of large, medium, small
-const BUBBLE_SIZES_DESKTOP=[110,80,95,70,100,75,85,65,90,72,78,88,62,105,68,82,76,92,66,98,74,84,60,96,70,88,64,102,78,86,68,94];
-const BUBBLE_SIZES_MOBILE=[80,60,70,55,75,65,58,72,62,68,56,74,60,78,64,70,58,66,72,62];
 
-// 4x4 grid, center 2x2 cells excluded (where logo+counter live)
-// Outer 12 cells each get bubbles, some cells get 2 on desktop
-function getBubblePositions(W, H){
-  const COLS=4, ROWS=4;
-  const cellW=W/COLS, cellH=H/ROWS;
-  const PAD=10;
-  const sizes=shuffle(isMobile?[...BUBBLE_SIZES_MOBILE]:[...BUBBLE_SIZES_DESKTOP]);
-  let sizeIdx=0;
-  const positions=[];
-
-  for(let row=0;row<ROWS;row++){
-    for(let col=0;col<COLS;col++){
-      // Skip center 2x2
-      if(row>=1&&row<=2&&col>=1&&col<=2) continue;
-
-      // On desktop place 2 bubbles per outer cell, mobile 1
-      const perCell=isMobile?1:2;
-      for(let n=0;n<perCell;n++){
-        const size=sizes[sizeIdx%sizes.length]; sizeIdx++;
-        const cellX=col*cellW;
-        const cellY=row*cellH;
-        // Random position within cell, padded so bubble stays inside
-        const maxX=cellW-size-PAD;
-        const maxY=cellH-size-PAD;
-        const x=cellX+PAD+rng()*Math.max(0,maxX-PAD);
-        const y=cellY+PAD+rng()*Math.max(0,maxY-PAD);
-        positions.push({x,y,size});
-      }
-    }
-  }
-  return shuffle(positions); // shuffle so reveal order feels random not row-by-row
-}
+// Ring config
+const PHOTO_COUNT = isMobile ? 9 : 12;   // photos in the ring
+const PHOTO_SIZE  = isMobile ? 52 : 64;  // diameter of each circular photo px
+const RING_R      = isMobile ? 88 : 108; // radius from logo center to photo center
+// logo is 70px mobile / 90px desktop, so ring sits just outside logo edge with a clean gap
 
 // ── LOGO PATHS ────────────────────────────────────────────────
 const LOGO_PATHS=[
@@ -312,12 +286,11 @@ const _kidCountReady=new Promise(r=>{_resolveKidCount=r;});
 
 // ── COUNTER + BUBBLES + LOGO FILL — one loop ─────────────────
 const COUNTER_MS=2600;
-const BUBBLE_REVEAL_MS=2200;
 function easeOut4(t){return 1-Math.pow(1-t,4);}
 
-let bubbleEls=[];
+let ringPhotoEls=[];
 
-function runCounterAndBubbles(targetCount){
+function runCounterAndRing(targetCount){
   const numEl=document.getElementById('counter-num');
   const labelEl=document.getElementById('counter-label');
   numEl.classList.add('show');
@@ -338,17 +311,17 @@ function runCounterAndBubbles(targetCount){
       _logoFillRect.setAttribute('y',fillY);
     }
 
-    // bubbles reveal progressively
-    const revealCount=Math.round(easeOut4(Math.min(elapsed/BUBBLE_REVEAL_MS,1))*bubbleEls.length);
-    for(let i=0;i<revealCount;i++) bubbleEls[i].classList.add('visible');
+    // ring photos reveal progressively as counter climbs
+    const revealCount=Math.round(easedT*ringPhotoEls.length);
+    for(let i=0;i<revealCount;i++) ringPhotoEls[i].classList.add('visible');
 
     if(elapsed<COUNTER_MS) requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 }
 
-// ── BUILD BUBBLES ─────────────────────────────────────────────
-async function buildBubbles(){
+// ── BUILD PHOTO RING ──────────────────────────────────────────
+async function buildRing(){
   let filenames=[];
   try{
     const res=await fetch(GITHUB_API);
@@ -359,36 +332,36 @@ async function buildBubbles(){
         .map(f=>f.name);
     }
   }catch(e){}
+  if(filenames.length===0) return;
 
-  if(filenames.length===0) return; // graceful — no bubbles if API fails
+  const picked=shuffle(filenames).slice(0,PHOTO_COUNT);
+  const rotator=document.getElementById('ring-rotator');
 
-  const W=window.innerWidth,H=window.innerHeight;
-  const positions=getBubblePositions(W,H);
-  const picked=shuffle(filenames).slice(0,positions.length);
-  const layer=document.getElementById('bubble-layer');
+  // Size the rotator to the ring diameter so centering works
+  const diameter=(RING_R+PHOTO_SIZE/2)*2;
+  rotator.style.width=diameter+'px';
+  rotator.style.height=diameter+'px';
 
-  bubbleEls=picked.map((name,i)=>{
-    const pos=positions[i];
+  ringPhotoEls=picked.map((name,i)=>{
+    const angle=(i/PHOTO_COUNT)*Math.PI*2 - Math.PI/2; // start from top
+    const cx=RING_R*Math.cos(angle);
+    const cy=RING_R*Math.sin(angle);
     const div=document.createElement('div');
-    div.className='bubble';
-    div.style.cssText=`left:${pos.x}px;top:${pos.y}px;width:${pos.size}px;height:${pos.size}px;`;
+    div.className='ring-photo';
+    // Position relative to rotator center
+    div.style.cssText=`
+      width:${PHOTO_SIZE}px;height:${PHOTO_SIZE}px;
+      left:${RING_R+PHOTO_SIZE/2+cx-PHOTO_SIZE/2+(PHOTO_SIZE/2)}px;
+      top:${RING_R+PHOTO_SIZE/2+cy-PHOTO_SIZE/2+(PHOTO_SIZE/2)}px;
+    `;
+    // Simpler: position from center of rotator
+    div.style.left=(diameter/2 + cx - PHOTO_SIZE/2)+'px';
+    div.style.top=(diameter/2 + cy - PHOTO_SIZE/2)+'px';
     const img=document.createElement('img');
     img.src='intro/'+encodeURIComponent(name);
     img.alt='';
     div.appendChild(img);
-    layer.appendChild(div);
-
-    // Subtle slow drift animation — each bubble gets unique timing
-    const driftX=(rng()-0.5)*14;
-    const driftY=(rng()-0.5)*14;
-    const driftDuration=6000+Math.floor(rng()*4000);
-    const driftDelay=Math.floor(rng()*2000);
-    div.animate([
-      {transform:'scale(1) translate(0,0)'},
-      {transform:`scale(1) translate(${driftX}px,${driftY}px)`},
-      {transform:'scale(1) translate(0,0)'}
-    ],{duration:driftDuration,delay:driftDelay,iterations:Infinity,easing:'ease-in-out'});
-
+    rotator.appendChild(div);
     return div;
   });
 }
@@ -408,15 +381,21 @@ function dismissLegend(){
   const mapWrap=document.getElementById('map-wrap');
 
   // Kick off bubble build and kid count fetch in parallel with logo draw
-  buildBubbles(); // starts fetching photos immediately
+  buildRing(); // starts fetching photos immediately
 
   await drawLogo();
   await sleep(100);
 
   const targetCount=await _kidCountReady;
-  runCounterAndBubbles(targetCount);
+  runCounterAndRing(targetCount);
 
-  await sleep(COUNTER_MS+600);
+  // Fade ring in and start spinning as counter climbs
+  const rotator=document.getElementById('ring-rotator');
+  rotator.style.opacity='1';
+  rotator.classList.add('spinning');
+
+  // Extra beat after counter lands so the ring has a moment to shine
+  await sleep(COUNTER_MS+1600);
 
   splash.classList.add('fade-out');
   await sleep(500);
