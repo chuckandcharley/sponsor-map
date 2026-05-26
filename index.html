@@ -336,34 +336,37 @@ async function buildRing(){
   const picked=shuffle(filenames).slice(0,PHOTO_COUNT);
   const rotator=document.getElementById('ring-rotator');
 
-  // Size the rotator to the ring diameter
-  const diameter=(RING_R+PHOTO_SIZE/2)*2;
+  // Measure the full splash-ui block (logo + number + label) to find its center
+  // and its half-height so the ring clears all content
+  const uiEl=document.getElementById('splash-ui');
+  const uiRect=uiEl.getBoundingClientRect();
+  const uiCX=uiRect.left+uiRect.width/2;
+  const uiCY=uiRect.top+uiRect.height/2;
+
+  // Ring radius = half the diagonal of the ui block + gap + half photo size
+  // This guarantees the ring sits just outside the entire text+logo unit
+  const uiHalfH=uiRect.height/2;
+  const uiHalfW=uiRect.width/2;
+  const clearRadius=Math.sqrt(uiHalfW*uiHalfW+uiHalfH*uiHalfH);
+  const dynamicR=Math.round(clearRadius+PHOTO_SIZE*0.7);
+
+  const diameter=(dynamicR+PHOTO_SIZE/2)*2;
   rotator.style.width=diameter+'px';
   rotator.style.height=diameter+'px';
+  rotator.style.left=(uiCX-diameter/2)+'px';
+  rotator.style.top=(uiCY-diameter/2)+'px';
 
-  // Position rotator centered on the logo element, not the whole splash
-  const logoEl=document.getElementById('logo-svg-wrap');
-  const logoRect=logoEl.getBoundingClientRect();
-  const logoCX=logoRect.left+logoRect.width/2;
-  const logoCY=logoRect.top+logoRect.height/2;
-  rotator.style.left=(logoCX-diameter/2)+'px';
-  rotator.style.top=(logoCY-diameter/2)+'px';
-
+  // Redefine positions using dynamicR instead of fixed RING_R
   ringPhotoEls=picked.map((name,i)=>{
-    const angle=(i/PHOTO_COUNT)*Math.PI*2 - Math.PI/2; // start from top
-    const cx=RING_R*Math.cos(angle);
-    const cy=RING_R*Math.sin(angle);
+    const angle=(i/PHOTO_COUNT)*Math.PI*2-Math.PI/2;
+    const cx=dynamicR*Math.cos(angle);
+    const cy=dynamicR*Math.sin(angle);
     const div=document.createElement('div');
     div.className='ring-photo';
-    // Position relative to rotator center
-    div.style.cssText=`
-      width:${PHOTO_SIZE}px;height:${PHOTO_SIZE}px;
-      left:${RING_R+PHOTO_SIZE/2+cx-PHOTO_SIZE/2+(PHOTO_SIZE/2)}px;
-      top:${RING_R+PHOTO_SIZE/2+cy-PHOTO_SIZE/2+(PHOTO_SIZE/2)}px;
-    `;
-    // Simpler: position from center of rotator
-    div.style.left=(diameter/2 + cx - PHOTO_SIZE/2)+'px';
-    div.style.top=(diameter/2 + cy - PHOTO_SIZE/2)+'px';
+    div.style.left=(diameter/2+cx-PHOTO_SIZE/2)+'px';
+    div.style.top=(diameter/2+cy-PHOTO_SIZE/2)+'px';
+    div.style.width=PHOTO_SIZE+'px';
+    div.style.height=PHOTO_SIZE+'px';
     const img=document.createElement('img');
     img.src='intro/'+encodeURIComponent(name);
     img.alt='';
