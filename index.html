@@ -320,53 +320,47 @@ function runCounterAndRing(targetCount){
 }
 
 // ── BUILD PHOTO RING ──────────────────────────────────────────
-async function buildRing(){
-  let filenames=[];
+// Returns promise that resolves with array of filenames (or empty)
+async function fetchPhotoNames(){
   try{
     const res=await fetch(GITHUB_API);
-    if(res.ok){
-      const items=await res.json();
-      filenames=items
-        .filter(f=>f.type==='file'&&/\.(jpe?g|png|gif|webp)$/i.test(f.name))
-        .map(f=>f.name);
-    }
-  }catch(e){}
-  if(filenames.length===0) return;
+    if(!res.ok) return [];
+    const items=await res.json();
+    return shuffle(items
+      .filter(f=>f.type==='file'&&/\.(jpe?g|png|gif|webp)$/i.test(f.name))
+      .map(f=>f.name));
+  }catch(e){ return []; }
+}
 
-  const picked=shuffle(filenames).slice(0,PHOTO_COUNT);
+function buildRingDOM(filenames){
+  if(!filenames.length) return;
+  const picked=filenames.slice(0,PHOTO_COUNT);
   const rotator=document.getElementById('ring-rotator');
 
-  // Measure the full splash-ui block (logo + number + label) to find its center
-  // and its half-height so the ring clears all content
+  // Measure splash-ui AFTER logo draw so it has real dimensions
   const uiEl=document.getElementById('splash-ui');
   const uiRect=uiEl.getBoundingClientRect();
   const uiCX=uiRect.left+uiRect.width/2;
   const uiCY=uiRect.top+uiRect.height/2;
 
-  // Ring radius = half the diagonal of the ui block + gap + half photo size
-  // This guarantees the ring sits just outside the entire text+logo unit
-  const uiHalfH=uiRect.height/2;
-  const uiHalfW=uiRect.width/2;
-  const clearRadius=Math.sqrt(uiHalfW*uiHalfW+uiHalfH*uiHalfH);
-  const dynamicR=Math.round(clearRadius+PHOTO_SIZE*0.7);
-
+  // Radius clears the diagonal of the full ui block + breathing room
+  const hw=uiRect.width/2, hh=uiRect.height/2;
+  const dynamicR=Math.round(Math.sqrt(hw*hw+hh*hh)+PHOTO_SIZE*0.8);
   const diameter=(dynamicR+PHOTO_SIZE/2)*2;
+
   rotator.style.width=diameter+'px';
   rotator.style.height=diameter+'px';
   rotator.style.left=(uiCX-diameter/2)+'px';
   rotator.style.top=(uiCY-diameter/2)+'px';
 
-  // Redefine positions using dynamicR instead of fixed RING_R
   ringPhotoEls=picked.map((name,i)=>{
-    const angle=(i/PHOTO_COUNT)*Math.PI*2-Math.PI/2;
-    const cx=dynamicR*Math.cos(angle);
-    const cy=dynamicR*Math.sin(angle);
+    const angle=(i/picked.length)*Math.PI*2-Math.PI/2;
     const div=document.createElement('div');
     div.className='ring-photo';
-    div.style.left=(diameter/2+cx-PHOTO_SIZE/2)+'px';
-    div.style.top=(diameter/2+cy-PHOTO_SIZE/2)+'px';
     div.style.width=PHOTO_SIZE+'px';
     div.style.height=PHOTO_SIZE+'px';
+    div.style.left=(diameter/2+dynamicR*Math.cos(angle)-PHOTO_SIZE/2)+'px';
+    div.style.top=(diameter/2+dynamicR*Math.sin(angle)-PHOTO_SIZE/2)+'px';
     const img=document.createElement('img');
     img.src='intro/'+encodeURIComponent(name);
     img.alt='';
@@ -376,37 +370,33 @@ async function buildRing(){
   });
 }
 
-// ── LEGEND DISMISS ────────────────────────────────────────────
-let legendDismissed=false;
-function dismissLegend(){
-  if(legendDismissed) return;
-  legendDismissed=true;
-  document.getElementById('map-legend').classList.add('hidden');
-}
-
 // ── SPLASH SEQUENCE ───────────────────────────────────────────
 (async function(){
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const splash=document.getElementById('splash');
   const mapWrap=document.getElementById('map-wrap');
 
-  // Kick off bubble build and kid count fetch in parallel with logo draw
-  // Fetch photos in background immediately (API call)
-  const ringReadyPromise=buildRing();
+  // Fetch photos and draw logo in parallel
+  const [filenames] = await Promise.all([
+    fetchPhotoNames(),
+    drawLogo()
+  ]);
 
-  await drawLogo();
-  await sleep(100);
+  // Now logo is rendered so getBoundingClientRect is accurate
+  buildRingDOM(filenames);
 
-  // Wait for ring to be built (usually already done by now), then position and show
-  await ringReadyPromise;
+  await sleep(80);
+
+  // Start ring spinning
   const rotator=document.getElementById('ring-rotator');
   rotator.style.opacity='1';
   rotator.classList.add('spinning');
 
+  // Start counter — kid count may already be ready or we wait
   const targetCount=await _kidCountReady;
   runCounterAndRing(targetCount);
 
-  // Extra beat after counter lands so the ring has a moment to shine
+  // Wait for counter + extra beat
   await sleep(COUNTER_MS+1600);
 
   splash.classList.add('fade-out');
