@@ -344,7 +344,7 @@ function buildRingDOM(filenames){
   const uiH=uiEl.offsetHeight;
   const uiW=uiEl.offsetWidth;
   // Half-diagonal of the ui block gives us the corner clearance distance
-  const hw=Math.min(uiW/2, W*0.42); // cap width contribution so ring isn't huge
+  const hw=Math.min(uiW/2, window.innerWidth*0.42); // cap width contribution so ring isn't huge
   const hh=uiH/2;
   const dynamicR=Math.round(Math.sqrt(hw*hw+hh*hh)+PHOTO_SIZE*0.7);
   const diameter=(dynamicR+PHOTO_SIZE/2)*2;
