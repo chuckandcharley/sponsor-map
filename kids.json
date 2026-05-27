@@ -1,5 +1,19 @@
 [
   {
+    "name": "Lotus",
+    "age": "3 years old",
+    "city": "Hamilton",
+    "state": "IN",
+    "zip": "46742"
+  },
+  {
+    "name": "Raelynn",
+    "age": "1 year old",
+    "city": "Bloomingdale",
+    "state": "IL",
+    "zip": "60108"
+  },
+  {
     "name": "Maeve",
     "age": "4 years old",
     "city": "Chicago",
