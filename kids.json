@@ -245,13 +245,6 @@
     "zip": "75605"
   },
   {
-    "name": "Atlas",
-    "age": "4 years old",
-    "city": "Dallas",
-    "state": "TX",
-    "zip": "75216"
-  },
-  {
     "name": "Aspen",
     "age": "1 year old",
     "city": "Grand Prairie",
@@ -1181,6 +1174,13 @@
     "city": "Frisco",
     "state": "TX",
     "zip": "75036"
+  },
+  {
+    "name": "Emma",
+    "age": "5 years old",
+    "city": "Oxford",
+    "state": "ME",
+    "zip": "04270"
   },
   {
     "name": "Bodie",
@@ -3757,13 +3757,6 @@
     "city": "Chandler",
     "state": "AZ",
     "zip": "85226"
-  },
-  {
-    "name": "Dyran",
-    "age": "7 years old",
-    "city": "Sweetwater",
-    "state": "TN",
-    "zip": "37874"
   },
   {
     "name": "Aella",
