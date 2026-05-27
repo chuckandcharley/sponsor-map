@@ -229,10 +229,10 @@ const GITHUB_API='https://api.github.com/repos/chuckandcharley/sponsor-map/conte
 
 // ── GRID INTRO CONFIG ─────────────────────────────────────────
 const GRID_COLS=6,GRID_ROWS=6,GRID_TOTAL=GRID_COLS*GRID_ROWS;
-const T_REVEAL=1800;
-const T_HOLD=1000;
+const T_REVEAL=1500;
+const T_HOLD=1800;
 const T_EXIT=1000;
-const T_COUNT=2200;
+const T_COUNT=2500;
 
 // ── CELL PLACEHOLDER COLORS ───────────────────────────────────
 const CELL_COLORS=['#b5d4f4','#9fc8e0','#c5e3f4','#a0cce4','#bbd7ec','#cde4f0','#85b7eb','#d0e8f5','#b0d9ee','#c8dff2'];
@@ -307,7 +307,7 @@ function rippleOrder(cols,rows){
   return items.map(x=>x.idx);
 }
 
-// ── BUILD GRID CELLS ──────────────────────────────────────────
+// ── BUILD GRID CELLS — preloads all photos before building DOM ─
 async function buildGridCells(){
   let filenames=[];
   try{
@@ -320,6 +320,16 @@ async function buildGridCells(){
     }
   }catch(e){}
 
+  const picked=shuffle(filenames).slice(0,GRID_TOTAL);
+
+  // Preload every image fully before touching the DOM — no partial/placeholder states
+  const preloaded=await Promise.all(picked.map(name=>new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>resolve(img);
+    img.onerror=()=>resolve(null);
+    img.src='intro/'+encodeURIComponent(name);
+  })));
+
   const grid=document.getElementById('photo-grid');
   const W=window.innerWidth,H=window.innerHeight;
   const maxW=Math.min(W-32,820);
@@ -328,20 +338,18 @@ async function buildGridCells(){
   const cellH=Math.min(Math.floor(cellW*0.72),Math.floor((H*0.9-(GRID_ROWS-1)*gap)/GRID_ROWS));
   grid.style.cssText=`grid-template-columns:repeat(${GRID_COLS},${cellW}px);gap:${gap}px;width:${GRID_COLS*cellW+(GRID_COLS-1)*gap}px;`;
 
-  const picked=filenames.length>0?shuffle(filenames).slice(0,GRID_TOTAL):[];
   const cells=[];
-
   for(let i=0;i<GRID_TOTAL;i++){
     const cell=document.createElement('div');
     cell.className='grid-cell';
-    cell.style.cssText=`width:${cellW}px;height:${cellH}px;background:${CELL_COLORS[i%CELL_COLORS.length]};`;
-    if(picked[i]){
-      const img=document.createElement('img');
-      img.src='intro/'+encodeURIComponent(picked[i]);
-      img.alt='';
-      cell.appendChild(img);
+    const loadedImg=preloaded[i];
+    if(loadedImg){
+      cell.style.cssText=`width:${cellW}px;height:${cellH}px;background:#c5dff0;`;
+      loadedImg.alt='';
+      cell.appendChild(loadedImg);
     }else{
-      cell.innerHTML='<svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.5" stroke="#004270" stroke-width="1.5"/><path d="M5 20c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#004270" stroke-width="1.5" stroke-linecap="round"/></svg>';
+      // No photo available for this slot — plain tinted cell, no icon
+      cell.style.cssText=`width:${cellW}px;height:${cellH}px;background:${CELL_COLORS[i%CELL_COLORS.length]};`;
     }
     grid.appendChild(cell);
     cells.push(cell);
