@@ -338,18 +338,8 @@ function buildRingDOM(filenames){
   const picked=filenames.slice(0,PHOTO_COUNT);
   const rotator=document.getElementById('ring-rotator');
 
-  // Measure just the ui block's offsetHeight to find how far down from center
-  // the label text ends, so ring clears it
-  const uiEl=document.getElementById('splash-ui');
-  const uiH=uiEl.offsetHeight;
-  const uiW=uiEl.offsetWidth;
-  // Half-diagonal of the ui block gives us the corner clearance distance
-  const hw=Math.min(uiW/2, window.innerWidth*0.42); // cap width contribution so ring isn't huge
-  const hh=uiH/2;
-  const dynamicR=Math.round(Math.sqrt(hw*hw+hh*hh)+PHOTO_SIZE*0.7);
-  const diameter=(dynamicR+PHOTO_SIZE/2)*2;
-
-  // Flex centering in ring-wrap handles positioning — just set the size
+  // Fixed radius around the logo — flex centering in ring-wrap handles positioning
+  const diameter=(RING_R+PHOTO_SIZE/2)*2;
   rotator.style.width=diameter+'px';
   rotator.style.height=diameter+'px';
 
@@ -359,8 +349,8 @@ function buildRingDOM(filenames){
     div.className='ring-photo';
     div.style.width=PHOTO_SIZE+'px';
     div.style.height=PHOTO_SIZE+'px';
-    div.style.left=(diameter/2+dynamicR*Math.cos(angle)-PHOTO_SIZE/2)+'px';
-    div.style.top=(diameter/2+dynamicR*Math.sin(angle)-PHOTO_SIZE/2)+'px';
+    div.style.left=(diameter/2+RING_R*Math.cos(angle)-PHOTO_SIZE/2)+'px';
+    div.style.top=(diameter/2+RING_R*Math.sin(angle)-PHOTO_SIZE/2)+'px';
     const img=document.createElement('img');
     img.src='intro/'+encodeURIComponent(name);
     img.alt='';
