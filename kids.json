@@ -1,5 +1,19 @@
 [
   {
+    "name": "Elle",
+    "age": "1 year old",
+    "city": "Lebanon",
+    "state": "OH",
+    "zip": "45036"
+  },
+  {
+    "name": "Riott",
+    "age": "6 years old",
+    "city": "Fairport",
+    "state": "NY",
+    "zip": "14450"
+  },
+  {
     "name": "Sofia",
     "age": "2 years old",
     "city": "South Mills",
@@ -1169,13 +1183,6 @@
     "zip": "75036"
   },
   {
-    "name": "Emma",
-    "age": "5 years old",
-    "city": "Oxford",
-    "state": "ME",
-    "zip": "04270"
-  },
-  {
     "name": "Bodie",
     "age": "3 years old",
     "city": "Lehigh",
@@ -1933,7 +1940,7 @@
   },
   {
     "name": "Ophelia",
-    "age": "2 years old",
+    "age": "3 years old",
     "city": "Milwaukee",
     "state": "WI",
     "zip": "53210"
@@ -1968,7 +1975,7 @@
   },
   {
     "name": "Hunter",
-    "age": "8 years old",
+    "age": "9 years old",
     "city": "Mannsville",
     "state": "NY",
     "zip": "13661"
@@ -2843,7 +2850,7 @@
   },
   {
     "name": "Walker",
-    "age": "4 years old",
+    "age": "5 years old",
     "city": "Breaux Bridge",
     "state": "LA",
     "zip": "70517"
