@@ -1,5 +1,12 @@
 [
   {
+    "name": "Maeve",
+    "age": "4 years old",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60614"
+  },
+  {
     "name": "Eren",
     "age": "4 years old",
     "city": "Garland",
