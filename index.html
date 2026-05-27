@@ -136,17 +136,13 @@ svg#us-map:active{cursor:grabbing}
   display:block;font-size:clamp(72px,16vw,180px);font-weight:900;
   letter-spacing:-0.04em;color:var(--navy);font-variant-numeric:tabular-nums;
   line-height:1;text-align:center;white-space:nowrap;
-  opacity:0;transition:opacity 0.5s ease;
 }
-#counter-num.show{opacity:1;}
 #label-clip{overflow:hidden;line-height:1;margin-top:.1em;width:100%;text-align:center;padding:0 20px;}
 #counter-label{
   display:block;font-size:clamp(13px,2.4vw,32px);font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;color:var(--navy);
   line-height:1;text-align:center;white-space:nowrap;
-  opacity:0;transition:opacity 0.5s ease;
 }
-#counter-label.show{opacity:1;}
 </style>
 </head>
 <body>
@@ -382,10 +378,6 @@ async function buildGridCells(){
   const targetCount=await _kidCountReady;
 
   await logoPromise;
-
-  // Fade in number and label now that the logo is drawn
-  document.getElementById('counter-num').classList.add('show');
-  document.getElementById('counter-label').classList.add('show');
 
   const countStart=performance.now();
   await new Promise(resolve=>{
