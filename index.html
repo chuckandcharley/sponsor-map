@@ -376,25 +376,28 @@ function buildRingDOM(filenames){
   const splash=document.getElementById('splash');
   const mapWrap=document.getElementById('map-wrap');
 
-  // Fetch photos and draw logo in parallel
-  const [filenames] = await Promise.all([
-    fetchPhotoNames(),
-    drawLogo()
-  ]);
+  // Kick off photo fetch in background — don't await it yet
+  const photoPromise=fetchPhotoNames();
 
-  // Now logo is rendered so getBoundingClientRect is accurate
-  buildRingDOM(filenames);
-
+  // Draw logo first — this is the only thing blocking the counter
+  await drawLogo();
   await sleep(80);
+
+  // Start counter immediately — never blocked by photos
+  const targetCount=await _kidCountReady;
+  runCounterAndRing(targetCount);
+
+  // Build ring with whatever photos are ready — add a timeout so it never stalls
+  const filenames=await Promise.race([
+    photoPromise,
+    new Promise(r=>setTimeout(()=>r([]),3000)) // 3s timeout fallback
+  ]);
+  buildRingDOM(filenames);
 
   // Start ring spinning
   const rotator=document.getElementById('ring-rotator');
   rotator.style.opacity='1';
   rotator.classList.add('spinning');
-
-  // Start counter — kid count may already be ready or we wait
-  const targetCount=await _kidCountReady;
-  runCounterAndRing(targetCount);
 
   // Wait for counter + extra beat
   await sleep(COUNTER_MS+1600);
