@@ -86,54 +86,63 @@ svg#us-map:active{cursor:grabbing}
 }
 #splash.fade-out{opacity:0;}
 
-/* Bubbles */
-#bubble-layer{position:absolute;inset:0;pointer-events:none;z-index:1;}
-.bubble{
-  position:absolute;border-radius:50%;overflow:hidden;
-  opacity:0;transform:scale(0.5);
-  transition:opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1);
-  box-shadow:0 4px 16px rgba(0,42,70,0.15);
-  border:2.5px solid rgba(255,255,255,0.9);
+/* ── PHOTO GRID ── */
+#grid-layer{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;z-index:1;
+  transition:opacity 0.3s ease;
 }
-.bubble.visible{opacity:1;transform:scale(1);}
-.bubble img{width:100%;height:100%;object-fit:cover;display:block;}
-
-/* Soft vignette so bubbles fade at edges */
-#edge-fade{
-  position:absolute;inset:0;pointer-events:none;z-index:2;
-  background:radial-gradient(ellipse 70% 62% at 50% 50%,
-    transparent 30%,rgba(243,249,253,0.3) 58%,rgba(243,249,253,0.82) 76%,#f3f9fd 100%);
+#photo-grid{
+  display:grid;
+  gap:5px;
 }
+.grid-cell{
+  border-radius:7px;
+  overflow:hidden;
+  background:#c5dff0;
+  opacity:0;
+  transform:scale(0.55);
+  transition:opacity 0.38s ease, transform 0.38s cubic-bezier(0.34,1.35,0.64,1);
+  display:flex;align-items:center;justify-content:center;
+}
+.grid-cell.visible{opacity:1;transform:scale(1);}
+.grid-cell.exit{
+  opacity:0;
+  transform:scale(0.65);
+  transition:opacity 0.32s ease, transform 0.32s ease;
+}
+.grid-cell img{width:100%;height:100%;object-fit:cover;display:block;}
+.grid-cell .placeholder-icon{width:38%;height:38%;opacity:0.28;}
 
+/* ── LOGO + COUNTER PHASE ── */
 #splash-ui{
   position:absolute;inset:0;z-index:5;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   pointer-events:none;
+  opacity:0;
+  transition:opacity 0.7s ease;
 }
+#splash-ui.show{opacity:1;}
 #logo-svg-wrap{margin-bottom:20px;}
 #num-clip{overflow:visible;line-height:1;width:100%;text-align:center;padding:0 20px;}
 #counter-num{
   display:block;font-size:clamp(72px,16vw,180px);font-weight:900;
   letter-spacing:-0.04em;color:var(--navy);font-variant-numeric:tabular-nums;
   line-height:1;text-align:center;white-space:nowrap;
-  opacity:0;transition:opacity 0.4s ease;
 }
-#counter-num.show{opacity:1;}
 #label-clip{overflow:hidden;line-height:1;margin-top:.1em;width:100%;text-align:center;padding:0 20px;}
 #counter-label{
   display:block;font-size:clamp(13px,2.4vw,32px);font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;color:var(--navy);
   line-height:1;text-align:center;white-space:nowrap;
-  opacity:0;transition:opacity 0.5s ease;
 }
-#counter-label.show{opacity:1;}
 </style>
 </head>
 <body>
 
 <div id="splash">
-  <div id="bubble-layer"></div>
-  <div id="edge-fade"></div>
+  <div id="grid-layer"><div id="photo-grid"></div></div>
   <div id="splash-ui">
     <div id="logo-svg-wrap"></div>
     <div id="num-clip"><span id="counter-num">0</span></div>
@@ -167,9 +176,9 @@ svg#us-map:active{cursor:grabbing}
       </div>
     </div>
     <div id="modal-footer">
-      <a id="btn-build" href="#" class="btn btn-primary">Sponsor & Build This Playset</a>
+      <a id="btn-build" href="#" class="btn btn-primary">Sponsor &amp; Build This Playset</a>
       <a id="btn-sponsor" href="#" class="btn btn-secondary" target="_blank" rel="noopener">I Want to Fund This Playset</a>
-      <button onclick="closeModal()" style="background:none;border:none;padding:4px 0 0;margin:0;cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#b0c4d4;font-family:var(--ff);text-align:center;width:100%;transition:color .15s;display:block;" onmouseover="this.style.color='#004270'" onmouseout="this.style.color='#b0c4d4'">✕ Close</button>
+      <button onclick="closeModal()" style="background:none;border:none;padding:4px 0 0;margin:0;cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#b0c4d4;font-family:var(--ff);text-align:center;width:100%;transition:color .15s;display:block;" onmouseover="this.style.color='#004270'" onmouseout="this.style.color='#b0c4d4'">&#x2715; Close</button>
     </div>
   </div>
 
@@ -189,17 +198,17 @@ svg#us-map:active{cursor:grabbing}
 
   <div id="zoom-controls">
     <button class="zoom-btn" id="btn-zoom-in" aria-label="Zoom in">+</button>
-    <button class="zoom-btn" id="btn-zoom-out" aria-label="Zoom out">−</button>
-    <button class="zoom-btn" id="btn-zoom-reset" aria-label="Reset zoom" style="font-size:11px">⊙</button>
+    <button class="zoom-btn" id="btn-zoom-out" aria-label="Zoom out">&#8722;</button>
+    <button class="zoom-btn" id="btn-zoom-reset" aria-label="Reset zoom" style="font-size:11px">&#8857;</button>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||window.innerWidth<768;
 
-// ── SEEDED RANDOM — fresh every page load ─────────────────────
+// ── SEEDED RANDOM ─────────────────────────────────────────────
 function mulberry32(s){
   return function(){
     s|=0;s=s+0x6D2B79F5|0;
@@ -215,38 +224,22 @@ function shuffle(arr){
   return a;
 }
 
-// ── FETCH PHOTO LIST FROM GITHUB API (no key needed for public repo) ──
-const GITHUB_API = 'https://api.github.com/repos/chuckandcharley/sponsor-map/contents/intro';
-const BUBBLE_COUNT = isMobile ? 10 : 16;
+// ── GITHUB PHOTO LIST ─────────────────────────────────────────
+const GITHUB_API='https://api.github.com/repos/chuckandcharley/sponsor-map/contents/intro';
 
-// Bubble sizes — mix of large, medium, small
-const BUBBLE_SIZES = isMobile
-  ? [80,60,70,55,75,65,58,72,62,68,56]
-  : [110,80,95,70,100,75,85,65,90,72,78,88,62,105,68,82];
+// ── GRID INTRO CONFIG ─────────────────────────────────────────
+const GRID_COLS=6,GRID_ROWS=6,GRID_TOTAL=GRID_COLS*GRID_ROWS;
+const T_REVEAL=1800;
+const T_HOLD=1000;
+const T_EXIT=1000;
+const T_COUNT=2200;
 
-// Pre-calculated positions that orbit around center without overlapping UI
-// Expressed as percentage offsets from center, placed in the outer ring
-function getBubblePositions(W, H){
-  const cx=W/2, cy=H/2;
-  // Safe zone around logo+counter: roughly 260px wide, 200px tall
-  const safeW=isMobile?160:240, safeH=isMobile?140:200;
-  const positions=[];
-  const angles=shuffle([...Array(BUBBLE_COUNT)].map((_,i)=>i*(360/BUBBLE_COUNT)));
-  angles.forEach((angle,i)=>{
-    const size=BUBBLE_SIZES[i%BUBBLE_SIZES.length];
-    const rad=angle*(Math.PI/180);
-    // Orbit radius varies per bubble for organic feel
-    const orbitX=(W*0.34)+(rng()-0.5)*W*0.08;
-    const orbitY=(H*0.30)+(rng()-0.5)*H*0.08;
-    let x=cx+Math.cos(rad)*orbitX-size/2;
-    let y=cy+Math.sin(rad)*orbitY-size/2;
-    // Clamp to screen with padding
-    x=Math.max(8,Math.min(W-size-8,x));
-    y=Math.max(8,Math.min(H-size-8,y));
-    positions.push({x,y,size});
-  });
-  return positions;
-}
+// ── CELL PLACEHOLDER COLORS ───────────────────────────────────
+const CELL_COLORS=['#b5d4f4','#9fc8e0','#c5e3f4','#a0cce4','#bbd7ec','#cde4f0','#85b7eb','#d0e8f5','#b0d9ee','#c8dff2'];
+
+// ── KID COUNT PROMISE ─────────────────────────────────────────
+let _resolveKidCount;
+const _kidCountReady=new Promise(r=>{_resolveKidCount=r;});
 
 // ── LOGO PATHS ────────────────────────────────────────────────
 const LOGO_PATHS=[
@@ -300,49 +293,22 @@ function drawLogo(){
   });
 }
 
-// ── KID COUNT PROMISE ─────────────────────────────────────────
-let _resolveKidCount;
-const _kidCountReady=new Promise(r=>{_resolveKidCount=r;});
-
-// ── COUNTER + BUBBLES + LOGO FILL — one loop ─────────────────
-const COUNTER_MS=2600;
-const BUBBLE_REVEAL_MS=2200;
+// ── EASING ────────────────────────────────────────────────────
 function easeOut4(t){return 1-Math.pow(1-t,4);}
 
-let bubbleEls=[];
-
-function runCounterAndBubbles(targetCount){
-  const numEl=document.getElementById('counter-num');
-  const labelEl=document.getElementById('counter-label');
-  numEl.classList.add('show');
-  labelEl.classList.add('show');
-  const start=performance.now();
-
-  function frame(now){
-    const elapsed=now-start;
-    const ct=Math.min(elapsed/COUNTER_MS,1);
-    const easedT=easeOut4(ct);
-
-    // counter
-    numEl.textContent=Math.round(easedT*targetCount).toLocaleString();
-
-    // logo fill locked to counter progress
-    if(_logoFillRect){
-      const fillY=-40+2128*(1-easedT);
-      _logoFillRect.setAttribute('y',fillY);
-    }
-
-    // bubbles reveal progressively
-    const revealCount=Math.round(easeOut4(Math.min(elapsed/BUBBLE_REVEAL_MS,1))*bubbleEls.length);
-    for(let i=0;i<revealCount;i++) bubbleEls[i].classList.add('visible');
-
-    if(elapsed<COUNTER_MS) requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
+// ── RIPPLE ORDER: center outward ──────────────────────────────
+function rippleOrder(cols,rows){
+  const cx=(cols-1)/2,cy=(rows-1)/2;
+  const items=[];
+  for(let r=0;r<rows;r++)
+    for(let c=0;c<cols;c++)
+      items.push({idx:r*cols+c,dist:Math.sqrt((c-cx)**2+(r-cy)**2)});
+  items.sort((a,b)=>a.dist-b.dist);
+  return items.map(x=>x.idx);
 }
 
-// ── BUILD BUBBLES ─────────────────────────────────────────────
-async function buildBubbles(){
+// ── BUILD GRID CELLS ──────────────────────────────────────────
+async function buildGridCells(){
   let filenames=[];
   try{
     const res=await fetch(GITHUB_API);
@@ -354,70 +320,105 @@ async function buildBubbles(){
     }
   }catch(e){}
 
-  if(filenames.length===0) return; // graceful — no bubbles if API fails
-
-  const picked=shuffle(filenames).slice(0,BUBBLE_COUNT);
+  const grid=document.getElementById('photo-grid');
   const W=window.innerWidth,H=window.innerHeight;
-  const positions=getBubblePositions(W,H);
-  const layer=document.getElementById('bubble-layer');
+  const maxW=Math.min(W-32,820);
+  const gap=5;
+  const cellW=Math.floor((maxW-(GRID_COLS-1)*gap)/GRID_COLS);
+  const cellH=Math.min(Math.floor(cellW*0.72),Math.floor((H*0.9-(GRID_ROWS-1)*gap)/GRID_ROWS));
+  grid.style.cssText=`grid-template-columns:repeat(${GRID_COLS},${cellW}px);gap:${gap}px;width:${GRID_COLS*cellW+(GRID_COLS-1)*gap}px;`;
 
-  bubbleEls=picked.map((name,i)=>{
-    const pos=positions[i];
-    const div=document.createElement('div');
-    div.className='bubble';
-    div.style.cssText=`left:${pos.x}px;top:${pos.y}px;width:${pos.size}px;height:${pos.size}px;`;
-    const img=document.createElement('img');
-    img.src='intro/'+encodeURIComponent(name);
-    img.alt='';
-    div.appendChild(img);
-    layer.appendChild(div);
+  const picked=filenames.length>0?shuffle(filenames).slice(0,GRID_TOTAL):[];
+  const cells=[];
 
-    // Subtle slow drift animation — each bubble gets unique timing
-    const driftX=(rng()-0.5)*14;
-    const driftY=(rng()-0.5)*14;
-    const driftDuration=6000+Math.floor(rng()*4000);
-    const driftDelay=Math.floor(rng()*2000);
-    div.animate([
-      {transform:'scale(1) translate(0,0)'},
-      {transform:`scale(1) translate(${driftX}px,${driftY}px)`},
-      {transform:'scale(1) translate(0,0)'}
-    ],{duration:driftDuration,delay:driftDelay,iterations:Infinity,easing:'ease-in-out'});
-
-    return div;
-  });
+  for(let i=0;i<GRID_TOTAL;i++){
+    const cell=document.createElement('div');
+    cell.className='grid-cell';
+    cell.style.cssText=`width:${cellW}px;height:${cellH}px;background:${CELL_COLORS[i%CELL_COLORS.length]};`;
+    if(picked[i]){
+      const img=document.createElement('img');
+      img.src='intro/'+encodeURIComponent(picked[i]);
+      img.alt='';
+      cell.appendChild(img);
+    }else{
+      cell.innerHTML='<svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.5" stroke="#004270" stroke-width="1.5"/><path d="M5 20c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#004270" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    }
+    grid.appendChild(cell);
+    cells.push(cell);
+  }
+  return cells;
 }
 
-// ── LEGEND DISMISS ────────────────────────────────────────────
-let legendDismissed=false;
-function dismissLegend(){
-  if(legendDismissed) return;
-  legendDismissed=true;
-  document.getElementById('map-legend').classList.add('hidden');
-}
-
-// ── SPLASH SEQUENCE ───────────────────────────────────────────
+// ── MAIN SPLASH SEQUENCE ──────────────────────────────────────
 (async function(){
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const splash=document.getElementById('splash');
   const mapWrap=document.getElementById('map-wrap');
+  const gridLayer=document.getElementById('grid-layer');
+  const splashUI=document.getElementById('splash-ui');
 
-  // Kick off bubble build and kid count fetch in parallel with logo draw
-  buildBubbles(); // starts fetching photos immediately
+  const cells=await buildGridCells();
+  const order=rippleOrder(GRID_COLS,GRID_ROWS);
 
-  await drawLogo();
-  await sleep(100);
+  // ── Phase 1: Grid ripples in from center ─────────────────
+  const revealStart=performance.now();
+  await new Promise(resolve=>{
+    function frame(now){
+      const t=Math.min((now-revealStart)/T_REVEAL,1);
+      const count=Math.round(easeOut4(t)*GRID_TOTAL);
+      for(let i=0;i<count;i++) cells[order[i]]?.classList.add('visible');
+      if(t<1) requestAnimationFrame(frame);
+      else{cells.forEach(c=>c.classList.add('visible'));resolve();}
+    }
+    requestAnimationFrame(frame);
+  });
 
+  // ── Phase 2: Hold ─────────────────────────────────────────
+  await sleep(T_HOLD);
+
+  // ── Phase 3: Grid collapses back to center ────────────────
+  const exitStart=performance.now();
+  await new Promise(resolve=>{
+    function frame(now){
+      const t=Math.min((now-exitStart)/T_EXIT,1);
+      const count=Math.round(easeOut4(t)*GRID_TOTAL);
+      for(let i=0;i<count;i++) cells[order[GRID_TOTAL-1-i]]?.classList.add('exit');
+      if(t<1) requestAnimationFrame(frame); else resolve();
+    }
+    requestAnimationFrame(frame);
+  });
+
+  await sleep(220);
+  gridLayer.style.opacity='0';
+
+  // ── Phase 4: Logo draw + counter count-up ────────────────
+  splashUI.classList.add('show');
+  const logoPromise=drawLogo();
   const targetCount=await _kidCountReady;
-  runCounterAndBubbles(targetCount);
 
-  await sleep(COUNTER_MS+600);
+  await logoPromise;
 
+  const countStart=performance.now();
+  await new Promise(resolve=>{
+    function frame(now){
+      const t=Math.min((now-countStart)/T_COUNT,1);
+      const e=easeOut4(t);
+      document.getElementById('counter-num').textContent=Math.round(e*targetCount).toLocaleString();
+      if(_logoFillRect){
+        const fillY=-40+2128*(1-e);
+        _logoFillRect.setAttribute('y',fillY);
+      }
+      if(t<1) requestAnimationFrame(frame); else resolve();
+    }
+    requestAnimationFrame(frame);
+  });
+
+  // ── Phase 5: Fade splash, reveal map ─────────────────────
+  await sleep(600);
   splash.classList.add('fade-out');
   await sleep(500);
   mapWrap.classList.add('visible');
-
   setTimeout(()=>document.getElementById('map-legend').classList.add('visible'),700);
-
   await sleep(900);
   splash.style.display='none';
 
@@ -549,6 +550,12 @@ function pinPath(r){
   const s=r/4.5;
   function tx(x){return(x-5.5)*s;}function ty(y){return(y-15)*s;}
   return `M${tx(5.5)},${ty(1)} C${tx(3.01)},${ty(1)} ${tx(1)},${ty(3.01)} ${tx(1)},${ty(5.5)} C${tx(1)},${ty(8.86)} ${tx(5.5)},${ty(15)} ${tx(5.5)},${ty(15)} C${tx(5.5)},${ty(15)} ${tx(10)},${ty(8.86)} ${tx(10)},${ty(5.5)} C${tx(10)},${ty(3.01)} ${tx(7.99)},${ty(1)} ${tx(5.5)},${ty(1)} Z`;
+}
+
+let legendDismissed=false;
+function dismissLegend(){
+  if(legendDismissed) return;legendDismissed=true;
+  document.getElementById('map-legend').classList.add('hidden');
 }
 
 const card=document.getElementById('modal-card');
