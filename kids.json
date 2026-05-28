@@ -2511,6 +2511,15 @@
     "priority": false
   },
   {
+    "name": "Kai",
+    "age": "6 years old",
+    "city": "Paia",
+    "state": "HI",
+    "zip": "96779",
+    "entryDate": "February 2026",
+    "priority": false
+  },
+  {
     "name": "Braxton",
     "age": "6 years old",
     "city": "San Tan Valley",
@@ -3537,6 +3546,24 @@
     "priority": true
   },
   {
+    "name": "Zion",
+    "age": "3 years old",
+    "city": "Hauula",
+    "state": "HI",
+    "zip": "96717",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "Emely",
+    "age": "9 years old",
+    "city": "Spanaway",
+    "state": "WA",
+    "zip": "98387",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
     "name": "Josafat",
     "age": "3 years old",
     "city": "Yuma",
@@ -3843,6 +3870,24 @@
     "priority": true
   },
   {
+    "name": "Emely",
+    "age": "9 years old",
+    "city": "Spanaway",
+    "state": "WA",
+    "zip": "98387",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "Emely",
+    "age": "9 years old",
+    "city": "Spanaway",
+    "state": "WA",
+    "zip": "98387",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
     "name": "Simon",
     "age": "3 years old",
     "city": "Campbell",
@@ -3929,6 +3974,15 @@
     "city": "Perryville",
     "state": "MO",
     "zip": "63775",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "emely",
+    "age": "9 years old",
+    "city": "spanaway",
+    "state": "WA",
+    "zip": "98387",
     "entryDate": "November 2025",
     "priority": true
   },
@@ -4064,6 +4118,15 @@
     "city": "Benton",
     "state": "TN",
     "zip": "37307",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "Nathan",
+    "age": "5 years old",
+    "city": "Bentonville",
+    "state": "AK",
+    "zip": "72712",
     "entryDate": "November 2025",
     "priority": true
   },
@@ -4685,6 +4748,15 @@
     "city": "Oakley",
     "state": "CA",
     "zip": "94561",
+    "entryDate": "September 2025",
+    "priority": true
+  },
+  {
+    "name": "Vladymir",
+    "age": "3 years old",
+    "city": "Anchorage",
+    "state": "AK",
+    "zip": "99508",
     "entryDate": "September 2025",
     "priority": true
   },
