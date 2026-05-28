@@ -76,12 +76,12 @@ svg#us-map:active{cursor:grabbing}
 #legend-pin{flex-shrink:0;}
 #legend-text{display:flex;flex-direction:column;gap:1px;}
 #legend-main{font-size:12px;font-weight:700;color:#fff;line-height:1.3;letter-spacing:.01em;}
+#legend-priority{font-size:12px;font-weight:700;color:#7dd4f8;line-height:1.3;letter-spacing:.01em;}
 #legend-sub{font-size:9px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.05em;text-transform:uppercase;}
 @media(max-width:767px){
-  #map-legend{padding:7px 10px 7px 9px;gap:6px;max-width:162px;border-radius:8px;}
-  #legend-main{font-size:10px;}
+  #map-legend{padding:7px 10px 7px 9px;gap:6px;max-width:175px;border-radius:8px;}
+  #legend-main,#legend-priority{font-size:10px;}
   #legend-sub{font-size:8px;}
-  #legend-pin svg{width:11px;height:16px;}
 }
 
 /* ── SPLASH ── */
@@ -190,15 +190,21 @@ svg#us-map:active{cursor:grabbing}
 
   <!-- Legend -->
   <div id="map-legend">
-    <div id="legend-pin">
-      <svg width="14" height="20" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#fff" stroke="#fff" stroke-width="0.5" stroke-linejoin="round"/>
-        <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
-      </svg>
-    </div>
     <div id="legend-text">
-      <span id="legend-main">Kiddo waiting for a sponsor</span>
-      <span id="legend-sub">Tap to learn more</span>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+        <svg width="11" height="16" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+          <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#fff" stroke="#fff" stroke-width="0.5" stroke-linejoin="round"/>
+          <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
+        </svg>
+        <span id="legend-main">Kiddo waiting for a sponsor</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;">
+        <svg width="11" height="16" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+          <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#7dd4f8" stroke="#7dd4f8" stroke-width="0.5" stroke-linejoin="round"/>
+          <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
+        </svg>
+        <span id="legend-priority">Waiting 6+ months</span>
+      </div>
     </div>
   </div>
 
@@ -236,7 +242,7 @@ const GITHUB_API='https://api.github.com/repos/chuckandcharley/sponsor-map/conte
 // ── GRID INTRO CONFIG ─────────────────────────────────────────
 const GRID_COLS=6,GRID_ROWS=6,GRID_TOTAL=GRID_COLS*GRID_ROWS;
 const T_REVEAL=1500;
-const T_HOLD=1800;
+const T_HOLD=300;
 const T_EXIT=1000;
 const T_COUNT=2500;
 
@@ -581,10 +587,27 @@ function dismissLegend(){
   document.getElementById('map-legend').classList.add('hidden');
 }
 
+const PIN_COLOR_REGULAR='#ffffff';
+const PIN_COLOR_PRIORITY='#7dd4f8';
+const PIN_DOT_COLOR='#004270';
+
 const card=document.getElementById('modal-card');
-let isOpen=false,_selectedPin=null;
-function highlightPin(gNode){clearHighlight();_selectedPin=gNode;d3.select(gNode).select('path').attr('fill','#f0a500');d3.select(gNode).select('circle').attr('fill','#c47800');}
-function clearHighlight(){if(_selectedPin){d3.select(_selectedPin).select('path').attr('fill','#ffffff');d3.select(_selectedPin).select('circle').attr('fill','#004270');_selectedPin=null;}}
+let isOpen=false,_selectedPin=null,_selectedPinPriority=false;
+function highlightPin(gNode,isPriority){
+  clearHighlight();
+  _selectedPin=gNode;
+  _selectedPinPriority=isPriority;
+  d3.select(gNode).select('path').attr('fill','#f0a500');
+  d3.select(gNode).select('circle').attr('fill','#c47800');
+}
+function clearHighlight(){
+  if(_selectedPin){
+    const origFill=_selectedPinPriority?PIN_COLOR_PRIORITY:PIN_COLOR_REGULAR;
+    d3.select(_selectedPin).select('path').attr('fill',origFill);
+    d3.select(_selectedPin).select('circle').attr('fill',PIN_DOT_COLOR);
+    _selectedPin=null;_selectedPinPriority=false;
+  }
+}
 
 function hidePins(){
   d3.select('#pins-group').selectAll('g').each(function(){if(this!==_selectedPin){d3.select(this).style('pointer-events','none').transition().duration(200).style('opacity','0');}});
@@ -601,6 +624,15 @@ function openModal(kid){
   document.getElementById('modal-name').textContent=kid.name;
   document.getElementById('modal-age').textContent=kid.age;
   document.getElementById('modal-location').textContent=kid.city&&kid.state?kid.city+', '+kid.state:kid.state||'';
+  // Eyebrow text — "Waiting Since Month Year" if we have a date, fallback otherwise
+  const waitingEl=document.getElementById('modal-waiting');
+  if(kid.entryDate){
+    waitingEl.innerHTML=`<span>Waiting Since ${kid.entryDate}</span>`;
+    waitingEl.style.color=kid.priority?'#7dd4f8':'rgba(255,255,255,0.45)';
+  }else{
+    waitingEl.innerHTML='<span>Waiting for a Sponsor</span>';
+    waitingEl.style.color='rgba(255,255,255,0.45)';
+  }
   const kidLabel=kid.name+(kid.city?', '+kid.city:'')+(kid.state?', '+kid.state:'');
   document.getElementById('btn-build').onclick=function(e){e.preventDefault();window.parent.postMessage({type:'RSF_FILL_FORM',kiddo:kidLabel},'*');};
   document.getElementById('btn-sponsor').onclick=function(e){e.preventDefault();window.open(URL_SPONSOR,'_blank');};
@@ -622,19 +654,30 @@ function renderMarkers(kids,animate){
   layer.selectAll('*').remove();
   const positions=buildPinPositions(kids);
   const pr=getPinR(),strokeW=Math.max(0.5,1.2/currentK),dotR=pr*0.38;
-  positions.forEach((pt,ci)=>{
-    const delay=animate?ci*8:0,kid=pt.kid;
+
+  // Draw regular pins first, priority pins after — so priority always renders on top
+  const regular=positions.filter(pt=>!pt.kid.priority);
+  const priority=positions.filter(pt=>pt.kid.priority);
+
+  function drawPin(pt,ci){
+    const kid=pt.kid;
+    const isPriority=!!kid.priority;
+    const fillColor=isPriority?PIN_COLOR_PRIORITY:PIN_COLOR_REGULAR;
+    const delay=animate?ci*8:0;
     const g=layer.append('g').attr('transform',`translate(${pt.x},${pt.y})`).style('cursor','pointer').style('opacity',animate?'0':'1');
-    g.append('path').attr('d',pinPath(pr)).attr('fill','#ffffff').attr('stroke','#004270').attr('stroke-width',strokeW).attr('stroke-linejoin','round').style('pointer-events','all');
-    g.append('circle').attr('cx',0).attr('cy',-pr*2.11).attr('r',dotR).attr('fill','#004270').style('pointer-events','all');
-    g.on('click',(e)=>{if(isOpen){closeModal();return;}e.stopPropagation();dismissLegend();highlightPin(g.node());openModal(kid);})
+    g.append('path').attr('d',pinPath(pr)).attr('fill',fillColor).attr('stroke','#004270').attr('stroke-width',strokeW).attr('stroke-linejoin','round').style('pointer-events','all');
+    g.append('circle').attr('cx',0).attr('cy',-pr*2.11).attr('r',dotR).attr('fill',PIN_DOT_COLOR).style('pointer-events','all');
+    g.on('click',(e)=>{if(isOpen){closeModal();return;}e.stopPropagation();dismissLegend();highlightPin(g.node(),isPriority);openModal(kid);})
      .on('mouseover',function(){d3.select(this).select('path').attr('transform','scale(1.18)');})
      .on('mouseout',function(){d3.select(this).select('path').attr('transform','');});
     if(!animate) return;
     const dropSVG=pr*4;
     g.attr('transform',`translate(${pt.x},${pt.y-dropSVG})`);
     setTimeout(()=>{g.style('opacity','1').transition().duration(340).ease(d3.easeBackOut.overshoot(1.4)).attr('transform',`translate(${pt.x},${pt.y})`);},delay);
-  });
+  }
+
+  regular.forEach((pt,i)=>drawPin(pt,i));
+  priority.forEach((pt,i)=>drawPin(pt,regular.length+i));
 }
 
 fetch('./zip_centroids.json')
