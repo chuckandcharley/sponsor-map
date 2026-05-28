@@ -1,5 +1,14 @@
 [
   {
+    "name": "Nova",
+    "age": "9 years old",
+    "city": "Birmingham",
+    "state": "AL",
+    "zip": "35215",
+    "entryDate": "May 2026",
+    "priority": false
+  },
+  {
     "name": "Lotus",
     "age": "3 years old",
     "city": "Hamilton",
@@ -630,6 +639,15 @@
     "priority": false
   },
   {
+    "name": "Kai",
+    "age": "1 year old",
+    "city": "Siler City",
+    "state": "NC",
+    "zip": "27344",
+    "entryDate": "May 2026",
+    "priority": false
+  },
+  {
     "name": "Julius",
     "age": "8 years old",
     "city": "University Hts.",
@@ -797,15 +815,6 @@
     "city": "Albemarle",
     "state": "NC",
     "zip": "28001",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Gattlynn",
-    "age": "3 years old",
-    "city": "Henderson",
-    "state": "NC",
-    "zip": "27537",
     "entryDate": "May 2026",
     "priority": false
   },
