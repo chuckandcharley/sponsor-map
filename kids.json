@@ -21,20 +21,6 @@
     "zip": "60614"
   },
   {
-    "name": "Eren",
-    "age": "4 years old",
-    "city": "Garland",
-    "state": "TX",
-    "zip": "75040"
-  },
-  {
-    "name": "Eren",
-    "age": "4 years old",
-    "city": "Garland",
-    "state": "TX",
-    "zip": "75040"
-  },
-  {
     "name": "Elle",
     "age": "1 year old",
     "city": "Lebanon",
@@ -474,13 +460,6 @@
     "city": "Richmond",
     "state": "IL",
     "zip": "60071"
-  },
-  {
-    "name": "Lillian",
-    "age": "5 years old",
-    "city": "Omaha",
-    "state": "NE",
-    "zip": "68106"
   },
   {
     "name": "Grace",
@@ -1643,13 +1622,6 @@
     "city": "Ocilla",
     "state": "GA",
     "zip": "31774"
-  },
-  {
-    "name": "Emmitt",
-    "age": "7 years old",
-    "city": "Omaha",
-    "state": "NE",
-    "zip": "68104"
   },
   {
     "name": "Lenora",
@@ -2905,13 +2877,6 @@
     "zip": "49503"
   },
   {
-    "name": "Sylvia",
-    "age": "5 years old",
-    "city": "Omaha",
-    "state": "NE",
-    "zip": "68124"
-  },
-  {
     "name": "Dallis",
     "age": "5 years old",
     "city": "Leechburg",
@@ -3302,13 +3267,6 @@
     "city": "Newville",
     "state": "PA",
     "zip": "17241"
-  },
-  {
-    "name": "Fable",
-    "age": "5 years old",
-    "city": "Grand Island",
-    "state": "NE",
-    "zip": "68803"
   },
   {
     "name": "Sebastian",
