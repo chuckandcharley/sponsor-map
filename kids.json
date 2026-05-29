@@ -1125,15 +1125,6 @@
     "priority": false
   },
   {
-    "name": "Daviana",
-    "age": "2 years old",
-    "city": "Eagle Bridge",
-    "state": "NY",
-    "zip": "12057",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
     "name": "Clover",
     "age": "7 years old",
     "city": "Erlanger",
@@ -2745,15 +2736,6 @@
     "priority": false
   },
   {
-    "name": "Holland",
-    "age": "5 years old",
-    "city": "Axtell",
-    "state": "TX",
-    "zip": "76624",
-    "entryDate": "January 2026",
-    "priority": false
-  },
-  {
     "name": "Scotti",
     "age": "1 year old",
     "city": "Duluth",
@@ -3470,15 +3452,6 @@
     "city": "Cairo",
     "state": "GA",
     "zip": "39828",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Hayes",
-    "age": "4 years old",
-    "city": "Rancho Cordova",
-    "state": "CA",
-    "zip": "95742",
     "entryDate": "November 2025",
     "priority": true
   },
