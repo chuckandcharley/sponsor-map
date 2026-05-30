@@ -36,15 +36,6 @@
     "priority": false
   },
   {
-    "name": "Arlette",
-    "age": "3 years old",
-    "city": "Algona",
-    "state": "WA",
-    "zip": "98001",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Milan",
     "age": "4 years old",
     "city": "Whitehouse Station",
@@ -4172,6 +4163,15 @@
     "city": "Graham",
     "state": "WA",
     "zip": "98338",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "romeo",
+    "age": "8 years old",
+    "city": "Puyallup",
+    "state": "WA",
+    "zip": "98375",
     "entryDate": "November 2025",
     "priority": true
   },
