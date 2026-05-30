@@ -1,5 +1,14 @@
 [
   {
+    "name": "Hudson",
+    "age": "4 years old",
+    "city": "Enterprise",
+    "state": "AL",
+    "zip": "36330",
+    "entryDate": "May 2026",
+    "priority": false
+  },
+  {
     "name": "Kaitlyn",
     "age": "6 years old",
     "city": "Palm Coast",
@@ -2080,7 +2089,7 @@
   },
   {
     "name": "Elio",
-    "age": "Under 1 year old",
+    "age": "1 year old",
     "city": "Apple Valley",
     "state": "CA",
     "zip": "92308",
@@ -3399,7 +3408,7 @@
     "state": "WI",
     "zip": "54235",
     "entryDate": "December 2025",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Phoenix",
@@ -4042,7 +4051,7 @@
   },
   {
     "name": "Elijah",
-    "age": "9 years old",
+    "age": "10 years old",
     "city": "Louisville",
     "state": "KY",
     "zip": "40272",
