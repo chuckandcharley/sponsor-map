@@ -657,6 +657,13 @@ function renderMarkers(kids,animate){
   const regular=positions.filter(pt=>!pt.kid.priority);
   const priority=positions.filter(pt=>pt.kid.priority);
 
+  // Disable pin interaction while pins are dropping in, so a pin landing under
+  // a stationary cursor can't fire a hover and dismiss the legend / pop a tip.
+  // A real hover only counts once everything has settled. Instant (non-animated)
+  // re-renders — from resize or zoom recluster — are interactive immediately.
+  if(animate){ window._pinsInteractive=false; }
+  else{ window._pinsInteractive=true; }
+
   function drawPin(pt,ci){
     const kid=pt.kid;
     const isPriority=!!kid.priority;
@@ -669,6 +676,7 @@ function renderMarkers(kids,animate){
     if(isMobile){
       // Tap: show tip, auto-dismiss after a few seconds
       g.on('click',e=>{
+        if(!window._pinsInteractive) return;
         e.stopPropagation();
         dismissLegend();
         if(_activePin===g.node()){hideTip();return;}
@@ -677,8 +685,8 @@ function renderMarkers(kids,animate){
       });
     }else{
       // Hover: animate pin + show tip; leave hides it
-      g.on('mouseenter',()=>{dismissLegend();showTip(kid,pt,g.node(),isPriority);})
-       .on('mouseleave',()=>{hideTip();});
+      g.on('mouseenter',()=>{if(!window._pinsInteractive) return;dismissLegend();showTip(kid,pt,g.node(),isPriority);})
+       .on('mouseleave',()=>{if(!window._pinsInteractive) return;hideTip();});
     }
 
     if(!animate) return;
@@ -689,6 +697,15 @@ function renderMarkers(kids,animate){
 
   regular.forEach((pt,i)=>drawPin(pt,i));
   priority.forEach((pt,i)=>drawPin(pt,regular.length+i));
+
+  if(animate){
+    // last pin's start delay + its drop tween, plus a small buffer
+    const totalPins=regular.length+priority.length;
+    const lastDelay=Math.max(0,(totalPins-1)*8);
+    const settleMs=lastDelay+340+150;
+    clearTimeout(window._pinsSettleTimer);
+    window._pinsSettleTimer=setTimeout(()=>{window._pinsInteractive=true;},settleMs);
+  }
 }
 
 fetch('./zip_centroids.json')
