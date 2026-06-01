@@ -1,19 +1,10 @@
 [
   {
-    "name": "Chase",
-    "age": "2 years old",
-    "city": "Saint Augustine",
-    "state": "FL",
-    "zip": "32095",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Chase",
-    "age": "2 years old",
-    "city": "Saint Augustine",
-    "state": "FL",
-    "zip": "32095",
+    "name": "Jamison",
+    "age": "1 year old",
+    "city": "Johnstown",
+    "state": "OH",
+    "zip": "43032",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -23,15 +14,6 @@
     "city": "Centralia",
     "state": "MO",
     "zip": "65240",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Chase",
-    "age": "2 years old",
-    "city": "Saint Augustine",
-    "state": "FL",
-    "zip": "32095",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -59,15 +41,6 @@
     "city": "Ashland",
     "state": "WI",
     "zip": "54806",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Emiliano",
-    "age": "3 years old",
-    "city": "Yuma",
-    "state": "AZ",
-    "zip": "85365",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -158,15 +131,6 @@
     "city": "Whitehouse Station",
     "state": "NJ",
     "zip": "08889",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Olivia",
-    "age": "Under 1 year old",
-    "city": "Lamar",
-    "state": "CO",
-    "zip": "81052",
     "entryDate": "May 2026",
     "priority": false
   },
