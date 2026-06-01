@@ -14,6 +14,8 @@
   /* Header offset — adjust this single value to match your WordPress nav height.
      The map fills the viewport minus this. Default 0 = true full screen. */
   --header-h:0px;
+  /* Exposed so JS can read the safe-area inset (env() isn't readable in JS directly) */
+  --safe-b:env(safe-area-inset-bottom, 0px);
 }
 html,body{width:100%;height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden;font-family:var(--ff)}
 body{display:flex;flex-direction:column;}
@@ -35,6 +37,33 @@ svg#us-map{
 }
 svg#us-map:active{cursor:grabbing}
 .state{stroke:#002d50;stroke-width:0.5;stroke-linejoin:round}
+
+/* ── PHOTO-TILE BACKGROUND ── */
+#photo-bg{
+  position:absolute;inset:0;z-index:0;
+  display:grid;
+  gap:0;
+  background:var(--bg);
+  opacity:0;transition:opacity 1.1s ease;
+}
+#photo-bg.visible{opacity:1;}
+.bg-tile{
+  position:relative;overflow:hidden;background:var(--bg);
+}
+.bg-tile .layer{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:0;transition:opacity 1.6s ease;
+  will-change:opacity;
+}
+.bg-tile .layer.on{opacity:1;}
+/* Medium-presence veil — keeps the map the clear focal point */
+#photo-bg-veil{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg, rgba(243,249,253,0.72) 0%, rgba(243,249,253,0.62) 45%, rgba(243,249,253,0.72) 100%);
+  opacity:0;transition:opacity 1.1s ease;
+}
+#photo-bg-veil.visible{opacity:1;}
 
 /* ── HOVER / TAP TOOLTIP ── */
 #pin-tip{
@@ -64,14 +93,14 @@ svg#us-map:active{cursor:grabbing}
 }
 
 /* Zoom controls */
-#zoom-controls{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom));right:16px;display:flex;flex-direction:column;gap:4px;z-index:30;transition:opacity .3s ease;}
+#zoom-controls{position:absolute;display:flex;flex-direction:column;gap:4px;z-index:30;transition:opacity .3s ease;}
 .zoom-btn{width:32px;height:32px;background:#fff;border:1.5px solid #cde4f0;border-radius:8px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,42,70,.12);transition:background .12s,transform .1s;-webkit-tap-highlight-color:transparent;font-family:var(--ff)}
 .zoom-btn:hover{background:#f0f7fc}
 .zoom-btn:active{transform:scale(.93)}
 
 /* Legend */
 #map-legend{
-  position:absolute;bottom:calc(16px + env(safe-area-inset-bottom));left:16px;z-index:30;
+  position:absolute;z-index:30;
   background:var(--navy);border:none;border-radius:10px;
   padding:10px 14px 10px 12px;
   display:flex;align-items:center;gap:9px;
@@ -109,8 +138,11 @@ svg#us-map:active{cursor:grabbing}
   transition:opacity 0.7s ease;
 }
 #splash-ui.show{opacity:1;}
-#logo-stage{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
-#logo-svg-wrap{position:relative;}
+#logo-stage{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:22px;width:340px;height:340px;}
+#logo-svg-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
+@media(max-width:767px){
+  #logo-stage{width:260px;height:260px;}
+}
 #num-clip{overflow:visible;line-height:1;width:100%;text-align:center;padding:0 20px;}
 #counter-num{
   display:block;font-size:clamp(72px,15vw,168px);font-weight:900;
@@ -138,6 +170,10 @@ svg#us-map:active{cursor:grabbing}
 </div>
 
 <div id="map-wrap">
+  <!-- Photo-tile background (populated after preload) sits behind the map -->
+  <div id="photo-bg" aria-hidden="true"></div>
+  <div id="photo-bg-veil" aria-hidden="true"></div>
+
   <svg id="us-map" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
     <g id="zoom-group">
       <g id="states-group"></g>
@@ -391,6 +427,9 @@ async function buildPhotoLogo(){
   const splashUI=document.getElementById('splash-ui');
 
   splashUI.classList.add('show');
+  // Begin preloading the photo background now so it's ready by the time the
+  // map reveals. It stays hidden behind the opaque splash until then.
+  if(window._startPhotoBg) window._startPhotoBg();
   const logo=await buildPhotoLogo();
   const targetCount=await _kidCountReady;
 
@@ -422,7 +461,8 @@ async function buildPhotoLogo(){
   splash.classList.add('fade-out');
   await sleep(280);
   mapWrap.classList.add('visible');
-  setTimeout(()=>document.getElementById('map-legend').classList.add('visible'),500);
+  if(window._positionControls) requestAnimationFrame(window._positionControls);
+  setTimeout(()=>{document.getElementById('map-legend').classList.add('visible');if(window._positionControls) window._positionControls();},500);
   await sleep(600);
   splash.style.display='none';
 
@@ -508,6 +548,7 @@ fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
       .datum(topojson.mesh(us,us.objects.states,(a,b)=>a!==b&&String(a.id)!==ALASKA&&a.id!==10&&a.id!==HAWAII&&String(b.id)!==ALASKA&&b.id!==10&&String(b.id)!=='15'))
       .attr('fill','none').attr('stroke','#002d50').attr('stroke-width','0.3').attr('d',pathGen);
     window._illuminateMap=()=>{mapReady=true;if(pendingKids) renderMarkers(pendingKids,true);};
+    if(window._positionControls) requestAnimationFrame(window._positionControls);
   }).catch(()=>{mapReady=true;if(pendingKids) renderMarkers(pendingKids,true);});
 
 let centroids={};
@@ -695,8 +736,197 @@ fetch('./zip_centroids.json')
   })
   .catch(()=>{pendingKids=[];_resolveKidCount(0);window._kidsForIllumination=new Set();});
 
-new ResizeObserver(()=>{if(window._allKids) renderMarkers(window._allKids,false);})
-  .observe(document.getElementById('map-wrap'));
+// ── PHOTO-TILE BACKGROUND CONTROLLER ──────────────────────────
+// Medium tiles (~6-7 across), medium presence (veiled), slow calm cross-fades.
+// Guarantee: a tile only ever fades to a photo that is ALREADY fully loaded in
+// the browser. No blue fallbacks, no half-rendered swaps. Candidates that
+// aren't ready are simply skipped that cycle.
+const PhotoBG=(function(){
+  const bg=document.getElementById('photo-bg');
+  const veil=document.getElementById('photo-bg-veil');
+  const TARGET_COLS=isMobile?6:7;     // ~6-7 across
+  const SWAP_EVERY=[3200,5200];       // slow & calm: one tile every ~3-5s
+  let pool=[];                         // [{src, ready:true}] — only loaded photos
+  let tiles=[];                        // [{el, layers:[a,b], active, current}]
+  let started=false, swapTimer=null;
+
+  function pickReady(exclude){
+    if(pool.length===0) return null;
+    // choose a random already-loaded photo, avoiding the tile's current one
+    for(let tries=0;tries<8;tries++){
+      const cand=pool[Math.floor(rng()*pool.length)];
+      if(cand && cand.ready && cand.src!==exclude) return cand.src;
+    }
+    // fallback: any ready photo
+    const any=pool.find(p=>p.ready&&p.src!==exclude);
+    return any?any.src:(pool[0]?pool[0].src:null);
+  }
+
+  function buildGrid(){
+    const wrap=document.getElementById('map-wrap');
+    const W=wrap.clientWidth, H=wrap.clientHeight;
+    if(W===0||H===0) return false;
+    const cols=TARGET_COLS;
+    const cellW=W/cols;
+    const rows=Math.max(1,Math.round(H/cellW));
+    bg.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+    bg.style.gridTemplateRows=`repeat(${rows},1fr)`;
+    bg.innerHTML='';
+    tiles=[];
+    const total=cols*rows;
+    for(let i=0;i<total;i++){
+      const cell=document.createElement('div');
+      cell.className='bg-tile';
+      const a=document.createElement('div');a.className='layer';
+      const b=document.createElement('div');b.className='layer';
+      cell.appendChild(a);cell.appendChild(b);
+      bg.appendChild(cell);
+      // seed each tile with a ready photo on layer A (already loaded → instant)
+      const src=pickReady(null);
+      if(src){a.style.backgroundImage=`url("${src}")`;a.classList.add('on');}
+      tiles.push({el:cell,layers:[a,b],active:0,current:src});
+    }
+    return true;
+  }
+
+  function swapOne(){
+    if(tiles.length===0) return;
+    const t=tiles[Math.floor(rng()*tiles.length)];
+    const next=pickReady(t.current);
+    if(!next){return;} // nothing new ready — skip calmly, try next cycle
+    const hidden=t.layers[t.active^1];
+    const shown=t.layers[t.active];
+    hidden.style.backgroundImage=`url("${next}")`; // already cached → renders now
+    // next frame: fade hidden in, fade shown out
+    requestAnimationFrame(()=>{
+      hidden.classList.add('on');
+      shown.classList.remove('on');
+    });
+    t.active^=1;t.current=next;
+  }
+
+  function scheduleSwap(){
+    const [lo,hi]=SWAP_EVERY;
+    const delay=lo+rng()*(hi-lo);
+    swapTimer=setTimeout(()=>{swapOne();scheduleSwap();},delay);
+  }
+
+  // Preload a pool of photos. Resolves when at least `minReady` are loaded so
+  // the grid can be seeded with real images immediately.
+  async function preload(minReady){
+    let names=[];
+    try{
+      const res=await fetch(GITHUB_API);
+      if(res.ok){
+        const items=await res.json();
+        names=items.filter(f=>f.type==='file'&&/\.(jpe?g|png|gif|webp)$/i.test(f.name)).map(f=>f.name);
+      }
+    }catch(e){}
+    names=shuffle(names);
+    pool=names.map(n=>({src:'intro/'+encodeURIComponent(n),ready:false}));
+    if(pool.length===0) return false;
+    // kick off loading for all; mark ready as each finishes
+    let readyCount=0;
+    const need=Math.min(minReady,pool.length);
+    await new Promise(resolve=>{
+      let settled=false;
+      pool.forEach(p=>{
+        const img=new Image();
+        img.onload=()=>{p.ready=true;readyCount++;if(!settled&&readyCount>=need){settled=true;resolve();}};
+        img.onerror=()=>{p.ready=false;if(!settled&&readyCount>=need){settled=true;resolve();}};
+        img.src=p.src;
+      });
+      // safety: if fewer than `need` ever load, resolve once all have settled
+      setTimeout(()=>{if(!settled){settled=true;resolve();}},6000);
+    });
+    return pool.some(p=>p.ready);
+  }
+
+  async function start(){
+    if(started) return;started=true;
+    // need enough ready photos to seed a full grid before we show anything
+    const cols=TARGET_COLS;
+    const wrap=document.getElementById('map-wrap');
+    const approxRows=Math.max(1,Math.round(wrap.clientHeight/(wrap.clientWidth/cols)));
+    const seedNeed=Math.min(cols*approxRows, 24);
+    const ok=await preload(Math.max(seedNeed,12));
+    if(!ok){
+      // No photos reachable at all — keep the existing clean bg, never break.
+      return;
+    }
+    if(!buildGrid()) return;
+    // reveal the photo bg + veil together (cross-fades from the light-blue)
+    requestAnimationFrame(()=>{bg.classList.add('visible');veil.classList.add('visible');});
+    scheduleSwap();
+  }
+
+  function relayout(){ if(started && pool.some(p=>p.ready)) buildGrid(); }
+
+  return {start,relayout};
+})();
+window._startPhotoBg=()=>PhotoBG.start();
+window._relayoutPhotoBg=()=>PhotoBG.relayout();
+
+// ── ANCHOR CONTROLS TO THE RENDERED MAP (not the viewport) ────
+// On tall full-screen viewports the SVG centers the map with empty bands
+// above/below. We pin the legend + zoom controls to the map's actual drawn
+// bounds so they sit right beside the map, like the iframe versions did.
+// We anchor to the *unzoomed* map geometry (derived from the SVG element +
+// the map's bounding box in viewBox units) so controls don't move on zoom.
+let _mapBoxVB=null; // {x,y,w,h} of the map content within the 960x600 viewBox
+function getMapBoxVB(){
+  if(_mapBoxVB) return _mapBoxVB;
+  // bounding box of all state paths in viewBox coords, ignoring zoom transform
+  const paths=document.querySelectorAll('#states-group path.state');
+  if(!paths.length) return null;
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  paths.forEach(p=>{
+    const b=p.getBBox();
+    if(b.x<minX)minX=b.x;if(b.y<minY)minY=b.y;
+    if(b.x+b.width>maxX)maxX=b.x+b.width;if(b.y+b.height>maxY)maxY=b.y+b.height;
+  });
+  if(!isFinite(minX)) return null;
+  _mapBoxVB={x:minX,y:minY,w:maxX-minX,h:maxY-minY};
+  return _mapBoxVB;
+}
+function positionControls(){
+  const svgEl2=document.getElementById('us-map');
+  const wrap=document.getElementById('map-wrap');
+  if(!svgEl2||!wrap) return;
+  const box=getMapBoxVB();
+  if(!box) return;
+  const svgRect=svgEl2.getBoundingClientRect();
+  const wrapRect=wrap.getBoundingClientRect();
+  if(svgRect.width===0) return;
+  // The SVG renders its 960x600 viewBox with xMidYMid meet inside svgRect.
+  const VB_W=960,VB_H=600;
+  const scale=Math.min(svgRect.width/VB_W, svgRect.height/VB_H);
+  const renderW=VB_W*scale, renderH=VB_H*scale;
+  const offX=(svgRect.width-renderW)/2 + (svgRect.left-wrapRect.left);
+  const offY=(svgRect.height-renderH)/2 + (svgRect.top-wrapRect.top);
+  // map content bounds in wrap pixels
+  const mapLeft=offX+box.x*scale;
+  const mapRight=offX+(box.x+box.w)*scale;
+  const mapBottom=offY+(box.y+box.h)*scale;
+  const safeB=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-b'))||0;
+  const INSET=16;
+  const maxBottom=wrapRect.height-INSET-safeB;
+  const anchorBottom=Math.min(mapBottom,maxBottom);
+
+  const legend=document.getElementById('map-legend');
+  const zoom=document.getElementById('zoom-controls');
+  legend.style.left=Math.max(INSET,mapLeft+INSET)+'px';
+  legend.style.top=(anchorBottom-legend.offsetHeight-INSET)+'px';
+  zoom.style.left=(Math.min(wrapRect.width-INSET,mapRight-INSET)-zoom.offsetWidth)+'px';
+  zoom.style.top=(anchorBottom-zoom.offsetHeight-INSET)+'px';
+}
+window._positionControls=positionControls;
+
+new ResizeObserver(()=>{
+  if(window._allKids) renderMarkers(window._allKids,false);
+  positionControls();
+  if(window._relayoutPhotoBg) window._relayoutPhotoBg();
+}).observe(document.getElementById('map-wrap'));
 </script>
 </body>
 </html>
