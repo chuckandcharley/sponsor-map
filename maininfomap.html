@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Playhouse Map — Explore</title>
 <link rel="preconnect" href="https://fonts.bunny.net">
 <link href="https://fonts.bunny.net/css?family=source-sans-3:400,600,700,900&display=swap" rel="stylesheet">
@@ -20,7 +20,9 @@ body{display:flex;flex-direction:column;}
 
 /* ── MAP WRAP — full screen minus header ── */
 #map-wrap{
-  position:relative;width:100%;height:calc(100vh - var(--header-h));
+  position:relative;width:100%;
+  height:calc(100vh - var(--header-h));        /* fallback for older browsers */
+  height:calc(100dvh - var(--header-h));        /* accounts for mobile address/tool bars */
   margin:0 auto;
   user-select:none;-webkit-user-select:none;display:flex;flex-direction:column;
   opacity:0;transition:opacity 1.2s ease;
@@ -62,14 +64,14 @@ svg#us-map:active{cursor:grabbing}
 }
 
 /* Zoom controls */
-#zoom-controls{position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;gap:4px;z-index:30;transition:opacity .3s ease;}
+#zoom-controls{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom));right:16px;display:flex;flex-direction:column;gap:4px;z-index:30;transition:opacity .3s ease;}
 .zoom-btn{width:32px;height:32px;background:#fff;border:1.5px solid #cde4f0;border-radius:8px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,42,70,.12);transition:background .12s,transform .1s;-webkit-tap-highlight-color:transparent;font-family:var(--ff)}
 .zoom-btn:hover{background:#f0f7fc}
 .zoom-btn:active{transform:scale(.93)}
 
 /* Legend */
 #map-legend{
-  position:absolute;bottom:16px;left:16px;z-index:30;
+  position:absolute;bottom:calc(16px + env(safe-area-inset-bottom));left:16px;z-index:30;
   background:var(--navy);border:none;border-radius:10px;
   padding:10px 14px 10px 12px;
   display:flex;align-items:center;gap:9px;
@@ -130,10 +132,8 @@ svg#us-map:active{cursor:grabbing}
     <div id="logo-stage">
       <div id="logo-svg-wrap"></div>
     </div>
-    <div id="count-block" style="opacity:0;transition:opacity 0.5s ease;">
-      <div id="num-clip"><span id="counter-num">0</span></div>
-      <div id="label-clip"><span id="counter-label">kiddos waiting for a sponsor</span></div>
-    </div>
+    <div id="num-clip"><span id="counter-num">0</span></div>
+    <div id="label-clip"><span id="counter-label">kiddos waiting for a sponsor</span></div>
   </div>
 </div>
 
@@ -263,7 +263,6 @@ async function buildPhotoLogo(){
   const maskRect=document.createElementNS(ns,'rect');
   maskRect.setAttribute('x',LOGO_VB.x);maskRect.setAttribute('width',LOGO_VB.w);
   maskRect.setAttribute('fill','#fff');
-  // start empty (height 0 at the very bottom)
   maskRect.setAttribute('y',LOGO_VB.y+LOGO_VB.h);
   maskRect.setAttribute('height',0);
   mask.appendChild(maskRect);
@@ -280,7 +279,7 @@ async function buildPhotoLogo(){
   });
   svg.appendChild(vesselG);
 
-  // photo tiles group — clipped to logo, masked by rising rect
+  // photo tiles group — clipped to logo, revealed by the rising mask
   const photoG=document.createElementNS(ns,'g');
   photoG.setAttribute('clip-path','url(#logoClip)');
   photoG.setAttribute('mask','url(#fillMask)');
@@ -322,7 +321,7 @@ async function buildPhotoLogo(){
       ti++;
     }
   }
-  // subtle grid seams for the photo-tile look
+  // subtle grid seams for the photo-tile look — masked by the same rising fill
   const seams=document.createElementNS(ns,'g');
   seams.setAttribute('clip-path','url(#logoClip)');
   seams.setAttribute('mask','url(#fillMask)');
@@ -399,7 +398,6 @@ async function buildPhotoLogo(){
   await logo.drawIn();
 
   // Beat 2: count up + fill the logo with photos in sync
-  document.getElementById('count-block').style.opacity='1';
   const countStart=performance.now();
   await new Promise(resolve=>{
     function frame(now){
