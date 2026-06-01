@@ -129,18 +129,12 @@ svg#us-map:active{cursor:grabbing}
    short, wide iframe shrinks the whole stack instead of clipping it. */
 #logo-stage{
   position:relative;display:flex;align-items:center;justify-content:center;
-  margin-bottom:clamp(10px,2.2vh,22px);
-  width:min(340px, 42vh, 60vw);
-  height:min(340px, 42vh, 60vw);
+  margin-bottom:clamp(4px,1vh,12px);
+  width:min(360px, 46vh, 64vw);
+  height:min(360px, 46vh, 64vw);
 }
 #logo-svg-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-#num-clip{overflow:visible;line-height:1;width:100%;text-align:center;padding:0 20px;}
-#counter-num{
-  display:block;font-size:min(168px, 15vw, 20vh);font-weight:900;
-  letter-spacing:-0.04em;color:var(--navy);font-variant-numeric:tabular-nums;
-  line-height:1;text-align:center;white-space:nowrap;
-}
-#label-clip{overflow:hidden;line-height:1;margin-top:.1em;width:100%;text-align:center;padding:0 20px;}
+#label-clip{overflow:hidden;line-height:1;width:100%;text-align:center;padding:0 20px;}
 #counter-label{
   display:block;font-size:min(30px, 2.4vw, 3.4vh);font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;color:var(--navy);
@@ -155,7 +149,6 @@ svg#us-map:active{cursor:grabbing}
     <div id="logo-stage">
       <div id="logo-svg-wrap"></div>
     </div>
-    <div id="num-clip"><span id="counter-num">0</span></div>
     <div id="label-clip"><span id="counter-label">kiddos waiting for a sponsor</span></div>
   </div>
 </div>
@@ -389,6 +382,36 @@ async function buildPhotoLogo(){
 
   document.getElementById('logo-svg-wrap').appendChild(svg);
 
+  // ── In-logo count ──
+  // The number lives at the house's doorway center and is always centered there,
+  // growing symmetrically left/right as digits increase. Sized so the widest
+  // realistic value (4 digits + comma) stays within the house interior
+  // (measured safe span x:694–1378, center x≈1036). A soft white halo keeps it
+  // legible over the photo fill without altering the fill itself.
+  const DOOR_CX=1036, DOOR_CY=1175;      // doorway center in logo coords
+  const NUM_FONT=200;                     // locked size: fits "8,888" within walls
+  // halo (drawn first, behind the number)
+  const numHalo=document.createElementNS(ns,'text');
+  numHalo.setAttribute('x',DOOR_CX);numHalo.setAttribute('y',DOOR_CY);
+  numHalo.setAttribute('text-anchor','middle');
+  numHalo.setAttribute('dominant-baseline','central');
+  numHalo.style.cssText=`font-family:'Source Sans 3',sans-serif;font-weight:900;font-size:${NUM_FONT}px;fill:#fff;stroke:#fff;stroke-width:26px;stroke-linejoin:round;opacity:0.9;paint-order:stroke;`;
+  numHalo.textContent='0';
+  const numText=document.createElementNS(ns,'text');
+  numText.setAttribute('x',DOOR_CX);numText.setAttribute('y',DOOR_CY);
+  numText.setAttribute('text-anchor','middle');
+  numText.setAttribute('dominant-baseline','central');
+  numText.style.cssText=`font-family:'Source Sans 3',sans-serif;font-weight:900;font-size:${NUM_FONT}px;fill:#004270;letter-spacing:-6px;`;
+  numText.textContent='0';
+  svg.appendChild(numHalo);
+  svg.appendChild(numText);
+
+  function setCount(str){numHalo.textContent=str;numText.textContent=str;}
+  // number group hidden until the count begins
+  const numGroup=[numHalo,numText];
+  numGroup.forEach(el=>{el.style.opacity='0';el.style.transition='opacity 0.4s ease';});
+  function showCount(){numGroup.forEach(el=>{el.style.opacity=el===numText?'1':'0.9';});}
+
   // prime strokes for the draw-in (hidden until drawIn() runs)
   const lens=strokeEls.map(el=>el.getTotalLength());
   strokeEls.forEach((el,i)=>{el.style.strokeDasharray=lens[i];el.style.strokeDashoffset=lens[i];});
@@ -415,7 +438,7 @@ async function buildPhotoLogo(){
       setTimeout(resolve,total+150);
     });
   }
-  return {svg,setFill,drawIn};
+  return {svg,setFill,drawIn,setCount,showCount};
 }
 
 // ── MAIN SPLASH SEQUENCE ──────────────────────────────────────
@@ -432,20 +455,21 @@ async function buildPhotoLogo(){
   // Beat 1: draw the logo outline stroke-by-stroke
   await logo.drawIn();
 
-  // Beat 2: count up + fill the logo with photos in sync
+  // Beat 2: count up (number inside the house) + fill the logo with photos
+  logo.showCount();
   const countStart=performance.now();
   await new Promise(resolve=>{
     function frame(now){
       const t=Math.min((now-countStart)/T_COUNT,1);
       const e=easeOut4(t);
-      document.getElementById('counter-num').textContent=Math.round(e*targetCount).toLocaleString();
+      logo.setCount(Math.round(e*targetCount).toLocaleString());
       logo.setFill(e);
       if(t<1) requestAnimationFrame(frame); else resolve();
     }
     requestAnimationFrame(frame);
   });
   logo.setFill(1);
-  document.getElementById('counter-num').textContent=targetCount.toLocaleString();
+  logo.setCount(targetCount.toLocaleString());
 
   // Hold full for a beat
   await sleep(T_FULL_HOLD);
