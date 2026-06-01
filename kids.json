@@ -1,28 +1,28 @@
 [
   {
+    "name": "Terra",
+    "age": "Under 1 year old",
+    "city": "Edenton",
+    "state": "NC",
+    "zip": "27933",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Jayden",
+    "age": "4 years old",
+    "city": "Kernersville",
+    "state": "NC",
+    "zip": "27284",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Rhet",
     "age": "6 years old",
     "city": "Hayesville",
     "state": "NC",
     "zip": "28904",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Jimmie",
-    "age": "1 year old",
-    "city": "Baton Rouge",
-    "state": "LA",
-    "zip": "70819",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Jimmie",
-    "age": "1 year old",
-    "city": "Baton Rouge",
-    "state": "LA",
-    "zip": "70819",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -59,15 +59,6 @@
     "city": "Gaffney",
     "state": "SC",
     "zip": "29340",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Kayden",
-    "age": "5 years old",
-    "city": "Benton",
-    "state": "AR",
-    "zip": "72019",
     "entryDate": "May 2026",
     "priority": false
   },
