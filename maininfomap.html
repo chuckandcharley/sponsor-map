@@ -66,7 +66,7 @@ svg#us-map:active{cursor:grabbing}
 }
 
 /* Zoom controls */
-#zoom-controls{position:absolute;display:flex;flex-direction:column;gap:4px;z-index:30;transition:opacity .3s ease;}
+#zoom-controls{position:absolute;display:flex;flex-direction:row;gap:6px;z-index:30;transition:opacity .3s ease;}
 .zoom-btn{width:32px;height:32px;background:#fff;border:1.5px solid #cde4f0;border-radius:8px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,42,70,.12);transition:background .12s,transform .1s;-webkit-tap-highlight-color:transparent;font-family:var(--ff)}
 .zoom-btn:hover{background:#f0f7fc}
 .zoom-btn:active{transform:scale(.93)}
@@ -186,7 +186,12 @@ svg#us-map:active{cursor:grabbing}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
-const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||window.innerWidth<768;
+// "Mobile" here means "tap, not hover" — decided by input capability, NOT window
+// width (a narrow desktop window or iframe still has a mouse and should hover).
+const _noHover = window.matchMedia && window.matchMedia('(hover: none)').matches;
+const _coarse  = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+const _uaMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const isMobile = _uaMobile || _noHover || _coarse;
 
 // ── SEEDED RANDOM ─────────────────────────────────────────────
 function mulberry32(s){
@@ -431,9 +436,6 @@ async function buildPhotoLogo(){
   setTimeout(()=>{
     document.getElementById('map-legend').classList.add('visible');
     if(window._positionControls) window._positionControls();
-    // Only allow dismissal once the legend has fully faded in, so pins
-    // dropping under the cursor during the intro can't kill it early.
-    setTimeout(()=>{legendReady=true;},700);
   },500);
   await sleep(600);
   splash.style.display='none';
@@ -569,13 +571,9 @@ function pinPath(r){
   return `M${tx(5.5)},${ty(1)} C${tx(3.01)},${ty(1)} ${tx(1)},${ty(3.01)} ${tx(1)},${ty(5.5)} C${tx(1)},${ty(8.86)} ${tx(5.5)},${ty(15)} ${tx(5.5)},${ty(15)} C${tx(5.5)},${ty(15)} ${tx(10)},${ty(8.86)} ${tx(10)},${ty(5.5)} C${tx(10)},${ty(3.01)} ${tx(7.99)},${ty(1)} ${tx(5.5)},${ty(1)} Z`;
 }
 
-let legendDismissed=false;
-let legendReady=false;   // becomes true only once the legend has fully appeared
-function dismissLegend(){
-  if(!legendReady) return;          // ignore dismiss attempts during intro/pin-drop
-  if(legendDismissed) return;legendDismissed=true;
-  document.getElementById('map-legend').classList.add('hidden');
-}
+// The legend now lives in the empty band BELOW the map (not overlapping it),
+// so it stays as a permanent key rather than auto-hiding on interaction.
+function dismissLegend(){ /* legend is persistent; nothing to dismiss */ }
 
 const PIN_COLOR_REGULAR='#ffffff';
 const PIN_COLOR_PRIORITY='#7dd4f8';
@@ -769,16 +767,29 @@ function positionControls(){
   const mapRight=offX+(box.x+box.w)*scale;
   const mapBottom=offY+(box.y+box.h)*scale;
   const safeB=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-b'))||0;
-  const INSET=16;
-  const maxBottom=wrapRect.height-INSET-safeB;
-  const anchorBottom=Math.min(mapBottom,maxBottom);
 
   const legend=document.getElementById('map-legend');
   const zoom=document.getElementById('zoom-controls');
-  legend.style.left=Math.max(INSET,mapLeft+INSET)+'px';
-  legend.style.top=(anchorBottom-legend.offsetHeight-INSET)+'px';
-  zoom.style.left=(Math.min(wrapRect.width-INSET,mapRight-INSET)-zoom.offsetWidth)+'px';
-  zoom.style.top=(anchorBottom-zoom.offsetHeight-INSET)+'px';
+  const legendH=legend.offsetHeight, zoomH=zoom.offsetHeight;
+  const rowH=Math.max(legendH,zoomH);
+
+  // Sit the row just BELOW where the map ends, with a comfortable gap, both
+  // clusters sharing one baseline (bottom-aligned). If the frame is too short
+  // to fit them below the map, clamp to the frame bottom so they never overflow.
+  const GAP=Math.round(Math.min(34, Math.max(20, renderH*0.045))); // comfy gap below map, scales a bit
+  const EDGE=16;            // distance from the side walls
+  const frameBottomLimit=wrapRect.height-EDGE-safeB;   // lowest the row may reach
+  let rowTop=mapBottom+GAP;
+  // keep the row within the frame
+  if(rowTop+rowH>frameBottomLimit) rowTop=Math.max(mapBottom+8, frameBottomLimit-rowH);
+
+  // legend: aligned to the map's left edge
+  legend.style.left=Math.max(EDGE,mapLeft)+'px';
+  legend.style.top=(rowTop+(rowH-legendH))+'px';   // bottom-align within the row
+  // zoom: right edge aligned to the map's right edge
+  const zoomLeft=Math.min(wrapRect.width-EDGE, mapRight)-zoom.offsetWidth;
+  zoom.style.left=Math.max(EDGE,zoomLeft)+'px';
+  zoom.style.top=(rowTop+(rowH-zoomH))+'px';        // bottom-align within the row
 }
 window._positionControls=positionControls;
 
