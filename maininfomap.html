@@ -25,31 +25,25 @@ body{display:flex;flex-direction:column;justify-content:center;}
    below it. No forced 100dvh, so there's no dead space above/below when embedded
    in a fixed-ratio iframe. The map-area ratio + strip define the total height. */
 #map-wrap{
-  position:relative;width:100%;max-width:1100px;
+  position:relative;width:100%;height:100%;
   margin:0 auto;
-  user-select:none;-webkit-user-select:none;display:flex;flex-direction:column;
+  user-select:none;-webkit-user-select:none;
   opacity:0;transition:opacity 1.2s ease;
 }
 #map-wrap.visible{opacity:1}
 
-/* The map area holds the SVG; its height tracks the map's natural shape. */
+/* The map fills the entire frame, so zooming shows map everywhere — including
+   behind the floating controls, exactly like the original. */
 #map-area{
-  position:relative;width:100%;
-  /* US map content is ~wider than tall; this ratio frames it snugly */
-  aspect-ratio:960 / 470;
+  position:absolute;inset:0;width:100%;height:100%;
 }
-/* Older browsers without aspect-ratio: fall back to padding-ratio box */
-@supports not (aspect-ratio:1/1){
-  #map-area{height:0;padding-bottom:48.9%;}
-}
-/* Control strip below the map — fixed, comfortable height; controls live here */
+/* The control row floats over the bottom of the map. It has NO background of
+   its own — when zoomed out you see the page bg, when zoomed in you see map. */
 #control-strip{
-  position:relative;width:100%;
-  height:64px;flex:0 0 auto;
+  position:absolute;left:0;right:0;bottom:0;
+  height:auto;pointer-events:none;z-index:30;
 }
-@media(max-width:767px){
-  #control-strip{height:56px;}
-}
+#control-strip > *{pointer-events:auto;}
 
 svg#us-map{
   position:absolute;top:0;left:0;z-index:1;
@@ -85,15 +79,15 @@ svg#us-map:active{cursor:grabbing}
   #pin-tip-meta{font-size:10px;}
 }
 
-/* Zoom controls — right side of the control strip, vertically centered */
-#zoom-controls{position:absolute;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:row;gap:6px;z-index:30;transition:opacity .3s ease;}
+/* Zoom controls — float at the bottom-right, over the map */
+#zoom-controls{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:row;gap:6px;z-index:30;transition:opacity .3s ease;}
 .zoom-btn{width:32px;height:32px;background:#fff;border:1.5px solid #cde4f0;border-radius:8px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,42,70,.12);transition:background .12s,transform .1s;-webkit-tap-highlight-color:transparent;font-family:var(--ff)}
 .zoom-btn:hover{background:#f0f7fc}
 .zoom-btn:active{transform:scale(.93)}
 
-/* Legend — left side of the control strip, vertically centered */
+/* Legend — float at the bottom-left, over the map */
 #map-legend{
-  position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:30;
+  position:absolute;left:16px;bottom:16px;z-index:30;
   background:var(--navy);border:none;border-radius:10px;
   padding:9px 14px;
   display:flex;align-items:center;gap:9px;
@@ -131,22 +125,26 @@ svg#us-map:active{cursor:grabbing}
   transition:opacity 0.7s ease;
 }
 #splash-ui.show{opacity:1;}
-#logo-stage{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:22px;width:340px;height:340px;}
-#logo-svg-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-@media(max-width:767px){
-  #logo-stage{width:260px;height:260px;}
+/* Intro scales to fit the splash box — uses the SMALLER of width/height so a
+   short, wide iframe shrinks the whole stack instead of clipping it. */
+#logo-stage{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  margin-bottom:clamp(10px,2.2vh,22px);
+  width:min(340px, 42vh, 60vw);
+  height:min(340px, 42vh, 60vw);
 }
+#logo-svg-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
 #num-clip{overflow:visible;line-height:1;width:100%;text-align:center;padding:0 20px;}
 #counter-num{
-  display:block;font-size:clamp(72px,15vw,168px);font-weight:900;
+  display:block;font-size:min(168px, 15vw, 20vh);font-weight:900;
   letter-spacing:-0.04em;color:var(--navy);font-variant-numeric:tabular-nums;
   line-height:1;text-align:center;white-space:nowrap;
 }
 #label-clip{overflow:hidden;line-height:1;margin-top:.1em;width:100%;text-align:center;padding:0 20px;}
 #counter-label{
-  display:block;font-size:clamp(13px,2.4vw,30px);font-weight:700;
+  display:block;font-size:min(30px, 2.4vw, 3.4vh);font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;color:var(--navy);
-  line-height:1;text-align:center;white-space:nowrap;
+  line-height:1.1;text-align:center;white-space:nowrap;
 }
 </style>
 </head>
@@ -275,11 +273,13 @@ async function buildPhotoLogo(){
     }
   }catch(e){}
 
-  const svgSize=isMobile?260:340;
   const svg=document.createElementNS(ns,'svg');
   svg.setAttribute('viewBox',`${LOGO_VB.x} ${LOGO_VB.y} ${LOGO_VB.w} ${LOGO_VB.h}`);
-  svg.setAttribute('width',svgSize);svg.setAttribute('height',svgSize);
-  svg.style.cssText='display:block;overflow:visible;';
+  // Fill the responsive #logo-stage (which is sized via CSS to fit the box),
+  // so the logo shrinks in short/wide iframes instead of overflowing.
+  svg.setAttribute('width','100%');svg.setAttribute('height','100%');
+  svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+  svg.style.cssText='display:block;overflow:visible;width:100%;height:100%;';
 
   const defs=document.createElementNS(ns,'defs');
 
@@ -355,9 +355,27 @@ async function buildPhotoLogo(){
       ti++;
     }
   }
-  // No grid seams — photos butt flush against each other so the images
-  // themselves define the mosaic (the thin white lines read as cheap).
+  // Subtle grid seams between photo tiles — masked by the same rising fill so
+  // they reveal in step with the photos. This grid look reads cleaner here.
+  const seams=document.createElementNS(ns,'g');
+  seams.setAttribute('clip-path','url(#logoClip)');
+  seams.setAttribute('mask','url(#fillMask)');
+  for(let c=1;c<cols;c++){
+    const l=document.createElementNS(ns,'line');
+    l.setAttribute('x1',LOGO_VB.x+c*tileW);l.setAttribute('y1',LOGO_VB.y);
+    l.setAttribute('x2',LOGO_VB.x+c*tileW);l.setAttribute('y2',LOGO_VB.y+LOGO_VB.h);
+    l.setAttribute('stroke','#f3f9fd');l.setAttribute('stroke-width','8');l.setAttribute('opacity','0.6');
+    seams.appendChild(l);
+  }
+  for(let r=1;r<rows;r++){
+    const l=document.createElementNS(ns,'line');
+    l.setAttribute('x1',LOGO_VB.x);l.setAttribute('y1',LOGO_VB.y+r*tileH);
+    l.setAttribute('x2',LOGO_VB.x+LOGO_VB.w);l.setAttribute('y2',LOGO_VB.y+r*tileH);
+    l.setAttribute('stroke','#f3f9fd');l.setAttribute('stroke-width','8');l.setAttribute('opacity','0.6');
+    seams.appendChild(l);
+  }
   svg.appendChild(photoG);
+  svg.appendChild(seams);
 
   // crisp logo outline on top — also serves as the draw-in strokes
   const topG=document.createElementNS(ns,'g');
@@ -733,14 +751,55 @@ fetch('./zip_centroids.json')
   })
   .catch(()=>{pendingKids=[];_resolveKidCount(0);window._kidsForIllumination=new Set();});
 
-// Controls now live in a fixed control strip below the map and are positioned
-// purely via CSS (legend left, zoom right, vertically centered). No JS layout
-// math needed — this is a no-op kept so existing callers stay harmless.
-function positionControls(){}
+// Anchor the floating legend + zoom controls just below the MAP's drawn bottom
+// edge (not the frame's bottom). On a tall/narrow screen the map sits centered
+// with empty space below it, so the controls lift up to stay near the map; on a
+// wide screen the map fills the frame and they sit near the bottom. They remain
+// floating OVER the map (no background block), so zoom still shows map behind
+// them. Anchored to the unzoomed map geometry so they don't move when zooming.
+let _mapBoxVB=null; // {y,h} of map content within the 960x600 viewBox
+function getMapBoxVB(){
+  if(_mapBoxVB) return _mapBoxVB;
+  const paths=document.querySelectorAll('#states-group path.state');
+  if(!paths.length) return null;
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  paths.forEach(p=>{
+    const b=p.getBBox();
+    if(b.x<minX)minX=b.x;if(b.y<minY)minY=b.y;
+    if(b.x+b.width>maxX)maxX=b.x+b.width;if(b.y+b.height>maxY)maxY=b.y+b.height;
+  });
+  if(!isFinite(minX)) return null;
+  _mapBoxVB={x:minX,y:minY,w:maxX-minX,h:maxY-minY};
+  return _mapBoxVB;
+}
+function positionControls(){
+  const area=document.getElementById('map-area');
+  const box=getMapBoxVB();
+  if(!area||!box) return;
+  const rect=area.getBoundingClientRect();
+  if(rect.width===0||rect.height===0) return;
+  const VB_W=960,VB_H=600;
+  // SVG fills #map-area with xMidYMid meet
+  const scale=Math.min(rect.width/VB_W, rect.height/VB_H);
+  const renderH=VB_H*scale;
+  const offY=(rect.height-renderH)/2;                 // top band height within area
+  const mapBottomPx=offY+(box.y+box.h)*scale;          // map's drawn bottom, from area top
+  const GAP=14;                                        // float just below the map edge
+  // distance from the frame's bottom up to the control row
+  let fromBottom=Math.round(rect.height-mapBottomPx+GAP);
+  // safety: never go off-screen top, never crowd the very bottom edge
+  const minFromBottom=12;
+  fromBottom=Math.max(minFromBottom, Math.min(fromBottom, rect.height-60));
+  const legend=document.getElementById('map-legend');
+  const zoom=document.getElementById('zoom-controls');
+  if(legend) legend.style.bottom=fromBottom+'px';
+  if(zoom) zoom.style.bottom=fromBottom+'px';
+}
 window._positionControls=positionControls;
 
 new ResizeObserver(()=>{
   if(window._allKids) renderMarkers(window._allKids,false);
+  positionControls();
 }).observe(document.getElementById('map-area'));
 </script>
 </body>
