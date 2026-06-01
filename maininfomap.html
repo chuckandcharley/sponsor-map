@@ -18,22 +18,42 @@
   --safe-b:env(safe-area-inset-bottom, 0px);
 }
 html,body{width:100%;height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden;font-family:var(--ff)}
-body{display:flex;flex-direction:column;}
+body{display:flex;flex-direction:column;justify-content:center;}
 
-/* ── MAP WRAP — full screen minus header ── */
+/* ── MAP WRAP ──
+   Sizes to its content: the map area (natural-ish ratio) plus a control strip
+   below it. No forced 100dvh, so there's no dead space above/below when embedded
+   in a fixed-ratio iframe. The map-area ratio + strip define the total height. */
 #map-wrap{
-  position:relative;width:100%;
-  height:calc(100vh - var(--header-h));        /* fallback for older browsers */
-  height:calc(100dvh - var(--header-h));        /* accounts for mobile address/tool bars */
+  position:relative;width:100%;max-width:1100px;
   margin:0 auto;
   user-select:none;-webkit-user-select:none;display:flex;flex-direction:column;
   opacity:0;transition:opacity 1.2s ease;
 }
 #map-wrap.visible{opacity:1}
 
+/* The map area holds the SVG; its height tracks the map's natural shape. */
+#map-area{
+  position:relative;width:100%;
+  /* US map content is ~wider than tall; this ratio frames it snugly */
+  aspect-ratio:960 / 470;
+}
+/* Older browsers without aspect-ratio: fall back to padding-ratio box */
+@supports not (aspect-ratio:1/1){
+  #map-area{height:0;padding-bottom:48.9%;}
+}
+/* Control strip below the map — fixed, comfortable height; controls live here */
+#control-strip{
+  position:relative;width:100%;
+  height:64px;flex:0 0 auto;
+}
+@media(max-width:767px){
+  #control-strip{height:56px;}
+}
+
 svg#us-map{
-  position:relative;z-index:1;
-  width:100%;height:100%;display:block;flex:1;cursor:grab;touch-action:none;
+  position:absolute;top:0;left:0;z-index:1;
+  width:100%;height:100%;display:block;cursor:grab;touch-action:none;
 }
 svg#us-map:active{cursor:grabbing}
 .state{stroke:#002d50;stroke-width:0.5;stroke-linejoin:round}
@@ -65,33 +85,33 @@ svg#us-map:active{cursor:grabbing}
   #pin-tip-meta{font-size:10px;}
 }
 
-/* Zoom controls */
-#zoom-controls{position:absolute;display:flex;flex-direction:row;gap:6px;z-index:30;transition:opacity .3s ease;}
+/* Zoom controls — right side of the control strip, vertically centered */
+#zoom-controls{position:absolute;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:row;gap:6px;z-index:30;transition:opacity .3s ease;}
 .zoom-btn{width:32px;height:32px;background:#fff;border:1.5px solid #cde4f0;border-radius:8px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,42,70,.12);transition:background .12s,transform .1s;-webkit-tap-highlight-color:transparent;font-family:var(--ff)}
 .zoom-btn:hover{background:#f0f7fc}
 .zoom-btn:active{transform:scale(.93)}
 
-/* Legend */
+/* Legend — left side of the control strip, vertically centered */
 #map-legend{
-  position:absolute;z-index:30;
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:30;
   background:var(--navy);border:none;border-radius:10px;
-  padding:10px 14px 10px 12px;
+  padding:9px 14px;
   display:flex;align-items:center;gap:9px;
   box-shadow:0 2px 12px rgba(0,42,70,.28);
   font-family:var(--ff);
   opacity:0;transition:opacity 0.6s ease;
-  max-width:200px;
 }
 #map-legend.visible{opacity:1;}
-#map-legend.hidden{opacity:0;pointer-events:none;transition:opacity 0.3s ease;}
-#legend-text{display:flex;flex-direction:column;gap:1px;}
-#legend-main{font-size:12px;font-weight:700;color:#fff;line-height:1.3;letter-spacing:.01em;}
-#legend-priority{font-size:12px;font-weight:700;color:#7dd4f8;line-height:1.3;letter-spacing:.01em;}
-#legend-sub{font-size:9px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.05em;text-transform:uppercase;}
+/* legend items sit in a row when there's width, stacked when tight */
+#legend-text{display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+.legend-item{display:flex;align-items:center;gap:7px;}
+#legend-main{font-size:12px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:.01em;white-space:nowrap;}
+#legend-priority{font-size:12px;font-weight:700;color:#7dd4f8;line-height:1.2;letter-spacing:.01em;white-space:nowrap;}
 @media(max-width:767px){
-  #map-legend{padding:7px 10px 7px 9px;gap:6px;max-width:175px;border-radius:8px;}
+  #map-legend{padding:7px 11px;gap:6px;border-radius:8px;left:10px;}
+  #zoom-controls{right:10px;gap:5px;}
+  .zoom-btn{width:30px;height:30px;}
   #legend-main,#legend-priority{font-size:10px;}
-  #legend-sub{font-size:8px;}
 }
 
 /* ── SPLASH ── */
@@ -143,43 +163,47 @@ svg#us-map:active{cursor:grabbing}
 </div>
 
 <div id="map-wrap">
-  <svg id="us-map" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-    <g id="zoom-group">
-      <g id="states-group"></g>
-      <g id="pins-group"></g>
-    </g>
-  </svg>
+  <div id="map-area">
+    <svg id="us-map" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <g id="zoom-group">
+        <g id="states-group"></g>
+        <g id="pins-group"></g>
+      </g>
+    </svg>
 
-  <!-- Hover / tap tooltip -->
-  <div id="pin-tip" role="status" aria-live="polite">
-    <div id="pin-tip-name">&#8212;</div>
-    <div id="pin-tip-meta"></div>
-  </div>
-
-  <!-- Legend -->
-  <div id="map-legend">
-    <div id="legend-text">
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
-        <svg width="11" height="16" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-          <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#fff" stroke="#fff" stroke-width="0.5" stroke-linejoin="round"/>
-          <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
-        </svg>
-        <span id="legend-main">Kiddo waiting for a sponsor</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px;">
-        <svg width="11" height="16" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-          <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#7dd4f8" stroke="#7dd4f8" stroke-width="0.5" stroke-linejoin="round"/>
-          <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
-        </svg>
-        <span id="legend-priority">Waiting 6+ months</span>
-      </div>
+    <!-- Hover / tap tooltip (points at pins, so it lives over the map) -->
+    <div id="pin-tip" role="status" aria-live="polite">
+      <div id="pin-tip-name">&#8212;</div>
+      <div id="pin-tip-meta"></div>
     </div>
   </div>
 
-  <div id="zoom-controls">
-    <button class="zoom-btn" id="btn-zoom-in" aria-label="Zoom in">+</button>
-    <button class="zoom-btn" id="btn-zoom-out" aria-label="Zoom out">&#8722;</button>
-    <button class="zoom-btn" id="btn-zoom-reset" aria-label="Reset zoom" style="font-size:11px">&#8857;</button>
+  <!-- Control strip below the map: legend (left) + zoom (right) -->
+  <div id="control-strip">
+    <div id="map-legend">
+      <div id="legend-text">
+        <div class="legend-item">
+          <svg width="11" height="16" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+            <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#fff" stroke="#fff" stroke-width="0.5" stroke-linejoin="round"/>
+            <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
+          </svg>
+          <span id="legend-main">Kiddo waiting for a sponsor</span>
+        </div>
+        <div class="legend-item">
+          <svg width="11" height="16" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+            <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#7dd4f8" stroke="#7dd4f8" stroke-width="0.5" stroke-linejoin="round"/>
+            <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
+          </svg>
+          <span id="legend-priority">Waiting 6+ months</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="zoom-controls">
+      <button class="zoom-btn" id="btn-zoom-in" aria-label="Zoom in">+</button>
+      <button class="zoom-btn" id="btn-zoom-out" aria-label="Zoom out">&#8722;</button>
+      <button class="zoom-btn" id="btn-zoom-reset" aria-label="Reset zoom" style="font-size:11px">&#8857;</button>
+    </div>
   </div>
 </div>
 
@@ -331,26 +355,9 @@ async function buildPhotoLogo(){
       ti++;
     }
   }
-  // subtle grid seams for the photo-tile look — masked by the same rising fill
-  const seams=document.createElementNS(ns,'g');
-  seams.setAttribute('clip-path','url(#logoClip)');
-  seams.setAttribute('mask','url(#fillMask)');
-  for(let c=1;c<cols;c++){
-    const l=document.createElementNS(ns,'line');
-    l.setAttribute('x1',LOGO_VB.x+c*tileW);l.setAttribute('y1',LOGO_VB.y);
-    l.setAttribute('x2',LOGO_VB.x+c*tileW);l.setAttribute('y2',LOGO_VB.y+LOGO_VB.h);
-    l.setAttribute('stroke','#f3f9fd');l.setAttribute('stroke-width','5');l.setAttribute('opacity','0.5');
-    seams.appendChild(l);
-  }
-  for(let r=1;r<rows;r++){
-    const l=document.createElementNS(ns,'line');
-    l.setAttribute('x1',LOGO_VB.x);l.setAttribute('y1',LOGO_VB.y+r*tileH);
-    l.setAttribute('x2',LOGO_VB.x+LOGO_VB.w);l.setAttribute('y2',LOGO_VB.y+r*tileH);
-    l.setAttribute('stroke','#f3f9fd');l.setAttribute('stroke-width','5');l.setAttribute('opacity','0.5');
-    seams.appendChild(l);
-  }
+  // No grid seams — photos butt flush against each other so the images
+  // themselves define the mosaic (the thin white lines read as cheap).
   svg.appendChild(photoG);
-  svg.appendChild(seams);
 
   // crisp logo outline on top — also serves as the draw-in strokes
   const topG=document.createElementNS(ns,'g');
@@ -610,16 +617,17 @@ function buildMeta(kid){
 }
 
 function positionTip(pt){
-  // pt is in SVG user coords; convert to screen px within #map-wrap
+  // pt is in SVG user coords; convert to screen px within #map-area (the tip's
+  // offset parent). The SVG fills #map-area, so the map's own bounds apply.
   const ctm=zoomGroup.node().getScreenCTM();
-  const wrapRect=document.getElementById('map-wrap').getBoundingClientRect();
+  const areaRect=document.getElementById('map-area').getBoundingClientRect();
   const screenX=ctm.a*pt.x+ctm.c*pt.y+ctm.e;
   const screenY=ctm.b*pt.x+ctm.d*pt.y+ctm.f;
   const pr=getPinR();
   // pin head dot sits ~2.11*pr above the anchor; lift tip a bit more
   const headLift=(pr*2.11+pr*0.9)*ctm.d; // scale by current vertical zoom factor
-  tip.style.left=screenX-wrapRect.left+'px';
-  tip.style.top=(screenY-wrapRect.top-headLift)+'px';
+  tip.style.left=screenX-areaRect.left+'px';
+  tip.style.top=(screenY-areaRect.top-headLift)+'px';
 }
 
 function showTip(kid,pt,gNode,isPriority){
@@ -725,78 +733,15 @@ fetch('./zip_centroids.json')
   })
   .catch(()=>{pendingKids=[];_resolveKidCount(0);window._kidsForIllumination=new Set();});
 
-// ── ANCHOR CONTROLS TO THE RENDERED MAP (not the viewport) ────
-// On tall full-screen viewports the SVG centers the map with empty bands
-// above/below. We pin the legend + zoom controls to the map's actual drawn
-// bounds so they sit right beside the map, like the iframe versions did.
-// We anchor to the *unzoomed* map geometry (derived from the SVG element +
-// the map's bounding box in viewBox units) so controls don't move on zoom.
-let _mapBoxVB=null; // {x,y,w,h} of the map content within the 960x600 viewBox
-function getMapBoxVB(){
-  if(_mapBoxVB) return _mapBoxVB;
-  // bounding box of all state paths in viewBox coords, ignoring zoom transform
-  const paths=document.querySelectorAll('#states-group path.state');
-  if(!paths.length) return null;
-  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
-  paths.forEach(p=>{
-    const b=p.getBBox();
-    if(b.x<minX)minX=b.x;if(b.y<minY)minY=b.y;
-    if(b.x+b.width>maxX)maxX=b.x+b.width;if(b.y+b.height>maxY)maxY=b.y+b.height;
-  });
-  if(!isFinite(minX)) return null;
-  _mapBoxVB={x:minX,y:minY,w:maxX-minX,h:maxY-minY};
-  return _mapBoxVB;
-}
-function positionControls(){
-  const svgEl2=document.getElementById('us-map');
-  const wrap=document.getElementById('map-wrap');
-  if(!svgEl2||!wrap) return;
-  const box=getMapBoxVB();
-  if(!box) return;
-  const svgRect=svgEl2.getBoundingClientRect();
-  const wrapRect=wrap.getBoundingClientRect();
-  if(svgRect.width===0) return;
-  // The SVG renders its 960x600 viewBox with xMidYMid meet inside svgRect.
-  const VB_W=960,VB_H=600;
-  const scale=Math.min(svgRect.width/VB_W, svgRect.height/VB_H);
-  const renderW=VB_W*scale, renderH=VB_H*scale;
-  const offX=(svgRect.width-renderW)/2 + (svgRect.left-wrapRect.left);
-  const offY=(svgRect.height-renderH)/2 + (svgRect.top-wrapRect.top);
-  // map content bounds in wrap pixels
-  const mapLeft=offX+box.x*scale;
-  const mapRight=offX+(box.x+box.w)*scale;
-  const mapBottom=offY+(box.y+box.h)*scale;
-  const safeB=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-b'))||0;
-
-  const legend=document.getElementById('map-legend');
-  const zoom=document.getElementById('zoom-controls');
-  const legendH=legend.offsetHeight, zoomH=zoom.offsetHeight;
-  const rowH=Math.max(legendH,zoomH);
-
-  // Sit the row just BELOW where the map ends, with a comfortable gap, both
-  // clusters sharing one baseline (bottom-aligned). If the frame is too short
-  // to fit them below the map, clamp to the frame bottom so they never overflow.
-  const GAP=Math.round(Math.min(34, Math.max(20, renderH*0.045))); // comfy gap below map, scales a bit
-  const EDGE=16;            // distance from the side walls
-  const frameBottomLimit=wrapRect.height-EDGE-safeB;   // lowest the row may reach
-  let rowTop=mapBottom+GAP;
-  // keep the row within the frame
-  if(rowTop+rowH>frameBottomLimit) rowTop=Math.max(mapBottom+8, frameBottomLimit-rowH);
-
-  // legend: aligned to the map's left edge
-  legend.style.left=Math.max(EDGE,mapLeft)+'px';
-  legend.style.top=(rowTop+(rowH-legendH))+'px';   // bottom-align within the row
-  // zoom: right edge aligned to the map's right edge
-  const zoomLeft=Math.min(wrapRect.width-EDGE, mapRight)-zoom.offsetWidth;
-  zoom.style.left=Math.max(EDGE,zoomLeft)+'px';
-  zoom.style.top=(rowTop+(rowH-zoomH))+'px';        // bottom-align within the row
-}
+// Controls now live in a fixed control strip below the map and are positioned
+// purely via CSS (legend left, zoom right, vertically centered). No JS layout
+// math needed — this is a no-op kept so existing callers stay harmless.
+function positionControls(){}
 window._positionControls=positionControls;
 
 new ResizeObserver(()=>{
   if(window._allKids) renderMarkers(window._allKids,false);
-  positionControls();
-}).observe(document.getElementById('map-wrap'));
+}).observe(document.getElementById('map-area'));
 </script>
 </body>
 </html>
