@@ -9,6 +9,15 @@
     "priority": false
   },
   {
+    "name": "Chase",
+    "age": "2 years old",
+    "city": "Saint Augustine",
+    "state": "FL",
+    "zip": "32095",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Charlie",
     "age": "Under 1 year old",
     "city": "Centralia",
@@ -1643,15 +1652,6 @@
     "city": "New Bedford",
     "state": "MA",
     "zip": "02744",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "ZIDANE",
-    "age": "5 years old",
-    "city": "Eustis",
-    "state": "FL",
-    "zip": "32726",
     "entryDate": "April 2026",
     "priority": false
   },
