@@ -1,5 +1,14 @@
 [
   {
+    "name": "Chase",
+    "age": "2 years old",
+    "city": "Saint Augustine",
+    "state": "FL",
+    "zip": "32095",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Kelly",
     "age": "5 years old",
     "city": "Palm city",
