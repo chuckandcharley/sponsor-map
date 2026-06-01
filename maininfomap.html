@@ -130,10 +130,8 @@ svg#us-map:active{cursor:grabbing}
     <div id="logo-stage">
       <div id="logo-svg-wrap"></div>
     </div>
-    <div id="count-block" style="opacity:0;transition:opacity 0.5s ease;">
-      <div id="num-clip"><span id="counter-num">0</span></div>
-      <div id="label-clip"><span id="counter-label">kiddos waiting for a sponsor</span></div>
-    </div>
+    <div id="num-clip"><span id="counter-num">0</span></div>
+    <div id="label-clip"><span id="counter-label">kiddos waiting for a sponsor</span></div>
   </div>
 </div>
 
@@ -205,7 +203,7 @@ const GITHUB_API='https://api.github.com/repos/chuckandcharley/sponsor-map/conte
 // ── LOGO PHOTO-FILL CONFIG ────────────────────────────────────
 // Photos tile the logo's bounding box; the logo path clips them so only
 // the logo shape shows photos. Fill rises bottom→top in sync with the count.
-const FILL_COLS=isMobile?7:9;     // photo columns across the logo box
+const FILL_COLS=isMobile?6:7;     // photo columns across the logo box (fewer = bigger, more present tiles)
 const T_COUNT=2600;               // count-up + fill duration (ms)
 const T_FULL_HOLD=900;            // hold once full, before map (ms)
 
@@ -254,20 +252,6 @@ async function buildPhotoLogo(){
   clip.setAttribute('id','logoClip');clip.setAttribute('clipPathUnits','userSpaceOnUse');
   LOGO_PATHS.forEach(d=>{const p=document.createElementNS(ns,'path');p.setAttribute('d',d);clip.appendChild(p);});
   defs.appendChild(clip);
-
-  // reveal mask = white rect rising from the bottom of the logo box
-  const mask=document.createElementNS(ns,'mask');
-  mask.setAttribute('id','fillMask');mask.setAttribute('maskUnits','userSpaceOnUse');
-  mask.setAttribute('x',LOGO_VB.x);mask.setAttribute('y',LOGO_VB.y);
-  mask.setAttribute('width',LOGO_VB.w);mask.setAttribute('height',LOGO_VB.h);
-  const maskRect=document.createElementNS(ns,'rect');
-  maskRect.setAttribute('x',LOGO_VB.x);maskRect.setAttribute('width',LOGO_VB.w);
-  maskRect.setAttribute('fill','#fff');
-  // start empty (height 0 at the very bottom)
-  maskRect.setAttribute('y',LOGO_VB.y+LOGO_VB.h);
-  maskRect.setAttribute('height',0);
-  mask.appendChild(maskRect);
-  defs.appendChild(mask);
   svg.appendChild(defs);
 
   // empty-vessel fill — held transparent during the draw-in, fades in after
@@ -280,10 +264,9 @@ async function buildPhotoLogo(){
   });
   svg.appendChild(vesselG);
 
-  // photo tiles group — clipped to logo, masked by rising rect
+  // photo tiles group — clipped to logo; each tile pops in at the fill line
   const photoG=document.createElementNS(ns,'g');
   photoG.setAttribute('clip-path','url(#logoClip)');
-  photoG.setAttribute('mask','url(#fillMask)');
 
   const cols=FILL_COLS;
   const tileW=LOGO_VB.w/cols;
@@ -299,10 +282,19 @@ async function buildPhotoLogo(){
   })));
 
   const TINTS=['#b5d4f4','#9fc8e0','#c5e3f4','#a0cce4','#bbd7ec','#85b7eb','#b0d9ee'];
+  // Each tile is wrapped in a <g> so it can pop in (scale+fade) at the fill line.
+  // tiles[] holds {g, thresh} where thresh is the fill-progress at which it triggers.
+  const tiles=[];
   let ti=0;
   for(let r=0;r<rows;r++){
     for(let c=0;c<cols;c++){
       const x=LOGO_VB.x+c*tileW, y=LOGO_VB.y+r*tileH;
+      const cxT=x+tileW/2, cyT=y+tileH/2; // tile center (for transform-origin)
+      const tileG=document.createElementNS(ns,'g');
+      tileG.style.transformOrigin=`${cxT}px ${cyT}px`;
+      tileG.style.opacity='0';
+      tileG.style.transform='scale(0.55)';
+
       const src=srcFor(ti);
       if(src){
         const img=document.createElementNS(ns,'image');
@@ -311,37 +303,35 @@ async function buildPhotoLogo(){
         img.setAttribute('x',x);img.setAttribute('y',y);
         img.setAttribute('width',tileW+1);img.setAttribute('height',tileH+1);
         img.setAttribute('preserveAspectRatio','xMidYMid slice');
-        photoG.appendChild(img);
+        tileG.appendChild(img);
       }else{
         const rect=document.createElementNS(ns,'rect');
         rect.setAttribute('x',x);rect.setAttribute('y',y);
         rect.setAttribute('width',tileW+1);rect.setAttribute('height',tileH+1);
         rect.setAttribute('fill',TINTS[(r*cols+c)%TINTS.length]);
-        photoG.appendChild(rect);
+        tileG.appendChild(rect);
       }
+      // seam: thin inset border drawn with the tile so grid lines arrive together
+      const seam=document.createElementNS(ns,'rect');
+      seam.setAttribute('x',x);seam.setAttribute('y',y);
+      seam.setAttribute('width',tileW);seam.setAttribute('height',tileH);
+      seam.setAttribute('fill','none');
+      seam.setAttribute('stroke','#f3f9fd');seam.setAttribute('stroke-width','5');
+      seam.setAttribute('opacity','0.5');
+      tileG.appendChild(seam);
+
+      photoG.appendChild(tileG);
+
+      // fill-progress threshold: based on vertical position (bottom fills first),
+      // plus per-tile jitter so the fill edge is irregular, not a flat sweep.
+      const yNorm=(cyT-LOGO_VB.y)/LOGO_VB.h;       // 0 top .. 1 bottom
+      const base=1-yNorm;                           // bottom rows trigger earliest
+      const jitter=(rng()-0.5)*0.13;                // ±~6.5% ragged edge
+      tiles.push({g:tileG, thresh:Math.max(0,Math.min(1,base+jitter))});
       ti++;
     }
   }
-  // subtle grid seams for the photo-tile look
-  const seams=document.createElementNS(ns,'g');
-  seams.setAttribute('clip-path','url(#logoClip)');
-  seams.setAttribute('mask','url(#fillMask)');
-  for(let c=1;c<cols;c++){
-    const l=document.createElementNS(ns,'line');
-    l.setAttribute('x1',LOGO_VB.x+c*tileW);l.setAttribute('y1',LOGO_VB.y);
-    l.setAttribute('x2',LOGO_VB.x+c*tileW);l.setAttribute('y2',LOGO_VB.y+LOGO_VB.h);
-    l.setAttribute('stroke','#f3f9fd');l.setAttribute('stroke-width','5');l.setAttribute('opacity','0.5');
-    seams.appendChild(l);
-  }
-  for(let r=1;r<rows;r++){
-    const l=document.createElementNS(ns,'line');
-    l.setAttribute('x1',LOGO_VB.x);l.setAttribute('y1',LOGO_VB.y+r*tileH);
-    l.setAttribute('x2',LOGO_VB.x+LOGO_VB.w);l.setAttribute('y2',LOGO_VB.y+r*tileH);
-    l.setAttribute('stroke','#f3f9fd');l.setAttribute('stroke-width','5');l.setAttribute('opacity','0.5');
-    seams.appendChild(l);
-  }
   svg.appendChild(photoG);
-  svg.appendChild(seams);
 
   // crisp logo outline on top — also serves as the draw-in strokes
   const topG=document.createElementNS(ns,'g');
@@ -361,9 +351,16 @@ async function buildPhotoLogo(){
 
   function setFill(prog){
     const p=Math.max(0,Math.min(1,prog));
-    const h=LOGO_VB.h*p;
-    maskRect.setAttribute('y',LOGO_VB.y+LOGO_VB.h-h);
-    maskRect.setAttribute('height',h);
+    // A tile triggers when the rising fill (1-thresh... measured as progress) reaches it.
+    // thresh ~1 = bottom (fills first), thresh ~0 = top (fills last).
+    for(const t of tiles){
+      if(!t.fired && p>=(1-t.thresh)){
+        t.fired=true;
+        t.g.style.transition='opacity 0.32s ease, transform 0.42s cubic-bezier(0.34,1.56,0.64,1)';
+        t.g.style.opacity='1';
+        t.g.style.transform='scale(1)';
+      }
+    }
   }
   // draw the logo outline stroke-by-stroke, then fade in the empty vessel fill
   function drawIn(){
@@ -399,7 +396,6 @@ async function buildPhotoLogo(){
   await logo.drawIn();
 
   // Beat 2: count up + fill the logo with photos in sync
-  document.getElementById('count-block').style.opacity='1';
   const countStart=performance.now();
   await new Promise(resolve=>{
     function frame(now){
