@@ -116,7 +116,25 @@ svg#us-map:active{cursor:grabbing}
 }
 #splash.fade-out{opacity:0;}
 
-/* ── LOGO PHOTO-FILL PHASE ── */
+/* ── PHOTO GRID (separate beat) ── */
+#grid-layer{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;z-index:1;
+  transition:opacity 0.3s ease;
+}
+#photo-grid{display:grid;gap:5px;}
+.grid-cell{
+  border-radius:7px;overflow:hidden;background:#e9f2f9;
+  opacity:0;transform:scale(0.55);
+  transition:opacity 0.28s ease, transform 0.28s cubic-bezier(0.34,1.35,0.64,1);
+  display:flex;align-items:center;justify-content:center;
+}
+.grid-cell.visible{opacity:1;transform:scale(1);}
+.grid-cell.exit{opacity:0;transform:scale(0.65);transition:opacity 0.22s ease, transform 0.22s ease;}
+.grid-cell img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
+
+/* ── LOGO + COUNTER PHASE ── */
 #splash-ui{
   position:absolute;inset:0;z-index:5;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -125,8 +143,6 @@ svg#us-map:active{cursor:grabbing}
   transition:opacity 0.7s ease;
 }
 #splash-ui.show{opacity:1;}
-/* Intro scales to fit the splash box — uses the SMALLER of width/height so a
-   short, wide iframe shrinks the whole stack instead of clipping it. */
 #logo-stage{
   position:relative;display:flex;align-items:center;justify-content:center;
   margin-bottom:clamp(6px,1.4vh,16px);
@@ -134,10 +150,15 @@ svg#us-map:active{cursor:grabbing}
   height:min(460px, 58vh, 80vw);
 }
 #logo-svg-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-#label-clip{overflow:hidden;line-height:1;width:100%;text-align:center;padding:0 20px;opacity:0;transition:opacity 0.7s ease;}
-#label-clip.show{opacity:1;}
+#num-clip{overflow:visible;line-height:1;width:100%;text-align:center;padding:0 20px;}
+#counter-num{
+  display:block;font-size:min(150px, 14vw, 19vh);font-weight:900;
+  letter-spacing:-0.04em;color:var(--navy);font-variant-numeric:tabular-nums;
+  line-height:1;text-align:center;white-space:nowrap;
+}
+#label-clip{overflow:hidden;line-height:1;margin-top:.1em;width:100%;text-align:center;padding:0 20px;}
 #counter-label{
-  display:block;font-size:min(34px, 3vw, 4vh);font-weight:700;
+  display:block;font-size:min(30px, 2.4vw, 3.4vh);font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;color:var(--navy);
   line-height:1.1;text-align:center;white-space:nowrap;
 }
@@ -146,10 +167,12 @@ svg#us-map:active{cursor:grabbing}
 <body>
 
 <div id="splash">
+  <div id="grid-layer"><div id="photo-grid"></div></div>
   <div id="splash-ui">
     <div id="logo-stage">
       <div id="logo-svg-wrap"></div>
     </div>
+    <div id="num-clip"><span id="counter-num">0</span></div>
     <div id="label-clip"><span id="counter-label">kiddos waiting for a sponsor</span></div>
   </div>
 </div>
@@ -228,12 +251,13 @@ function shuffle(arr){
 // ── GITHUB PHOTO LIST ─────────────────────────────────────────
 const GITHUB_API='https://api.github.com/repos/chuckandcharley/sponsor-map/contents/intro';
 
-// ── LOGO PHOTO-FILL CONFIG ────────────────────────────────────
-// Photos tile the logo's bounding box; the logo path clips them so only
-// the logo shape shows photos. Fill rises bottom→top in sync with the count.
-const FILL_COLS=isMobile?5:6;     // fewer, larger tiles → faces read clearly (not tiny/low-quality)
-const T_COUNT=2600;               // count-up + fill duration (ms)
-const T_FULL_HOLD=1900;           // hold once full, before map (ms)
+// ── GRID INTRO CONFIG ─────────────────────────────────────────
+const GRID_COLS=6,GRID_ROWS=6,GRID_TOTAL=GRID_COLS*GRID_ROWS;
+const T_REVEAL=1500;   // grid ripples in
+const T_HOLD=300;      // hold full grid
+const T_EXIT=1000;     // grid collapses
+const T_COUNT=2500;    // counter counts up + logo fills
+const T_FULL_HOLD=1900;// hold completed logo before map
 
 // ── KID COUNT PROMISE ─────────────────────────────────────────
 let _resolveKidCount;
@@ -245,185 +269,47 @@ const LOGO_PATHS=[
   "M 1578.15 1497.09 C 1591.87 1495.21 1617.98 1486.66 1632.23 1482.23 C 1735.48 1450.16 1835.81 1403.16 1929.94 1350.25 C 1949.84 1339.07 1978.73 1324.16 1997.27 1311.94 C 1935.64 1527.69 1822.63 1685.85 1650.29 1827.78 C 1538.49 1916.33 1409.1 1980.06 1270.75 2014.7 C 1248.92 2020.8 1226.39 2025.2 1204.03 2029.08 C 1016.65 2061.61 817.98 2043.84 641.545 1971.7 C 622.351 1963.85 603.947 1953.58 584.547 1946.16 C 605.05 1946.37 619.357 1945.11 639.565 1943.87 C 713.025 1939.33 796.058 1929.49 867.636 1912.09 C 929.61 1897.58 990.409 1878.44 1049.52 1854.85 C 1195.98 1795.4 1337.42 1692.05 1423.23 1557.96 C 1433.27 1542.27 1441.79 1525.58 1451.48 1509.66 C 1458.09 1508.81 1465.66 1508.43 1472.38 1507.93 C 1507.48 1508.75 1543.75 1503.65 1578.15 1497.09 z",
   "M 694.74 1327.94 C 641.237 1264.32 606.51 1187.06 594.451 1104.81 C 554.736 847.323 753.586 604.414 1016.21 598.583 C 1039.54 598.065 1073.08 599.231 1095.85 602.431 C 1194 616.218 1280.25 662.068 1349.24 732.662 C 1419.07 804.113 1457.69 887.05 1471.66 985.897 C 1477.07 1023.89 1476.23 1076.88 1468.26 1114.58 C 1459.99 1168.8 1434.18 1234.72 1403.99 1279.92 C 1394.53 1294.09 1383.66 1307.87 1373.95 1322.16 C 1375.57 1307.72 1374.9 1289.42 1374.87 1274.57 L 1374.77 1200.49 L 1374.73 1063.04 C 1374.58 1046.04 1374.97 1027.71 1374.22 1010.96 C 1386.32 1010.29 1412.48 1009.1 1423.83 1009.92 L 1038.83 690.576 C 1012.55 704.352 986.156 727.614 962.452 746.191 L 876.838 812.166 C 877.935 799.701 877.109 775.311 877.229 761.705 C 871.514 761.982 864.853 761.847 859.133 761.612 C 836.383 760.674 812.748 762.192 790.117 760.666 C 789.624 800.654 793.297 847.877 788.054 886.686 C 781.804 894.124 757.729 914.911 749.423 921.906 C 714.195 951.576 675.294 986.753 638.682 1014.13 C 656.809 1013.44 676.669 1013.84 694.925 1013.86 C 694.191 1025.15 694.799 1043.16 694.807 1054.82 L 694.673 1129.88 L 694.91 1268.67 C 694.959 1288.24 694.316 1308.59 694.74 1327.94 z"
 ];
-const LOGO_VB={x:-40,y:-40,w:2080,h:2128}; // viewBox used for the logo svg
+const LOGO_VB={x:-40,y:-40,w:2080,h:2128};
 
 // ── EASING ────────────────────────────────────────────────────
 function easeOut4(t){return 1-Math.pow(1-t,4);}
 
-// ── BUILD PHOTO-FILLED LOGO ───────────────────────────────────
-// Returns {svg, setFill(progress 0..1)}. Photos are preloaded, tiled across
-// the logo bounding box, and clipped to the logo shape. A rising mask reveals
-// them bottom→top as progress increases.
-async function buildPhotoLogo(){
+// ── DRAW LOGO (strokes draw in, then fill rises bottom→top) ────
+// Returns {setFill(0..1), drawIn()}. The logo fills with solid navy (original).
+let _logoFillRect=null;
+function drawLogo(){
   const ns='http://www.w3.org/2000/svg';
-
-  // fetch + preload photos
-  let filenames=[];
-  try{
-    const res=await fetch(GITHUB_API);
-    if(res.ok){
-      const items=await res.json();
-      filenames=items.filter(f=>f.type==='file'&&/\.(jpe?g|png|gif|webp)$/i.test(f.name)).map(f=>f.name);
-    }
-  }catch(e){}
-
   const svg=document.createElementNS(ns,'svg');
   svg.setAttribute('viewBox',`${LOGO_VB.x} ${LOGO_VB.y} ${LOGO_VB.w} ${LOGO_VB.h}`);
-  // Fill the responsive #logo-stage (which is sized via CSS to fit the box),
-  // so the logo shrinks in short/wide iframes instead of overflowing.
   svg.setAttribute('width','100%');svg.setAttribute('height','100%');
   svg.setAttribute('preserveAspectRatio','xMidYMid meet');
   svg.style.cssText='display:block;overflow:visible;width:100%;height:100%;';
-
   const defs=document.createElementNS(ns,'defs');
-
-  // clip path = the logo shape
   const clip=document.createElementNS(ns,'clipPath');
-  clip.setAttribute('id','logoClip');clip.setAttribute('clipPathUnits','userSpaceOnUse');
-  LOGO_PATHS.forEach(d=>{const p=document.createElementNS(ns,'path');p.setAttribute('d',d);clip.appendChild(p);});
-  defs.appendChild(clip);
-
-  // reveal mask = white rect rising from the bottom of the logo box
-  const mask=document.createElementNS(ns,'mask');
-  mask.setAttribute('id','fillMask');mask.setAttribute('maskUnits','userSpaceOnUse');
-  mask.setAttribute('x',LOGO_VB.x);mask.setAttribute('y',LOGO_VB.y);
-  mask.setAttribute('width',LOGO_VB.w);mask.setAttribute('height',LOGO_VB.h);
-  const maskRect=document.createElementNS(ns,'rect');
-  maskRect.setAttribute('x',LOGO_VB.x);maskRect.setAttribute('width',LOGO_VB.w);
-  maskRect.setAttribute('fill','#fff');
-  maskRect.setAttribute('y',LOGO_VB.y+LOGO_VB.h);
-  maskRect.setAttribute('height',0);
-  mask.appendChild(maskRect);
-  defs.appendChild(mask);
-  svg.appendChild(defs);
-
-  // empty-vessel fill — held transparent during the draw-in, fades in after
-  const vesselG=document.createElementNS(ns,'g');
-  vesselG.style.cssText='opacity:0;transition:opacity 0.5s ease;';
-  LOGO_PATHS.forEach(d=>{
-    const p=document.createElementNS(ns,'path');p.setAttribute('d',d);
-    p.style.cssText='fill:#dceaf4;stroke:none;';
-    vesselG.appendChild(p);
-  });
-  svg.appendChild(vesselG);
-
-  // photo tiles group — clipped to logo, revealed by the rising mask
-  const photoG=document.createElementNS(ns,'g');
-  photoG.setAttribute('clip-path','url(#logoClip)');
-  photoG.setAttribute('mask','url(#fillMask)');
-
-  const cols=FILL_COLS;
-  const tileW=LOGO_VB.w/cols;
-  const rows=Math.ceil(LOGO_VB.h/tileW);
-  const tileH=LOGO_VB.h/rows;
-  const totalTiles=cols*rows;
-  const picked=shuffle(filenames);
-
-  // preload chosen photos
-  const srcFor=i=>picked.length?('intro/'+encodeURIComponent(picked[i%picked.length])):null;
-  await Promise.all(Array.from({length:Math.min(totalTiles,picked.length||0)},(_, i)=>new Promise(res=>{
-    const im=new Image();im.onload=res;im.onerror=res;im.src=srcFor(i);
-  })));
-
-  const TINTS=['#b5d4f4','#9fc8e0','#c5e3f4','#a0cce4','#bbd7ec','#85b7eb','#b0d9ee'];
-  let ti=0;
-  for(let r=0;r<rows;r++){
-    for(let c=0;c<cols;c++){
-      const x=LOGO_VB.x+c*tileW, y=LOGO_VB.y+r*tileH;
-      const src=srcFor(ti);
-      if(src){
-        const img=document.createElementNS(ns,'image');
-        img.setAttributeNS('http://www.w3.org/1999/xlink','href',src);
-        img.setAttribute('href',src);
-        img.setAttribute('x',x);img.setAttribute('y',y);
-        img.setAttribute('width',tileW+1);img.setAttribute('height',tileH+1);
-        img.setAttribute('preserveAspectRatio','xMidYMid slice');
-        photoG.appendChild(img);
-      }else{
-        const rect=document.createElementNS(ns,'rect');
-        rect.setAttribute('x',x);rect.setAttribute('y',y);
-        rect.setAttribute('width',tileW+1);rect.setAttribute('height',tileH+1);
-        rect.setAttribute('fill',TINTS[(r*cols+c)%TINTS.length]);
-        photoG.appendChild(rect);
-      }
-      ti++;
-    }
-  }
-  // Subtle grid seams between photo tiles — masked by the same rising fill so
-  // they reveal in step with the photos. This grid look reads cleaner here.
-  const seams=document.createElementNS(ns,'g');
-  seams.setAttribute('clip-path','url(#logoClip)');
-  seams.setAttribute('mask','url(#fillMask)');
-  for(let c=1;c<cols;c++){
-    const l=document.createElementNS(ns,'line');
-    l.setAttribute('x1',LOGO_VB.x+c*tileW);l.setAttribute('y1',LOGO_VB.y);
-    l.setAttribute('x2',LOGO_VB.x+c*tileW);l.setAttribute('y2',LOGO_VB.y+LOGO_VB.h);
-    l.setAttribute('stroke','#ffffff');l.setAttribute('stroke-width','8');l.setAttribute('opacity','0.6');
-    seams.appendChild(l);
-  }
-  for(let r=1;r<rows;r++){
-    const l=document.createElementNS(ns,'line');
-    l.setAttribute('x1',LOGO_VB.x);l.setAttribute('y1',LOGO_VB.y+r*tileH);
-    l.setAttribute('x2',LOGO_VB.x+LOGO_VB.w);l.setAttribute('y2',LOGO_VB.y+r*tileH);
-    l.setAttribute('stroke','#ffffff');l.setAttribute('stroke-width','8');l.setAttribute('opacity','0.6');
-    seams.appendChild(l);
-  }
-  svg.appendChild(photoG);
-  svg.appendChild(seams);
-
-  // crisp logo outline on top — also serves as the draw-in strokes
-  const topG=document.createElementNS(ns,'g');
+  clip.setAttribute('id','lfc');clip.setAttribute('clipPathUnits','userSpaceOnUse');
+  const rect=document.createElementNS(ns,'rect');
+  rect.setAttribute('x',LOGO_VB.x);rect.setAttribute('y',LOGO_VB.y+LOGO_VB.h);
+  rect.setAttribute('width',LOGO_VB.w);rect.setAttribute('height',LOGO_VB.h);
+  _logoFillRect=rect;
+  clip.appendChild(rect);defs.appendChild(clip);svg.appendChild(defs);
+  // stroke paths (draw-in)
   const strokeEls=LOGO_PATHS.map(d=>{
     const p=document.createElementNS(ns,'path');p.setAttribute('d',d);
-    p.style.cssText='fill:none;stroke:#004270;stroke-width:22;stroke-linejoin:round;stroke-linecap:round;';
-    topG.appendChild(p);
-    return p;
+    p.style.cssText='fill:none;stroke:#004270;stroke-width:28;stroke-linecap:round;stroke-linejoin:round;';
+    svg.appendChild(p);return p;
   });
-  svg.appendChild(topG);
-
+  // fill group, clipped by the rising rect
+  const fillG=document.createElementNS(ns,'g');
+  fillG.setAttribute('clip-path','url(#lfc)');
+  LOGO_PATHS.forEach(d=>{
+    const p=document.createElementNS(ns,'path');p.setAttribute('d',d);
+    p.style.cssText='fill:#004270;stroke:none;';
+    fillG.appendChild(p);
+  });
+  svg.appendChild(fillG);
   document.getElementById('logo-svg-wrap').appendChild(svg);
-
-  // ── In-logo count ──
-  // The number lives at the house's doorway center and is always centered there,
-  // growing symmetrically left/right as digits increase. Sized so the widest
-  // realistic value (4 digits + comma) stays within the house interior
-  // (measured safe span x:694–1378, center x≈1036). A soft white halo keeps it
-  // legible over the photo fill without altering the fill itself.
-  const DOOR_CX=1036, DOOR_CY=1175;      // doorway center in logo coords
-  const NUM_FONT=200;                     // locked size: fits "8,888" within walls
-  // halo (drawn first, behind the number)
-  const numHalo=document.createElementNS(ns,'text');
-  numHalo.setAttribute('x',DOOR_CX);numHalo.setAttribute('y',DOOR_CY);
-  numHalo.setAttribute('text-anchor','middle');
-  numHalo.setAttribute('dominant-baseline','central');
-  numHalo.style.cssText=`font-family:'Source Sans 3',sans-serif;font-weight:900;font-size:${NUM_FONT}px;fill:#fff;stroke:#fff;stroke-width:26px;stroke-linejoin:round;opacity:0.9;paint-order:stroke;`;
-  numHalo.textContent='0';
-  const numText=document.createElementNS(ns,'text');
-  numText.setAttribute('x',DOOR_CX);numText.setAttribute('y',DOOR_CY);
-  numText.setAttribute('text-anchor','middle');
-  numText.setAttribute('dominant-baseline','central');
-  numText.style.cssText=`font-family:'Source Sans 3',sans-serif;font-weight:900;font-size:${NUM_FONT}px;fill:#004270;letter-spacing:-6px;`;
-  numText.textContent='0';
-  svg.appendChild(numHalo);
-  svg.appendChild(numText);
-
-  function setCount(str){numHalo.textContent=str;numText.textContent=str;}
-  // number group hidden until the count begins
-  const numGroup=[numHalo,numText];
-  numGroup.forEach(el=>{el.style.opacity='0';el.style.transition='opacity 0.4s ease';});
-  function showCount(){numGroup.forEach(el=>{el.style.opacity=el===numText?'1':'0.9';});}
-
-  // prime strokes for the draw-in (hidden until drawIn() runs)
   const lens=strokeEls.map(el=>el.getTotalLength());
   strokeEls.forEach((el,i)=>{el.style.strokeDasharray=lens[i];el.style.strokeDashoffset=lens[i];});
-
-  function setFill(prog){
-    const p=Math.max(0,Math.min(1,prog));
-    const h=LOGO_VB.h*p;
-    maskRect.setAttribute('y',LOGO_VB.y+LOGO_VB.h-h);
-    maskRect.setAttribute('height',h);
-  }
-  // draw the logo outline stroke-by-stroke, then fade in the empty vessel fill
   function drawIn(){
     return new Promise(resolve=>{
       const DRAW_MS=1400,STAGGER=180;
@@ -433,64 +319,134 @@ async function buildPhotoLogo(){
           el.style.strokeDashoffset='0';
         },i*STAGGER+60);
       });
-      const total=STAGGER*(strokeEls.length-1)+DRAW_MS+60;
-      // fade the soft vessel fill in just before the strokes finish
-      setTimeout(()=>{vesselG.style.opacity='1';},Math.max(0,total-450));
-      setTimeout(resolve,total+150);
+      setTimeout(resolve,STAGGER*(LOGO_PATHS.length-1)+DRAW_MS+120);
     });
   }
-  return {svg,setFill,drawIn,setCount,showCount};
+  function setFill(prog){
+    const e=Math.max(0,Math.min(1,prog));
+    _logoFillRect.setAttribute('y', LOGO_VB.y + LOGO_VB.h*(1-e));
+  }
+  return {drawIn,setFill};
 }
 
-// ── MAIN SPLASH SEQUENCE ──────────────────────────────────────
+// ── RIPPLE ORDER: center outward ──────────────────────────────
+function rippleOrder(cols,rows){
+  const cx=(cols-1)/2,cy=(rows-1)/2;const items=[];
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)
+    items.push({idx:r*cols+c,dist:Math.sqrt((c-cx)**2+(r-cy)**2)});
+  items.sort((a,b)=>a.dist-b.dist);
+  return items.map(x=>x.idx);
+}
+
+// ── BUILD GRID CELLS (separate full-screen photo grid) ─────────
+async function buildGridCells(){
+  const ns='intro/';
+  let filenames=[];
+  try{
+    const res=await fetch(GITHUB_API);
+    if(res.ok){
+      const items=await res.json();
+      filenames=items.filter(f=>f.type==='file'&&/\.(jpe?g|png|gif|webp)$/i.test(f.name)).map(f=>f.name);
+    }
+  }catch(e){}
+  const picked=shuffle(filenames).slice(0,GRID_TOTAL);
+  const preloaded=await Promise.all(picked.map(name=>new Promise(resolve=>{
+    const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>resolve(null);
+    img.src=ns+encodeURIComponent(name);
+  })));
+  const grid=document.getElementById('photo-grid');
+  const W=window.innerWidth,H=window.innerHeight;
+  const maxW=Math.min(W-32,820);
+  const gap=5;
+  const cellW=Math.floor((maxW-(GRID_COLS-1)*gap)/GRID_COLS);
+  const cellH=Math.min(Math.floor(cellW*0.72),Math.floor((H*0.9-(GRID_ROWS-1)*gap)/GRID_ROWS));
+  grid.style.cssText=`grid-template-columns:repeat(${GRID_COLS},${cellW}px);gap:${gap}px;width:${GRID_COLS*cellW+(GRID_COLS-1)*gap}px;`;
+  const TINTS=['#b5d4f4','#9fc8e0','#c5e3f4','#a0cce4','#bbd7ec','#cde4f0','#85b7eb','#d0e8f5','#b0d9ee','#c8dff2'];
+  const cells=[];
+  for(let i=0;i<GRID_TOTAL;i++){
+    const cell=document.createElement('div');
+    cell.className='grid-cell';
+    const loadedImg=preloaded[i];
+    if(loadedImg){
+      cell.style.cssText=`width:${cellW}px;height:${cellH}px;background:#e9f2f9;`;
+      loadedImg.alt='';cell.appendChild(loadedImg);
+    }else{
+      cell.style.cssText=`width:${cellW}px;height:${cellH}px;background:${TINTS[i%TINTS.length]};`;
+    }
+    grid.appendChild(cell);cells.push(cell);
+  }
+  return cells;
+}
+
+// ── MAIN SPLASH SEQUENCE (original two-part intro) ────────────
 (async function(){
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const splash=document.getElementById('splash');
   const mapWrap=document.getElementById('map-wrap');
+  const gridLayer=document.getElementById('grid-layer');
   const splashUI=document.getElementById('splash-ui');
 
+  // Phase 1: logo draws in + fills navy while the counter counts up
   splashUI.classList.add('show');
-  const logo=await buildPhotoLogo();
+  const logo=drawLogo();
+  const cellsPromise=buildGridCells();        // preload grid photos in parallel
   const targetCount=await _kidCountReady;
-
-  // Beat 1: draw the logo outline stroke-by-stroke
   await logo.drawIn();
 
-  // Beat 2: count up (number inside the house) + fill the logo with photos
-  logo.showCount();
-  const label=document.getElementById('label-clip');
-  const FADE=700; // caption fade duration (matches CSS)
-  // Caption arrives WITH the payoff: if the post-landing hold is long enough
-  // (>=2s) we fade it in right after the number lands; otherwise we start the
-  // fade before landing so it's settled by the time the count finishes.
-  let captionShown=false;
-  const showCaption=()=>{if(!captionShown){captionShown=true;label.classList.add('show');}};
   const countStart=performance.now();
   await new Promise(resolve=>{
     function frame(now){
       const t=Math.min((now-countStart)/T_COUNT,1);
       const e=easeOut4(t);
-      logo.setCount(Math.round(e*targetCount).toLocaleString());
+      document.getElementById('counter-num').textContent=Math.round(e*targetCount).toLocaleString();
       logo.setFill(e);
-      // if the hold is short, begin the caption fade before the number lands
-      if(T_FULL_HOLD<2000 && !captionShown && (T_COUNT - t*T_COUNT) <= FADE) showCaption();
       if(t<1) requestAnimationFrame(frame); else resolve();
     }
     requestAnimationFrame(frame);
   });
   logo.setFill(1);
-  logo.setCount(targetCount.toLocaleString());
-
-  // if the hold is long enough, fade the caption in now (right after landing)
-  if(T_FULL_HOLD>=2000) showCaption();
-
-  // Hold full for a beat
+  document.getElementById('counter-num').textContent=targetCount.toLocaleString();
   await sleep(T_FULL_HOLD);
 
-  // Fade splash → reveal map
-  splashUI.style.transition='opacity 0.6s ease';
+  // Phase 2: fade out logo+counter, reveal the separate photo grid
+  splashUI.style.transition='opacity 0.5s ease';
   splashUI.style.opacity='0';
-  await sleep(350);
+  await sleep(400);
+  splashUI.style.display='none';
+  const cells=await cellsPromise;
+  const order=rippleOrder(GRID_COLS,GRID_ROWS);
+
+  // Phase 3: grid ripples in from center
+  const revealStart=performance.now();
+  await new Promise(resolve=>{
+    function frame(now){
+      const t=Math.min((now-revealStart)/T_REVEAL,1);
+      const count=Math.round(easeOut4(t)*GRID_TOTAL);
+      for(let i=0;i<count;i++) cells[order[i]]?.classList.add('visible');
+      if(t<1) requestAnimationFrame(frame);
+      else{cells.forEach(c=>c.classList.add('visible'));resolve();}
+    }
+    requestAnimationFrame(frame);
+  });
+
+  // Phase 4: hold
+  await sleep(T_HOLD);
+
+  // Phase 5: grid collapses back to center
+  const exitStart=performance.now();
+  await new Promise(resolve=>{
+    function frame(now){
+      const t=Math.min((now-exitStart)/T_EXIT,1);
+      const count=Math.round(easeOut4(t)*GRID_TOTAL);
+      for(let i=0;i<count;i++) cells[order[GRID_TOTAL-1-i]]?.classList.add('exit');
+      if(t<1) requestAnimationFrame(frame); else resolve();
+    }
+    requestAnimationFrame(frame);
+  });
+  await sleep(80);
+  gridLayer.style.opacity='0';
+
+  // Phase 6: fade splash, reveal map
   splash.classList.add('fade-out');
   await sleep(280);
   mapWrap.classList.add('visible');
