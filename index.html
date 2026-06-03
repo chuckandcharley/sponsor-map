@@ -592,7 +592,13 @@ const PIN_COLOR_PRIORITY='#7dd4f8';
 const PIN_DOT_COLOR='#004270';
 
 const card=document.getElementById('modal-card');
-let isOpen=false,_selectedPin=null,_selectedPinPriority=false;
+
+// ── MODAL STATE ───────────────────────────────────────────────
+// isOpening: true during the 600ms delay before the card visually appears.
+// Guards against a second click firing closeModal (via map-wrap listener)
+// during that window, which would corrupt the open/close state machine.
+let isOpen=false,isOpening=false,_selectedPin=null,_selectedPinPriority=false;
+
 function highlightPin(gNode,isPriority){
   clearHighlight();
   _selectedPin=gNode;
@@ -619,12 +625,14 @@ function showPins(){
 }
 
 function openModal(kid){
-  if(isOpen) return;isOpen=true;_cancelInertia();
+  // Reject if already open OR mid-opening animation — prevents double-click corruption
+  if(isOpen||isOpening) return;
+  isOpen=true;isOpening=true;
+  _cancelInertia();
   dismissLegend();
   document.getElementById('modal-name').textContent=kid.name;
   document.getElementById('modal-age').textContent=kid.age;
   document.getElementById('modal-location').textContent=kid.city&&kid.state?kid.city+', '+kid.state:kid.state||'';
-  // Eyebrow text — "Waiting Since Month Year" if we have a date, fallback otherwise
   const waitingEl=document.getElementById('modal-waiting');
   if(kid.entryDate){
     waitingEl.innerHTML=`<span>Waiting Since ${kid.entryDate}</span>`;
@@ -637,13 +645,18 @@ function openModal(kid){
   document.getElementById('btn-build').onclick=function(e){e.preventDefault();window.parent.postMessage({type:'RSF_FILL_FORM',kiddo:kidLabel},'*');};
   document.getElementById('btn-sponsor').onclick=function(e){e.preventDefault();window.open(URL_SPONSOR,'_blank');};
   hidePins();
-  setTimeout(()=>card.classList.add('active'),600);
+  // Clear isOpening only once the card is fully visible — safe to close after this
+  setTimeout(()=>{card.classList.add('active');isOpening=false;},600);
 }
+
 function closeModal(){
-  if(!isOpen) return;isOpen=false;
+  // Block close during the opening animation window
+  if(!isOpen||isOpening) return;
+  isOpen=false;
   card.classList.remove('active');
   setTimeout(()=>{clearHighlight();showPins();},500);
 }
+
 document.getElementById('map-wrap').addEventListener('click',()=>{if(isOpen) closeModal();});
 card.addEventListener('click',e=>e.stopPropagation());
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
@@ -667,7 +680,16 @@ function renderMarkers(kids,animate){
     const g=layer.append('g').attr('transform',`translate(${pt.x},${pt.y})`).style('cursor','pointer').style('opacity',animate?'0':'1');
     g.append('path').attr('d',pinPath(pr)).attr('fill',fillColor).attr('stroke','#004270').attr('stroke-width',strokeW).attr('stroke-linejoin','round').style('pointer-events','all');
     g.append('circle').attr('cx',0).attr('cy',-pr*2.11).attr('r',dotR).attr('fill',PIN_DOT_COLOR).style('pointer-events','all');
-    g.on('click',(e)=>{if(isOpen){closeModal();return;}e.stopPropagation();dismissLegend();highlightPin(g.node(),isPriority);openModal(kid);})
+    g.on('click',(e)=>{
+        // If modal is open, close it (clicking a different pin while modal is visible)
+        if(isOpen){closeModal();return;}
+        // If mid-opening animation, ignore entirely
+        if(isOpening) return;
+        e.stopPropagation();
+        dismissLegend();
+        highlightPin(g.node(),isPriority);
+        openModal(kid);
+      })
      .on('mouseover',function(){d3.select(this).select('path').attr('transform','scale(1.18)');})
      .on('mouseout',function(){d3.select(this).select('path').attr('transform','');});
     if(!animate) return;
