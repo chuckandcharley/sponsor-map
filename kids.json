@@ -1,5 +1,14 @@
 [
   {
+    "name": "Jettson",
+    "age": "1 year old",
+    "city": "Burton",
+    "state": "OH",
+    "zip": "44021",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Evelyn",
     "age": "3 years old",
     "city": "Niskayuna",
@@ -95,15 +104,6 @@
     "city": "Centralia",
     "state": "MO",
     "zip": "65240",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Chase",
-    "age": "2 years old",
-    "city": "Saint Augustine",
-    "state": "FL",
-    "zip": "32095",
     "entryDate": "June 2026",
     "priority": false
   },
