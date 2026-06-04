@@ -1,5 +1,41 @@
 [
   {
+    "name": "Nova",
+    "age": "9 years old",
+    "city": "Deer Park",
+    "state": "TX",
+    "zip": "77536",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Nina",
+    "age": "1 year old",
+    "city": "Nutley",
+    "state": "NJ",
+    "zip": "07110",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Oakley",
+    "age": "1 year old",
+    "city": "Buena vista",
+    "state": "VA",
+    "zip": "24416",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Griffyn",
+    "age": "2 years old",
+    "city": "Cumming",
+    "state": "GA",
+    "zip": "30040",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Kane",
     "age": "5 years old",
     "city": "Gilroy",
@@ -860,15 +896,6 @@
     "city": "Westbury",
     "state": "NY",
     "zip": "11590",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Ellie",
-    "age": "5 years old",
-    "city": "Houston",
-    "state": "TX",
-    "zip": "77064",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -3507,7 +3534,7 @@
     "state": "TX",
     "zip": "76528",
     "entryDate": "December 2025",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Noura",
