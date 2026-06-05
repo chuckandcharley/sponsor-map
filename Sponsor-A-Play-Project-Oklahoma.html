@@ -221,10 +221,10 @@ const FOCUS_STATE = { fips:'40', abbr:'OK', name:'Oklahoma' };
 // 'instant' → open already cropped/zoomed onto the focused state.
 const INTRO_MODE = 'fly-in';
 
-const FOCUS_FILL   = 0.60;   // how much of the view the state fills when focused
+const FOCUS_FILL   = 0.50;   // how much of the view the state fills when focused
                              //   (lower = more surrounding states peek in → invites zoom-out)
-const FLYIN_HOLD_MS = 800;   // pause on the full US map before flying in (fly-in only)
-const FLYIN_DUR_MS  = 1600;  // duration of the glide-zoom into the state
+const FLYIN_HOLD_MS = 200;   // pause on the full US map before flying in (fly-in only)
+const FLYIN_DUR_MS  = 800;  // duration of the glide-zoom into the state
 const OUTLINE_COLOR = '#7dd4f8'; // brand cyan accent — same hue as the priority pins
 const MAX_K = 12;            // must not exceed the zoom scaleExtent max below
 // How far panning is allowed past the map edge (as a fraction of the viewBox).
