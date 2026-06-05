@@ -1,1 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Playhouse Map — Explore</title>
+<link rel="preconnect" href="https://fonts.bunny.net">
+<link href="https://fonts.bunny.net/css?family=source-sans-3:400,600,700,900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#004270;--blue:#0378ad;--white:#fff;--bg:#f3f9fd;
+  --ff:'Source Sans 3','Arial Narrow',Arial,sans-serif;
+  /* Header offset — adjust this single value to match your WordPress nav height.
+     The map fills the viewport minus this. Default 0 = true full screen. */
+  --header-h:0px;
+  /* Exposed so JS can read the safe-area inset (env() isn't readable in JS directly) */
+  --safe-b:env(safe-area-inset-bottom, 0px);
+}
+html,body{width:100%;height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden;font-family:var(--ff)}
+body{display:flex;flex-direction:column;justify-content:center;}
 
+/* ── MAP WRAP ──
+   Sizes to its content: the map area (natural-ish ratio) plus a control strip
+   below it. No forced 100dvh, so there's no dead space above/below when embedded
+   in a fixed-ratio iframe. The map-area ratio + strip define the total height. */
+#map-wrap{
+  position:relative;width:100%;height:100%;
+  margin:0 auto;
+  user-select:none;-webkit-user-select:none;
+  opacity:0;transition:opacity 1.2s ease;
+}
+#map-wrap.visible{opacity:1}
+
+/* The map fills the entire frame, so zooming shows map everywhere — including
+   behind the floating controls, exactly like the original. */
+#map-area{
+  position:absolute;inset:0;width:100%;height:100%;
+}
+/* The control row floats over the bottom of the map. It has NO background of
+   its own — when zoomed out you see the page bg, when zoomed in you see map. */
+#control-strip{
+  position:absolute;left:0;right:0;bottom:0;
+  height:auto;pointer-events:none;z-index:30;
+}
+#control-strip > *{pointer-events:auto;}
+
+svg#us-map{
+  position:absolute;top:0;left:0;z-index:1;
+  width:100%;height:100%;display:block;cursor:grab;touch-action:none;
+}
+svg#us-map:active{cursor:grabbing}
+.state{stroke:#002d50;stroke-width:0.5;stroke-linejoin:round}
+
+/* ── HOVER / TAP TOOLTIP ── */
+#pin-tip{
+  position:absolute;z-index:50;left:0;top:0;
+  transform:translate(-50%,-100%);
+  background:var(--navy);color:#fff;
+  padding:9px 13px 10px;border-radius:11px;
+  font-family:var(--ff);text-align:center;white-space:nowrap;
+  pointer-events:none;opacity:0;
+  box-shadow:0 6px 26px rgba(0,42,70,.30),0 2px 6px rgba(0,42,70,.16);
+  transition:opacity .18s ease, transform .22s cubic-bezier(0.34,1.45,0.64,1);
+  will-change:transform,opacity;
+}
+#pin-tip.active{opacity:1;}
+#pin-tip-name{font-size:15px;font-weight:700;letter-spacing:-0.01em;line-height:1.15;}
+#pin-tip-meta{font-size:11px;font-weight:600;color:rgba(255,255,255,0.62);margin-top:3px;letter-spacing:.02em;}
+#pin-tip-meta .priority{color:#7dd4f8;}
+/* little pointer triangle */
+#pin-tip::after{
+  content:'';position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
+  width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;
+  border-top:6px solid var(--navy);
+}
+@media(max-width:767px){
+  #pin-tip-name{font-size:14px;}
+  #pin-tip-meta{font-size:10px;}
+}
+
+/* Zoom controls — float at the bottom-right, over the map */
+#zoom-controls{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:row;gap:6px;z-index:30;transition:opacity .3s ease;}
+.zoom-btn{width:32px;height:32px;background:#fff;border:1.5px solid #cde4f0;border-radius:8px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,42,70,.12);transition:background .12s,transform .1s;-webkit-tap-highlight-color:transparent;font-family:var(--ff)}
+.zoom-btn:hover{background:#f0f7fc}
+.zoom-btn:active{transform:scale(.93)}
+
+/* Legend — float at the bottom-left, over the map */
+#map-legend{
+  position:absolute;left:16px;bottom:16px;z-index:30;
+  background:var(--navy);border:none;border-radius:10px;
+  padding:9px 14px;
+  display:flex;align-items:center;gap:9px;
+  box-shadow:0 2px 12px rgba(0,42,70,.28);
+  font-family:var(--ff);
+  opacity:0;transition:opacity 0.6s ease;
+}
+#map-legend.visible{opacity:1;}
+/* legend items sit in a row when there's width, stacked when tight */
+#legend-text{display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+.legend-item{display:flex;align-items:center;gap:7px;}
+#legend-main{font-size:12px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:.01em;white-space:nowrap;}
+#legend-priority{font-size:12px;font-weight:700;color:#7dd4f8;line-height:1.2;letter-spacing:.01em;white-space:nowrap;}
+@media(max-width:767px){
+  #map-legend{padding:7px 11px;gap:6px;border-radius:8px;left:10px;}
+  #zoom-controls{right:10px;gap:5px;}
+  .zoom-btn{width:30px;height:30px;}
+  #legend-main,#legend-priority{font-size:10px;}
+}
+
+/* ── SPLASH ── */
+#splash{
+  position:fixed;inset:0;z-index:100;overflow:hidden;
+  background:var(--bg);pointer-events:none;
+  transition:opacity 0.6s ease;
+}
+#splash.fade-out{opacity:0;}
+
+/* ── LOGO PHOTO-FILL PHASE ── */
+#splash-ui{
+  position:absolute;inset:0;z-index:5;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 0.7s ease;
+}
+#splash-ui.show{opacity:1;}
+/* Intro scales to fit the splash box — uses the SMALLER of width/height so a
+   short, wide iframe shrinks the whole stack instead of clipping it. */
+#logo-stage{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  margin-bottom:clamp(6px,1.4vh,16px);
+  width:min(460px, 58vh, 80vw);
+  height:min(460px, 58vh, 80vw);
+}
+#logo-svg-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
+#label-clip{overflow:hidden;line-height:1;width:100%;text-align:center;padding:0 20px;opacity:0;transition:opacity 0.7s ease;}
+#label-clip.show{opacity:1;}
+#counter-label{
+  display:block;font-size:min(34px, 3vw, 4vh);font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--navy);
+  line-height:1.1;text-align:center;white-space:nowrap;
+}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div id="splash-ui">
+    <div id="logo-stage">
+      <div id="logo-svg-wrap"></div>
+    </div>
+    <div id="label-clip"><span id="counter-label">kiddos waiting for a sponsor</span></div>
+  </div>
+</div>
+
+<div id="map-wrap">
+  <div id="map-area">
+    <svg id="us-map" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <g id="zoom-group">
+        <g id="states-group"></g>
+        <g id="highlight-group"></g>
+        <g id="pins-group"></g>
+      </g>
+    </svg>
+
+    <!-- Hover / tap tooltip (points at pins, so it lives over the map) -->
+    <div id="pin-tip" role="status" aria-live="polite">
+      <div id="pin-tip-name">&#8212;</div>
+      <div id="pin-tip-meta"></div>
+    </div>
+  </div>
+
+  <!-- Control strip below the map: legend (left) + zoom (right) -->
+  <div id="control-strip">
+    <div id="map-legend">
+      <div id="legend-text">
+        <div class="legend-item">
+          <svg width="11" height="16" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+            <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#fff" stroke="#fff" stroke-width="0.5" stroke-linejoin="round"/>
+            <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
+          </svg>
+          <span id="legend-main">Kiddo waiting for a sponsor</span>
+        </div>
+        <div class="legend-item">
+          <svg width="11" height="16" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+            <path d="M5.5,1 C3.01,1 1,3.01 1,5.5 C1,8.86 5.5,15 5.5,15 C5.5,15 10,8.86 10,5.5 C10,3.01 7.99,1 5.5,1 Z" fill="#7dd4f8" stroke="#7dd4f8" stroke-width="0.5" stroke-linejoin="round"/>
+            <circle cx="5.5" cy="5.5" r="2" fill="var(--navy)"/>
+          </svg>
+          <span id="legend-priority">Waiting 6+ months</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="zoom-controls">
+      <button class="zoom-btn" id="btn-zoom-in" aria-label="Zoom in">+</button>
+      <button class="zoom-btn" id="btn-zoom-out" aria-label="Zoom out">&#8722;</button>
+      <button class="zoom-btn" id="btn-zoom-reset" aria-label="Reset zoom" style="font-size:11px">&#8857;</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+// "Mobile" here means "tap, not hover" — decided by input capability, NOT window
+// width (a narrow desktop window or iframe still has a mouse and should hover).
+const _noHover = window.matchMedia && window.matchMedia('(hover: none)').matches;
+const _coarse  = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+const _uaMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const isMobile = _uaMobile || _noHover || _coarse;
+
+// ── STATE FOCUS CONFIG ────────────────────────────────────────
+// This is the ONLY block that differs between the Oklahoma and Washington
+// builds. To make the Washington version, swap FOCUS_STATE to the WA line.
+const FOCUS_STATE = { fips:'40', abbr:'OK', name:'Oklahoma' };
+// const FOCUS_STATE = { fips:'53', abbr:'WA', name:'Washington' };
+
+// 'fly-in'  → open on the full US map, hold a beat, then glide-zoom into the
+//             focused state as its outline fades in (recommended; see note).
+// 'instant' → open already cropped/zoomed onto the focused state.
+const INTRO_MODE = 'fly-in';
+
+const FOCUS_FILL   = 0.60;   // how much of the view the state fills when focused
+                             //   (lower = more surrounding states peek in → invites zoom-out)
+const FLYIN_HOLD_MS = 800;   // pause on the full US map before flying in (fly-in only)
+const FLYIN_DUR_MS  = 1600;  // duration of the glide-zoom into the state
+const OUTLINE_COLOR = '#7dd4f8'; // brand cyan accent — same hue as the priority pins
+const MAX_K = 12;            // must not exceed the zoom scaleExtent max below
+// How far panning is allowed past the map edge (as a fraction of the viewBox).
+// A little slack lets an edge state (e.g. Washington) sit centred when focused.
+const PAN_MARGIN = 0.35;
+
+// ── SEEDED RANDOM ─────────────────────────────────────────────
+function mulberry32(s){
+  return function(){
+    s|=0;s=s+0x6D2B79F5|0;
+    let t=Math.imul(s^s>>>15,1|s);
+    t=t+Math.imul(t^t>>>7,61|t)^t;
+    return((t^t>>>14)>>>0)/4294967296;
+  };
+}
+const rng=mulberry32(Math.floor(Math.random()*2147483647));
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+// ── GITHUB PHOTO LIST ─────────────────────────────────────────
+const GITHUB_API='https://api.github.com/repos/chuckandcharley/sponsor-map/contents/intro';
+
+// ── LOGO PHOTO-FILL CONFIG ────────────────────────────────────
+// Photos tile the logo's bounding box; the logo path clips them so only
+// the logo shape shows photos. Fill rises bottom→top in sync with the count.
+const FILL_COLS=isMobile?5:6;     // fewer, larger tiles → faces read clearly (not tiny/low-quality)
+const T_COUNT=2600;               // count-up + fill duration (ms)
+const T_FULL_HOLD=1900;           // hold once full, before map (ms)
+
+// ── KID COUNT PROMISE ─────────────────────────────────────────
+let _resolveKidCount;
+const _kidCountReady=new Promise(r=>{_resolveKidCount=r;});
+
+// ── LOGO PATHS ────────────────────────────────────────────────
+const LOGO_PATHS=[
+  "M 833.543 24.9457 L 835.261 24.812 C 844.162 24.0486 854.822 20.7168 863.96 19.4112 C 951.933 6.84074 1039.68 2.55187 1128.1 13.5491 C 1162.55 17.8343 1197 21.7025 1231.1 29.683 C 1459.71 77.0967 1664.85 202.203 1811.66 383.743 C 1852.34 433.985 1896.03 496.748 1923.67 555.192 C 1960.88 633.901 1956.95 738.11 1939.98 821.759 C 1895.04 1043.29 1720.99 1197.25 1521.74 1284.68 C 1528.61 1270.08 1534.47 1253.78 1540.7 1238.78 C 1559.98 1183.17 1571.63 1134.19 1574.44 1074.95 C 1580.64 944.298 1530.9 800.505 1444.33 702.774 C 1434.64 688.765 1410.11 666.083 1397 654.28 C 1324.71 589.168 1233.65 541.899 1137.39 524.833 C 984.994 497.814 847.714 529.55 721.588 618.114 C 680.009 647.342 643.189 682.81 612.425 723.266 C 608.797 728.06 600.394 738.919 597.399 743.82 C 562.312 795.152 538.038 843.969 519.909 903.37 C 511.076 930.979 506.861 967.91 503.539 996.629 C 501.167 1026.13 497.083 1075.8 502.939 1105.17 C 503.468 1121.72 507.148 1142.01 510.201 1158.41 C 531.251 1267.13 585.846 1366.51 666.31 1442.59 C 739.384 1511.02 815.608 1551.94 912.081 1576.58 C 931.058 1580.94 973.625 1589.6 991.996 1589.87 C 1012.24 1592.55 1033.77 1594.22 1054.21 1593.32 C 1065.72 1592.81 1078.08 1591.27 1089.6 1590.42 C 1095.37 1589.99 1105.49 1587 1110.44 1587.78 L 1110.5 1589 C 1097 1593.58 1081.4 1597.39 1067.57 1601.66 C 1039.09 1610.43 1009.88 1619.43 980.903 1626.33 C 898.952 1644.95 846.305 1649.82 761.327 1647.66 C 749.928 1647.4 738.552 1646.5 727.253 1644.97 C 722.583 1644.36 709.081 1642.16 705.061 1642.22 C 687.056 1638.27 667.947 1636.38 650.2 1632.06 C 478.414 1590.23 346.486 1454.81 277.077 1296.17 C 266.807 1272.7 251.853 1240.33 245.212 1215.46 C 223.59 1216.06 198.953 1215.44 177.128 1215.44 C 124.884 1215.3 72.64 1215.49 20.3988 1216.01 C 16.7222 1181.19 10.238 1148.04 7.4659 1111.92 C -6.96292 923.874 28.7594 724.979 117.979 557.466 C 144.088 506.885 170.061 467.504 202.001 421.256 C 208.192 413.912 213.93 405.999 219.913 398.42 C 339.095 247.438 499.472 129.959 681.117 65.653 C 731.223 47.9144 781.998 36.1015 833.543 24.9457 z",
+  "M 1578.15 1497.09 C 1591.87 1495.21 1617.98 1486.66 1632.23 1482.23 C 1735.48 1450.16 1835.81 1403.16 1929.94 1350.25 C 1949.84 1339.07 1978.73 1324.16 1997.27 1311.94 C 1935.64 1527.69 1822.63 1685.85 1650.29 1827.78 C 1538.49 1916.33 1409.1 1980.06 1270.75 2014.7 C 1248.92 2020.8 1226.39 2025.2 1204.03 2029.08 C 1016.65 2061.61 817.98 2043.84 641.545 1971.7 C 622.351 1963.85 603.947 1953.58 584.547 1946.16 C 605.05 1946.37 619.357 1945.11 639.565 1943.87 C 713.025 1939.33 796.058 1929.49 867.636 1912.09 C 929.61 1897.58 990.409 1878.44 1049.52 1854.85 C 1195.98 1795.4 1337.42 1692.05 1423.23 1557.96 C 1433.27 1542.27 1441.79 1525.58 1451.48 1509.66 C 1458.09 1508.81 1465.66 1508.43 1472.38 1507.93 C 1507.48 1508.75 1543.75 1503.65 1578.15 1497.09 z",
+  "M 694.74 1327.94 C 641.237 1264.32 606.51 1187.06 594.451 1104.81 C 554.736 847.323 753.586 604.414 1016.21 598.583 C 1039.54 598.065 1073.08 599.231 1095.85 602.431 C 1194 616.218 1280.25 662.068 1349.24 732.662 C 1419.07 804.113 1457.69 887.05 1471.66 985.897 C 1477.07 1023.89 1476.23 1076.88 1468.26 1114.58 C 1459.99 1168.8 1434.18 1234.72 1403.99 1279.92 C 1394.53 1294.09 1383.66 1307.87 1373.95 1322.16 C 1375.57 1307.72 1374.9 1289.42 1374.87 1274.57 L 1374.77 1200.49 L 1374.73 1063.04 C 1374.58 1046.04 1374.97 1027.71 1374.22 1010.96 C 1386.32 1010.29 1412.48 1009.1 1423.83 1009.92 L 1038.83 690.576 C 1012.55 704.352 986.156 727.614 962.452 746.191 L 876.838 812.166 C 877.935 799.701 877.109 775.311 877.229 761.705 C 871.514 761.982 864.853 761.847 859.133 761.612 C 836.383 760.674 812.748 762.192 790.117 760.666 C 789.624 800.654 793.297 847.877 788.054 886.686 C 781.804 894.124 757.729 914.911 749.423 921.906 C 714.195 951.576 675.294 986.753 638.682 1014.13 C 656.809 1013.44 676.669 1013.84 694.925 1013.86 C 694.191 1025.15 694.799 1043.16 694.807 1054.82 L 694.673 1129.88 L 694.91 1268.67 C 694.959 1288.24 694.316 1308.59 694.74 1327.94 z"
+];
+const LOGO_VB={x:-40,y:-40,w:2080,h:2128}; // viewBox used for the logo svg
+
+// ── EASING ────────────────────────────────────────────────────
+function easeOut4(t){return 1-Math.pow(1-t,4);}
+
+// ── BUILD PHOTO-FILLED LOGO ───────────────────────────────────
+// Returns {svg, setFill(progress 0..1)}. Photos are preloaded, tiled across
+// the logo bounding box, and clipped to the logo shape. A rising mask reveals
+// them bottom→top as progress increases.
+async function buildPhotoLogo(){
+  const ns='http://www.w3.org/2000/svg';
+
+  // fetch + preload photos
+  let filenames=[];
+  try{
+    const res=await fetch(GITHUB_API);
+    if(res.ok){
+      const items=await res.json();
+      filenames=items.filter(f=>f.type==='file'&&/\.(jpe?g|png|gif|webp)$/i.test(f.name)).map(f=>f.name);
+    }
+  }catch(e){}
+
+  const svg=document.createElementNS(ns,'svg');
+  svg.setAttribute('viewBox',`${LOGO_VB.x} ${LOGO_VB.y} ${LOGO_VB.w} ${LOGO_VB.h}`);
+  // Fill the responsive #logo-stage (which is sized via CSS to fit the box),
+  // so the logo shrinks in short/wide iframes instead of overflowing.
+  svg.setAttribute('width','100%');svg.setAttribute('height','100%');
+  svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+  svg.style.cssText='display:block;overflow:visible;width:100%;height:100%;';
+
+  const defs=document.createElementNS(ns,'defs');
+
+  // clip path = the logo shape
+  const clip=document.createElementNS(ns,'clipPath');
+  clip.setAttribute('id','logoClip');clip.setAttribute('clipPathUnits','userSpaceOnUse');
+  LOGO_PATHS.forEach(d=>{const p=document.createElementNS(ns,'path');p.setAttribute('d',d);clip.appendChild(p);});
+  defs.appendChild(clip);
+
+  // reveal mask = white rect rising from the bottom of the logo box
+  const mask=document.createElementNS(ns,'mask');
+  mask.setAttribute('id','fillMask');mask.setAttribute('maskUnits','userSpaceOnUse');
+  mask.setAttribute('x',LOGO_VB.x);mask.setAttribute('y',LOGO_VB.y);
+  mask.setAttribute('width',LOGO_VB.w);mask.setAttribute('height',LOGO_VB.h);
+  const maskRect=document.createElementNS(ns,'rect');
+  maskRect.setAttribute('x',LOGO_VB.x);maskRect.setAttribute('width',LOGO_VB.w);
+  maskRect.setAttribute('fill','#fff');
+  maskRect.setAttribute('y',LOGO_VB.y+LOGO_VB.h);
+  maskRect.setAttribute('height',0);
+  mask.appendChild(maskRect);
+  defs.appendChild(mask);
+  svg.appendChild(defs);
+
+  // empty-vessel fill — held transparent during the draw-in, fades in after
+  const vesselG=document.createElementNS(ns,'g');
+  vesselG.style.cssText='opacity:0;transition:opacity 0.5s ease;';
+  LOGO_PATHS.forEach(d=>{
+    const p=document.createElementNS(ns,'path');p.setAttribute('d',d);
+    p.style.cssText='fill:#dceaf4;stroke:none;';
+    vesselG.appendChild(p);
+  });
+  svg.appendChild(vesselG);
+
+  // photo tiles group — clipped to logo, revealed by the rising mask
+  const photoG=document.createElementNS(ns,'g');
+  photoG.setAttribute('clip-path','url(#logoClip)');
+  photoG.setAttribute('mask','url(#fillMask)');
+
+  const cols=FILL_COLS;
+  const tileW=LOGO_VB.w/cols;
+  const rows=Math.ceil(LOGO_VB.h/tileW);
+  const tileH=LOGO_VB.h/rows;
+  const totalTiles=cols*rows;
+  const picked=shuffle(filenames);
+
+  // preload chosen photos
+  const srcFor=i=>picked.length?('intro/'+encodeURIComponent(picked[i%picked.length])):null;
+  await Promise.all(Array.from({length:Math.min(totalTiles,picked.length||0)},(_, i)=>new Promise(res=>{
+    const im=new Image();im.onload=res;im.onerror=res;im.src=srcFor(i);
+  })));
+
+  const TINTS=['#b5d4f4','#9fc8e0','#c5e3f4','#a0cce4','#bbd7ec','#85b7eb','#b0d9ee'];
+  let ti=0;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const x=LOGO_VB.x+c*tileW, y=LOGO_VB.y+r*tileH;
+      const src=srcFor(ti);
+      if(src){
+        const img=document.createElementNS(ns,'image');
+        img.setAttributeNS('http://www.w3.org/1999/xlink','href',src);
+        img.setAttribute('href',src);
+        img.setAttribute('x',x);img.setAttribute('y',y);
+        img.setAttribute('width',tileW+1);img.setAttribute('height',tileH+1);
+        img.setAttribute('preserveAspectRatio','xMidYMid slice');
+        photoG.appendChild(img);
+      }else{
+        const rect=document.createElementNS(ns,'rect');
+        rect.setAttribute('x',x);rect.setAttribute('y',y);
+        rect.setAttribute('width',tileW+1);rect.setAttribute('height',tileH+1);
+        rect.setAttribute('fill',TINTS[(r*cols+c)%TINTS.length]);
+        photoG.appendChild(rect);
+      }
+      ti++;
+    }
+  }
+  // Subtle grid seams between photo tiles — masked by the same rising fill so
+  // they reveal in step with the photos. This grid look reads cleaner here.
+  const seams=document.createElementNS(ns,'g');
+  seams.setAttribute('clip-path','url(#logoClip)');
+  seams.setAttribute('mask','url(#fillMask)');
+  for(let c=1;c<cols;c++){
+    const l=document.createElementNS(ns,'line');
+    l.setAttribute('x1',LOGO_VB.x+c*tileW);l.setAttribute('y1',LOGO_VB.y);
+    l.setAttribute('x2',LOGO_VB.x+c*tileW);l.setAttribute('y2',LOGO_VB.y+LOGO_VB.h);
+    l.setAttribute('stroke','#ffffff');l.setAttribute('stroke-width','8');l.setAttribute('opacity','0.6');
+    seams.appendChild(l);
+  }
+  for(let r=1;r<rows;r++){
+    const l=document.createElementNS(ns,'line');
+    l.setAttribute('x1',LOGO_VB.x);l.setAttribute('y1',LOGO_VB.y+r*tileH);
+    l.setAttribute('x2',LOGO_VB.x+LOGO_VB.w);l.setAttribute('y2',LOGO_VB.y+r*tileH);
+    l.setAttribute('stroke','#ffffff');l.setAttribute('stroke-width','8');l.setAttribute('opacity','0.6');
+    seams.appendChild(l);
+  }
+  svg.appendChild(photoG);
+  svg.appendChild(seams);
+
+  // crisp logo outline on top — also serves as the draw-in strokes
+  const topG=document.createElementNS(ns,'g');
+  const strokeEls=LOGO_PATHS.map(d=>{
+    const p=document.createElementNS(ns,'path');p.setAttribute('d',d);
+    p.style.cssText='fill:none;stroke:#004270;stroke-width:22;stroke-linejoin:round;stroke-linecap:round;';
+    topG.appendChild(p);
+    return p;
+  });
+  svg.appendChild(topG);
+
+  document.getElementById('logo-svg-wrap').appendChild(svg);
+
+  // ── In-logo count ──
+  // The number lives at the house's doorway center and is always centered there,
+  // growing symmetrically left/right as digits increase. Sized so the widest
+  // realistic value (4 digits + comma) stays within the house interior
+  // (measured safe span x:694–1378, center x≈1036). A soft white halo keeps it
+  // legible over the photo fill without altering the fill itself.
+  const DOOR_CX=1036, DOOR_CY=1175;      // doorway center in logo coords
+  const NUM_FONT=200;                     // locked size: fits "8,888" within walls
+  // halo (drawn first, behind the number)
+  const numHalo=document.createElementNS(ns,'text');
+  numHalo.setAttribute('x',DOOR_CX);numHalo.setAttribute('y',DOOR_CY);
+  numHalo.setAttribute('text-anchor','middle');
+  numHalo.setAttribute('dominant-baseline','central');
+  numHalo.style.cssText=`font-family:'Source Sans 3',sans-serif;font-weight:900;font-size:${NUM_FONT}px;fill:#fff;stroke:#fff;stroke-width:26px;stroke-linejoin:round;opacity:0.9;paint-order:stroke;`;
+  numHalo.textContent='0';
+  const numText=document.createElementNS(ns,'text');
+  numText.setAttribute('x',DOOR_CX);numText.setAttribute('y',DOOR_CY);
+  numText.setAttribute('text-anchor','middle');
+  numText.setAttribute('dominant-baseline','central');
+  numText.style.cssText=`font-family:'Source Sans 3',sans-serif;font-weight:900;font-size:${NUM_FONT}px;fill:#004270;letter-spacing:-6px;`;
+  numText.textContent='0';
+  svg.appendChild(numHalo);
+  svg.appendChild(numText);
+
+  function setCount(str){numHalo.textContent=str;numText.textContent=str;}
+  // number group hidden until the count begins
+  const numGroup=[numHalo,numText];
+  numGroup.forEach(el=>{el.style.opacity='0';el.style.transition='opacity 0.4s ease';});
+  function showCount(){numGroup.forEach(el=>{el.style.opacity=el===numText?'1':'0.9';});}
+
+  // prime strokes for the draw-in (hidden until drawIn() runs)
+  const lens=strokeEls.map(el=>el.getTotalLength());
+  strokeEls.forEach((el,i)=>{el.style.strokeDasharray=lens[i];el.style.strokeDashoffset=lens[i];});
+
+  function setFill(prog){
+    const p=Math.max(0,Math.min(1,prog));
+    const h=LOGO_VB.h*p;
+    maskRect.setAttribute('y',LOGO_VB.y+LOGO_VB.h-h);
+    maskRect.setAttribute('height',h);
+  }
+  // draw the logo outline stroke-by-stroke, then fade in the empty vessel fill
+  function drawIn(){
+    return new Promise(resolve=>{
+      const DRAW_MS=1400,STAGGER=180;
+      strokeEls.forEach((el,i)=>{
+        setTimeout(()=>{
+          el.style.transition=`stroke-dashoffset ${DRAW_MS}ms cubic-bezier(0.4,0,0.2,1)`;
+          el.style.strokeDashoffset='0';
+        },i*STAGGER+60);
+      });
+      const total=STAGGER*(strokeEls.length-1)+DRAW_MS+60;
+      // fade the soft vessel fill in just before the strokes finish
+      setTimeout(()=>{vesselG.style.opacity='1';},Math.max(0,total-450));
+      setTimeout(resolve,total+150);
+    });
+  }
+  return {svg,setFill,drawIn,setCount,showCount};
+}
+
+// ── MAIN SPLASH SEQUENCE ──────────────────────────────────────
+(async function(){
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  const splash=document.getElementById('splash');
+  const mapWrap=document.getElementById('map-wrap');
+  const splashUI=document.getElementById('splash-ui');
+
+  splashUI.classList.add('show');
+  const logo=await buildPhotoLogo();
+  const targetCount=await _kidCountReady;
+
+  // Beat 1: draw the logo outline stroke-by-stroke
+  await logo.drawIn();
+
+  // Beat 2: count up (number inside the house) + fill the logo with photos
+  logo.showCount();
+  const label=document.getElementById('label-clip');
+  const FADE=700; // caption fade duration (matches CSS)
+  // Caption arrives WITH the payoff: if the post-landing hold is long enough
+  // (>=2s) we fade it in right after the number lands; otherwise we start the
+  // fade before landing so it's settled by the time the count finishes.
+  let captionShown=false;
+  const showCaption=()=>{if(!captionShown){captionShown=true;label.classList.add('show');}};
+  const countStart=performance.now();
+  await new Promise(resolve=>{
+    function frame(now){
+      const t=Math.min((now-countStart)/T_COUNT,1);
+      const e=easeOut4(t);
+      logo.setCount(Math.round(e*targetCount).toLocaleString());
+      logo.setFill(e);
+      // if the hold is short, begin the caption fade before the number lands
+      if(T_FULL_HOLD<2000 && !captionShown && (T_COUNT - t*T_COUNT) <= FADE) showCaption();
+      if(t<1) requestAnimationFrame(frame); else resolve();
+    }
+    requestAnimationFrame(frame);
+  });
+  logo.setFill(1);
+  logo.setCount(targetCount.toLocaleString());
+
+  // if the hold is long enough, fade the caption in now (right after landing)
+  if(T_FULL_HOLD>=2000) showCaption();
+
+  // Hold full for a beat
+  await sleep(T_FULL_HOLD);
+
+  // Fade splash → reveal map
+  splashUI.style.transition='opacity 0.6s ease';
+  splashUI.style.opacity='0';
+  await sleep(350);
+  splash.classList.add('fade-out');
+  await sleep(280);
+  mapWrap.classList.add('visible');
+  if(window._positionControls) requestAnimationFrame(window._positionControls);
+  setTimeout(()=>{
+    document.getElementById('map-legend').classList.add('visible');
+    if(window._positionControls) window._positionControls();
+  },500);
+  await sleep(600);
+  splash.style.display='none';
+
+  if(window._illuminateMap&&window._kidsForIllumination)
+    window._illuminateMap(window._kidsForIllumination);
+})();
+
+// ── MAP ───────────────────────────────────────────────────────
+const SVG_W=960,SVG_H=600;
+const ALASKA='02',HAWAII=15;
+const PALETTE=['#004270','#00527f','#01618e','#01719e','#0378ad','#0266a5'];
+
+function deduplicateKids(kids){
+  const seen=new Set();const out=[];
+  for(const k of kids){
+    const key=[(k.name||'').trim().toLowerCase(),(k.age||'').toString().trim().toLowerCase(),(k.state||'').trim().toLowerCase()].join('|');
+    if(!key||seen.has(key)) continue;seen.add(key);out.push(k);
+  }
+  return out;
+}
+
+const projection=d3.geoAlbersUsa().scale(1280).translate([SVG_W/2,SVG_H/2]);
+const pathGen=d3.geoPath().projection(projection);
+let currentK=1;
+const svg=d3.select('#us-map');
+const svgEl=document.getElementById('us-map');
+const zoomGroup=d3.select('#zoom-group');
+let lastReclusterK=1;
+
+let _velX=0,_velY=0,_lastPt=null,_lastT=0,_inertiaRaf=null,_touchCount=0;
+function _cancelInertia(){if(_inertiaRaf){cancelAnimationFrame(_inertiaRaf);_inertiaRaf=null;}}
+
+const zoom=d3.zoom()
+  .scaleExtent([1,12]).extent([[0,0],[SVG_W,SVG_H]])
+  .translateExtent([[-SVG_W*PAN_MARGIN,-SVG_H*PAN_MARGIN],[SVG_W*(1+PAN_MARGIN),SVG_H*(1+PAN_MARGIN)]])
+  .filter(event=>{if(event.type==='wheel') return false;return true;})
+  .on('zoom',event=>{
+    currentK=event.transform.k;zoomGroup.attr('transform',event.transform);
+    dismissLegend();
+    hideTip();
+    clearTimeout(window._reclusterTimer);
+    window._reclusterTimer=setTimeout(()=>{
+      if(window._allKids&&Math.abs(currentK-lastReclusterK)/lastReclusterK>0.15){
+        lastReclusterK=currentK;renderMarkers(window._allKids,false);
+      }
+    },80);
+  });
+svg.call(zoom);
+svg.on('pointerdown.inertia',()=>{_touchCount++;_cancelInertia();_velX=0;_velY=0;_lastPt=null;})
+   .on('pointermove.inertia',event=>{
+     if(_touchCount>1) return;
+     if(event.buttons===0&&event.pointerType!=='touch') return;
+     const now=performance.now();
+     if(_lastPt){const dt=Math.max(now-_lastT,1);_velX=(event.clientX-_lastPt[0])/dt;_velY=(event.clientY-_lastPt[1])/dt;}
+     _lastPt=[event.clientX,event.clientY];_lastT=now;
+   })
+   .on('pointerup.inertia pointercancel.inertia',()=>{
+     _touchCount=Math.max(0,_touchCount-1);if(_touchCount>0) return;
+     if(Math.abs(_velX)<0.1&&Math.abs(_velY)<0.1) return;
+     const MAX_VEL=0.6;
+     _velX=Math.max(-MAX_VEL,Math.min(MAX_VEL,_velX));_velY=Math.max(-MAX_VEL,Math.min(MAX_VEL,_velY));
+     const FRICTION=0.78,SCALE=10;
+     function coast(){_velX*=FRICTION;_velY*=FRICTION;if(Math.abs(_velX)<0.01&&Math.abs(_velY)<0.01){_inertiaRaf=null;return;}svg.call(zoom.translateBy,_velX*SCALE,_velY*SCALE);_inertiaRaf=requestAnimationFrame(coast);}
+     _inertiaRaf=requestAnimationFrame(coast);
+   });
+
+document.getElementById('btn-zoom-in').addEventListener('click',()=>{dismissLegend();hideTip();svg.transition().duration(320).call(zoom.scaleBy,2);});
+document.getElementById('btn-zoom-out').addEventListener('click',()=>{dismissLegend();hideTip();svg.transition().duration(320).call(zoom.scaleBy,0.5);});
+document.getElementById('btn-zoom-reset').addEventListener('click',()=>{dismissLegend();hideTip();svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity);});
+
+let mapReady=false,pendingKids=null;
+window._statePaths={};
+
+// ── STATE FOCUS / OUTLINE ─────────────────────────────────────
+// Compute a zoom transform that frames a single state (by FIPS id) in the
+// centre of the view, filling FOCUS_FILL of the smaller dimension.
+function focusTransformForFips(fips){
+  const node=window._statePaths[fips];
+  if(!node) return null;
+  const b=node.getBBox(); // geometry box in base (unzoomed) SVG coords
+  const k=Math.max(1,Math.min(MAX_K, FOCUS_FILL/Math.max(b.width/SVG_W,b.height/SVG_H)));
+  const cx=b.x+b.width/2, cy=b.y+b.height/2;
+  return d3.zoomIdentity.translate(SVG_W/2-k*cx, SVG_H/2-k*cy).scale(k);
+}
+
+// Draw a glowing brand-cyan outline over the focused state. It lives inside the
+// zoom group so it stays glued to the state at every zoom level, and uses a
+// non-scaling stroke so its weight reads the same whether zoomed in or out.
+function buildStateOutline(fips){
+  const node=window._statePaths[fips];
+  if(!node) return null;
+  const d=node.getAttribute('d');
+  const g=d3.select('#highlight-group');
+  g.selectAll('*').remove();
+  const glow=g.append('path').attr('d',d)
+    .attr('fill','none').attr('stroke',OUTLINE_COLOR)
+    .attr('stroke-width',9).attr('stroke-linejoin','round').attr('stroke-linecap','round')
+    .style('vector-effect','non-scaling-stroke').style('opacity',0);
+  const line=g.append('path').attr('d',d)
+    .attr('fill','none').attr('stroke',OUTLINE_COLOR)
+    .attr('stroke-width',2.6).attr('stroke-linejoin','round').attr('stroke-linecap','round')
+    .style('vector-effect','non-scaling-stroke').style('opacity',0);
+  return {glow,line,_revealed:false};
+}
+
+// Fade the outline in with one gentle "breath" of the glow to draw the eye.
+function revealOutline(refs){
+  if(!refs||refs._revealed) return;
+  refs._revealed=true;
+  refs.line.transition().duration(900).ease(d3.easeCubicOut).style('opacity',1);
+  refs.glow.transition().duration(900).ease(d3.easeCubicOut).style('opacity',0.5)
+    .transition().duration(1300).style('opacity',0.18)
+    .transition().duration(1300).style('opacity',0.34);
+}
+
+// Orchestrate how the map first presents the focused state.
+function startIntro(kids){
+  if(INTRO_MODE==='instant'){
+    const tf=focusTransformForFips(FOCUS_STATE.fips);
+    if(tf){
+      svg.call(zoom.transform,tf);
+      // we've jumped scale deliberately — don't let the recluster timer wipe the
+      // drop-in that's about to play at the focused scale.
+      lastReclusterK=currentK;
+      clearTimeout(window._reclusterTimer);
+    }
+    const refs=buildStateOutline(FOCUS_STATE.fips);
+    renderMarkers(kids,true);
+    setTimeout(()=>revealOutline(refs),600);
+  }else{ // 'fly-in' (recommended)
+    renderMarkers(kids,true);
+    const refs=buildStateOutline(FOCUS_STATE.fips);
+    const settle=window._lastPinSettleMs||1600;
+    setTimeout(()=>{
+      const tf=focusTransformForFips(FOCUS_STATE.fips);
+      if(!tf){revealOutline(refs);return;}
+      hideTip();
+      svg.transition().duration(FLYIN_DUR_MS).ease(d3.easeCubicInOut)
+         .call(zoom.transform,tf)
+         .on('interrupt end',()=>revealOutline(refs));
+      // safety net: reveal even if the transition's events don't fire
+      setTimeout(()=>revealOutline(refs),FLYIN_DUR_MS+250);
+    },settle+FLYIN_HOLD_MS);
+  }
+}
+
+fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
+  .then(r=>r.json()).then(us=>{
+    const stateFeatures=topojson.feature(us,us.objects.states).features
+      .filter(d=>String(d.id)!==ALASKA&&d.id!==10&&String(d.id)!=='15');
+    const g=d3.select('#states-group');
+    g.selectAll('path.state').data(stateFeatures).enter().append('path')
+      .attr('class','state').attr('d',pathGen)
+      .attr('fill',(d,i)=>PALETTE[i%PALETTE.length])
+      .each(function(d){window._statePaths[d.id]=this;});
+    g.append('path')
+      .datum(topojson.mesh(us,us.objects.states,(a,b)=>a!==b&&String(a.id)!==ALASKA&&a.id!==10&&a.id!==HAWAII&&String(b.id)!==ALASKA&&b.id!==10&&String(b.id)!=='15'))
+      .attr('fill','none').attr('stroke','#002d50').attr('stroke-width','0.3').attr('d',pathGen);
+    window._illuminateMap=()=>{mapReady=true;if(pendingKids) startIntro(pendingKids);};
+    if(window._positionControls) requestAnimationFrame(window._positionControls);
+  }).catch(()=>{mapReady=true;if(pendingKids) renderMarkers(pendingKids,true);});
+
+let centroids={};
+function toSVG(lat,lon){const pt=projection([lon,lat]);return pt?{x:pt[0],y:pt[1]}:null;}
+const BASE_PIN_R=isMobile?5.5:4.2,MIN_PIN_R=isMobile?4.5:3.0;
+function getPinR(){return Math.max(MIN_PIN_R,BASE_PIN_R/currentK);}
+
+function buildPinPositions(kids){
+  const pts=[];
+  kids.forEach(k=>{
+    if(k.state==='AK'||k.state==='HI') return;
+    const c=centroids[k.zip];let pos=null;
+    if(c) pos=toSVG(c[0],c[1]);
+    else if(k.lat!=null&&k.lon!=null) pos=toSVG(k.lat,k.lon);
+    if(!pos) return;pts.push({kid:k,x:pos.x,y:pos.y});
+  });
+  const pr=getPinR(),minDist=pr*2.4;
+  const svgPt=svgEl.createSVGPoint();
+  const statePaths=Array.from(document.querySelectorAll('#states-group path.state'));
+  function isOnLand(ax,ay){svgPt.x=ax;svgPt.y=ay;for(let sp of statePaths){if(sp.isPointInFill(svgPt)) return true;}return false;}
+  for(let pass=0;pass<12;pass++){
+    let moved=false;
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[j].x-pts[i].x,dy=pts[j].y-pts[i].y,dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<minDist&&dist>0){
+          moved=true;
+          const overlap=(minDist-dist)/2,nx=dx/dist,ny=dy/dist;
+          const jx=pts[j].x+nx*overlap,jy=pts[j].y+ny*overlap;
+          if(isOnLand(jx,jy)){pts[j].x=jx;pts[j].y=jy;}
+          else{const ix=pts[i].x-nx*overlap,iy=pts[i].y-ny*overlap;
+            if(isOnLand(ix,iy)){pts[i].x=ix;pts[i].y=iy;}
+            else{const jx2=pts[j].x-ny*overlap,jy2=pts[j].y+nx*overlap;if(isOnLand(jx2,jy2)){pts[j].x=jx2;pts[j].y=jy2;}}
+          }
+        }
+      }
+    }
+    if(!moved) break;
+  }
+  return pts;
+}
+
+function pinPath(r){
+  const s=r/4.5;
+  function tx(x){return(x-5.5)*s;}function ty(y){return(y-15)*s;}
+  return `M${tx(5.5)},${ty(1)} C${tx(3.01)},${ty(1)} ${tx(1)},${ty(3.01)} ${tx(1)},${ty(5.5)} C${tx(1)},${ty(8.86)} ${tx(5.5)},${ty(15)} ${tx(5.5)},${ty(15)} C${tx(5.5)},${ty(15)} ${tx(10)},${ty(8.86)} ${tx(10)},${ty(5.5)} C${tx(10)},${ty(3.01)} ${tx(7.99)},${ty(1)} ${tx(5.5)},${ty(1)} Z`;
+}
+
+// The legend now lives in the empty band BELOW the map (not overlapping it),
+// so it stays as a permanent key rather than auto-hiding on interaction.
+function dismissLegend(){ /* legend is persistent; nothing to dismiss */ }
+
+const PIN_COLOR_REGULAR='#ffffff';
+const PIN_COLOR_PRIORITY='#7dd4f8';
+const PIN_DOT_COLOR='#004270';
+
+// ── TOOLTIP STATE ─────────────────────────────────────────────
+const tip=document.getElementById('pin-tip');
+const tipName=document.getElementById('pin-tip-name');
+const tipMeta=document.getElementById('pin-tip-meta');
+let _activePin=null,_activePriority=false,_tipTimer=null;
+
+function activatePin(gNode,isPriority){
+  d3.select(gNode).select('path').attr('fill','#f0a500').attr('transform','scale(1.28)');
+  d3.select(gNode).select('circle').attr('fill','#c47800');
+  d3.select(gNode).raise();
+}
+function deactivatePin(gNode,isPriority){
+  const origFill=isPriority?PIN_COLOR_PRIORITY:PIN_COLOR_REGULAR;
+  d3.select(gNode).select('path').attr('fill',origFill).attr('transform','');
+  d3.select(gNode).select('circle').attr('fill',PIN_DOT_COLOR);
+}
+
+function buildMeta(kid){
+  // Name + age + waiting time
+  const bits=[];
+  if(kid.age!=null&&kid.age!=='') bits.push('Age '+kid.age);
+  if(kid.entryDate){
+    const cls=kid.priority?' class="priority"':'';
+    bits.push(`<span${cls}>Waiting since ${kid.entryDate}</span>`);
+  }else{
+    bits.push('Waiting for a sponsor');
+  }
+  return bits.join('&nbsp;&nbsp;·&nbsp;&nbsp;');
+}
+
+function positionTip(pt){
+  // pt is in SVG user coords; convert to screen px within #map-area (the tip's
+  // offset parent). The SVG fills #map-area, so the map's own bounds apply.
+  const ctm=zoomGroup.node().getScreenCTM();
+  const areaRect=document.getElementById('map-area').getBoundingClientRect();
+  const screenX=ctm.a*pt.x+ctm.c*pt.y+ctm.e;
+  const screenY=ctm.b*pt.x+ctm.d*pt.y+ctm.f;
+  const pr=getPinR();
+  // pin head dot sits ~2.11*pr above the anchor; lift tip a bit more
+  const headLift=(pr*2.11+pr*0.9)*ctm.d; // scale by current vertical zoom factor
+  tip.style.left=screenX-areaRect.left+'px';
+  tip.style.top=(screenY-areaRect.top-headLift)+'px';
+}
+
+function showTip(kid,pt,gNode,isPriority){
+  if(_tipTimer){clearTimeout(_tipTimer);_tipTimer=null;}
+  if(_activePin&&_activePin!==gNode) deactivatePin(_activePin,_activePriority);
+  _activePin=gNode;_activePriority=isPriority;
+  activatePin(gNode,isPriority);
+  tipName.textContent=kid.name||'';
+  tipMeta.innerHTML=buildMeta(kid);
+  positionTip(pt);
+  tip.classList.add('active');
+}
+function hideTip(){
+  if(_tipTimer){clearTimeout(_tipTimer);_tipTimer=null;}
+  tip.classList.remove('active');
+  if(_activePin){deactivatePin(_activePin,_activePriority);_activePin=null;}
+}
+
+// dismiss on background tap (mobile) / click-away
+document.getElementById('map-wrap').addEventListener('pointerdown',e=>{
+  if(e.target.closest('#pins-group')) return;
+  hideTip();
+});
+
+function renderMarkers(kids,animate){
+  window._allKids=kids;
+  hideTip();
+  const layer=d3.select('#pins-group');
+  layer.selectAll('*').remove();
+  const positions=buildPinPositions(kids);
+  const pr=getPinR(),strokeW=Math.max(0.5,1.2/currentK),dotR=pr*0.38;
+
+  const regular=positions.filter(pt=>!pt.kid.priority);
+  const priority=positions.filter(pt=>pt.kid.priority);
+
+  // Disable pin interaction while pins are dropping in, so a pin landing under
+  // a stationary cursor can't fire a hover and dismiss the legend / pop a tip.
+  // A real hover only counts once everything has settled. Instant (non-animated)
+  // re-renders — from resize or zoom recluster — are interactive immediately.
+  if(animate){ window._pinsInteractive=false; }
+  else{ window._pinsInteractive=true; }
+
+  function drawPin(pt,ci){
+    const kid=pt.kid;
+    const isPriority=!!kid.priority;
+    const fillColor=isPriority?PIN_COLOR_PRIORITY:PIN_COLOR_REGULAR;
+    const delay=animate?ci*8:0;
+    const g=layer.append('g').attr('transform',`translate(${pt.x},${pt.y})`).style('cursor','pointer').style('opacity',animate?'0':'1');
+    g.append('path').attr('d',pinPath(pr)).attr('fill',fillColor).attr('stroke','#004270').attr('stroke-width',strokeW).attr('stroke-linejoin','round').style('pointer-events','all').style('transition','transform .18s cubic-bezier(0.34,1.45,0.64,1)');
+    g.append('circle').attr('cx',0).attr('cy',-pr*2.11).attr('r',dotR).attr('fill',PIN_DOT_COLOR).style('pointer-events','all');
+
+    if(isMobile){
+      // Tap: show tip, auto-dismiss after a few seconds
+      g.on('click',e=>{
+        if(!window._pinsInteractive) return;
+        e.stopPropagation();
+        dismissLegend();
+        if(_activePin===g.node()){hideTip();return;}
+        showTip(kid,pt,g.node(),isPriority);
+        _tipTimer=setTimeout(hideTip,3500);
+      });
+    }else{
+      // Hover: animate pin + show tip; leave hides it
+      g.on('mouseenter',()=>{if(!window._pinsInteractive) return;dismissLegend();showTip(kid,pt,g.node(),isPriority);})
+       .on('mouseleave',()=>{if(!window._pinsInteractive) return;hideTip();});
+    }
+
+    if(!animate) return;
+    const dropSVG=pr*4;
+    g.attr('transform',`translate(${pt.x},${pt.y-dropSVG})`);
+    setTimeout(()=>{g.style('opacity','1').transition().duration(340).ease(d3.easeBackOut.overshoot(1.4)).attr('transform',`translate(${pt.x},${pt.y})`);},delay);
+  }
+
+  regular.forEach((pt,i)=>drawPin(pt,i));
+  priority.forEach((pt,i)=>drawPin(pt,regular.length+i));
+
+  if(animate){
+    // last pin's start delay + its drop tween, plus a small buffer
+    const totalPins=regular.length+priority.length;
+    const lastDelay=Math.max(0,(totalPins-1)*8);
+    const settleMs=lastDelay+340+150;
+    window._lastPinSettleMs=settleMs;
+    clearTimeout(window._pinsSettleTimer);
+    window._pinsSettleTimer=setTimeout(()=>{window._pinsInteractive=true;},settleMs);
+  }
+}
+
+fetch('./zip_centroids.json')
+  .then(r=>r.ok?r.json():{}).catch(()=>({}))
+  .then(c=>{
+    centroids=c;
+    return fetch('./kids.json');
+  })
+  .then(r=>{if(!r.ok) throw new Error();return r.json();})
+  .then(raw=>{
+    const list=Array.isArray(raw)&&raw.length>0?deduplicateKids(raw):[];
+    pendingKids=list;
+    _resolveKidCount(list.length);
+    const abbrToFips={'AL':'01','AZ':'04','AR':'05','CA':'06','CO':'08','CT':'09','DE':'10','FL':'12','GA':'13','ID':'16','IL':'17','IN':'18','IA':'19','KS':'20','KY':'21','LA':'22','ME':'23','MD':'24','MA':'25','MI':'26','MN':'27','MS':'28','MO':'29','MT':'30','NE':'31','NV':'32','NH':'33','NJ':'34','NM':'35','NY':'36','NC':'37','ND':'38','OH':'39','OK':'40','OR':'41','PA':'42','RI':'44','SC':'45','SD':'46','TN':'47','TX':'48','UT':'49','VT':'50','VA':'51','WA':'53','WV':'54','WI':'55','WY':'56','DC':'11'};
+    const activeSet=new Set();
+    list.forEach(k=>{const f=abbrToFips[k.state];if(f) activeSet.add(f);});
+    window._kidsForIllumination=activeSet;
+    if(mapReady) renderMarkers(list,true);
+  })
+  .catch(()=>{pendingKids=[];_resolveKidCount(0);window._kidsForIllumination=new Set();});
+
+// Anchor the floating legend + zoom controls just below the MAP's drawn bottom
+// edge (not the frame's bottom). On a tall/narrow screen the map sits centered
+// with empty space below it, so the controls lift up to stay near the map; on a
+// wide screen the map fills the frame and they sit near the bottom. They remain
+// floating OVER the map (no background block), so zoom still shows map behind
+// them. Anchored to the unzoomed map geometry so they don't move when zooming.
+let _mapBoxVB=null; // {y,h} of map content within the 960x600 viewBox
+function getMapBoxVB(){
+  if(_mapBoxVB) return _mapBoxVB;
+  const paths=document.querySelectorAll('#states-group path.state');
+  if(!paths.length) return null;
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  paths.forEach(p=>{
+    const b=p.getBBox();
+    if(b.x<minX)minX=b.x;if(b.y<minY)minY=b.y;
+    if(b.x+b.width>maxX)maxX=b.x+b.width;if(b.y+b.height>maxY)maxY=b.y+b.height;
+  });
+  if(!isFinite(minX)) return null;
+  _mapBoxVB={x:minX,y:minY,w:maxX-minX,h:maxY-minY};
+  return _mapBoxVB;
+}
+function positionControls(){
+  const area=document.getElementById('map-area');
+  const box=getMapBoxVB();
+  if(!area||!box) return;
+  const rect=area.getBoundingClientRect();
+  if(rect.width===0||rect.height===0) return;
+  const VB_W=960,VB_H=600;
+  // SVG fills #map-area with xMidYMid meet
+  const scale=Math.min(rect.width/VB_W, rect.height/VB_H);
+  const renderH=VB_H*scale;
+  const offY=(rect.height-renderH)/2;                 // top band height within area
+  const mapBottomPx=offY+(box.y+box.h)*scale;          // map's drawn bottom, from area top
+  const GAP=14;                                        // float just below the map edge
+  // distance from the frame's bottom up to the control row
+  let fromBottom=Math.round(rect.height-mapBottomPx+GAP);
+  // safety: never go off-screen top, never crowd the very bottom edge
+  const minFromBottom=12;
+  fromBottom=Math.max(minFromBottom, Math.min(fromBottom, rect.height-60));
+  const legend=document.getElementById('map-legend');
+  const zoom=document.getElementById('zoom-controls');
+  if(legend) legend.style.bottom=fromBottom+'px';
+  if(zoom) zoom.style.bottom=fromBottom+'px';
+}
+window._positionControls=positionControls;
+
+new ResizeObserver(()=>{
+  if(window._allKids) renderMarkers(window._allKids,false);
+  positionControls();
+}).observe(document.getElementById('map-area'));
+</script>
+</body>
+</html>
