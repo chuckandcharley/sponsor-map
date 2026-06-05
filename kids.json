@@ -1980,6 +1980,15 @@
     "priority": false
   },
   {
+    "name": "Emilio",
+    "age": "6 years old",
+    "city": "Las cruces",
+    "state": "NM",
+    "zip": "88007",
+    "entryDate": "March 2026",
+    "priority": false
+  },
+  {
     "name": "Blakely",
     "age": "5 years old",
     "city": "Kettering",
@@ -2565,6 +2574,15 @@
     "priority": false
   },
   {
+    "name": "Santiago",
+    "age": "4 years old",
+    "city": "Chaparral",
+    "state": "NM",
+    "zip": "88081",
+    "entryDate": "February 2026",
+    "priority": false
+  },
+  {
     "name": "Éowyn",
     "age": "7 years old",
     "city": "Lindenhurst",
@@ -3056,6 +3074,15 @@
     "city": "Lamont",
     "state": "CA",
     "zip": "93241",
+    "entryDate": "January 2026",
+    "priority": false
+  },
+  {
+    "name": "Ezra",
+    "age": "1 year old",
+    "city": "El Paso",
+    "state": "TX",
+    "zip": "79938",
     "entryDate": "January 2026",
     "priority": false
   },
@@ -4919,6 +4946,15 @@
     "city": "Kentwood",
     "state": "LA",
     "zip": "70444",
+    "entryDate": "September 2025",
+    "priority": true
+  },
+  {
+    "name": "Eli",
+    "age": "5 years old",
+    "city": "Horizon City",
+    "state": "TX",
+    "zip": "79928",
     "entryDate": "September 2025",
     "priority": true
   },
