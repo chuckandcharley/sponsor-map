@@ -559,22 +559,11 @@ const zoom=d3.zoom()
   .filter(event=>{if(event.type==='wheel') return false;return true;})
   .on('zoom',event=>{
     currentK=event.transform.k;zoomGroup.attr('transform',event.transform);
-    // Keep pins a steady on-screen size as the group scales, so they don't
-    // balloon during a zoom and snap back when the debounced re-render lands.
-    // Pins are drawn at radius window._pinRenderR; counter-scaling each pin body
-    // makes its apparent size always match a fresh render at the current zoom.
-    if(window._pinRenderR){
-      const s=getPinR(currentK)/window._pinRenderR;
-      d3.select('#pins-group').selectAll('g.pin-body').attr('transform','scale('+s+')');
-    }
+    // Pins are laid out once for the resting (focused) zoom and simply scale
+    // with the map — no re-layout on zoom, so there's no discrete size/position
+    // jump the first time you zoom.
     dismissLegend();
     hideTip();
-    clearTimeout(window._reclusterTimer);
-    window._reclusterTimer=setTimeout(()=>{
-      if(window._allKids&&Math.abs(currentK-lastReclusterK)/lastReclusterK>0.15){
-        lastReclusterK=currentK;renderMarkers(window._allKids,false);
-      }
-    },80);
   });
 svg.call(zoom);
 svg.on('pointerdown.inertia',()=>{_touchCount++;_cancelInertia();_velX=0;_velY=0;_lastPt=null;})
@@ -646,26 +635,25 @@ function revealOutline(refs){
 
 // Orchestrate how the map first presents the focused state.
 function startIntro(kids){
+  // Lay pins out once for the resting (focused) zoom so they never need
+  // re-spacing or resizing as you zoom — this is what removes the one-time jump.
+  const tf=focusTransformForFips(FOCUS_STATE.fips);
+  window._layoutK = tf ? tf.k : 1;
+
   if(INTRO_MODE==='instant'){
-    const tf=focusTransformForFips(FOCUS_STATE.fips);
-    if(tf){
-      svg.call(zoom.transform,tf);
-      // we've jumped scale deliberately — don't let the recluster timer wipe the
-      // drop-in that's about to play at the focused scale.
-      lastReclusterK=currentK;
-      clearTimeout(window._reclusterTimer);
-    }
+    if(tf) svg.call(zoom.transform,tf);
     const refs=buildStateOutline(FOCUS_STATE.fips);
     renderMarkers(kids,true);
     setTimeout(()=>revealOutline(refs),600);
   }else{ // 'fly-in' (recommended)
     renderMarkers(kids,true);
     const refs=buildStateOutline(FOCUS_STATE.fips);
-    // Fly in after a fixed beat on the full map — deliberately NOT tied to how
-    // long the pin cascade takes, so FLYIN_HOLD_MS controls the feel identically
-    // whether there are 0 pins (dev) or hundreds (live).
+    // Wait for the whole national pin cascade to finish BEFORE the hold + zoom,
+    // so every pin has already dropped into place. `settle` is how long the
+    // drop-in takes (scales with pin count); FLYIN_HOLD_MS is the beat AFTER the
+    // cascade, and FLYIN_DUR_MS is the zoom speed.
+    const settle=window._lastPinSettleMs||1600;
     setTimeout(()=>{
-      const tf=focusTransformForFips(FOCUS_STATE.fips);
       if(!tf){revealOutline(refs);return;}
       hideTip();
       svg.transition().duration(FLYIN_DUR_MS).ease(d3.easeCubicInOut)
@@ -673,7 +661,7 @@ function startIntro(kids){
          .on('interrupt end',()=>revealOutline(refs));
       // safety net: reveal even if the transition's events don't fire
       setTimeout(()=>revealOutline(refs),FLYIN_DUR_MS+250);
-    },FLYIN_HOLD_MS);
+    },settle+FLYIN_HOLD_MS);
   }
 }
 
@@ -703,7 +691,9 @@ fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
 let centroids={};
 function toSVG(lat,lon){const pt=projection([lon,lat]);return pt?{x:pt[0],y:pt[1]}:null;}
 const BASE_PIN_R=isMobile?5.5:4.2,MIN_PIN_R=isMobile?4.5:3.0;
-function getPinR(){return Math.max(MIN_PIN_R,BASE_PIN_R/currentK);}
+// Pins are sized & spaced for the resting (focused) zoom — set once in startIntro
+// as window._layoutK — so the layout never has to change as you zoom around.
+function getPinR(){return Math.max(MIN_PIN_R,BASE_PIN_R/(window._layoutK||currentK));}
 
 function buildPinPositions(kids){
   const pts=[];
@@ -826,8 +816,7 @@ function renderMarkers(kids,animate){
   const layer=d3.select('#pins-group');
   layer.selectAll('*').remove();
   const positions=buildPinPositions(kids);
-  const pr=getPinR(),strokeW=Math.max(0.5,1.2/currentK),dotR=pr*0.38;
-  window._pinRenderR=pr; // radius pins are drawn at this render (for zoom counter-scaling)
+  const pr=getPinR(),strokeW=1.1,dotR=pr*0.38;
 
   const regular=positions.filter(pt=>!pt.kid.priority);
   const priority=positions.filter(pt=>pt.kid.priority);
@@ -845,9 +834,8 @@ function renderMarkers(kids,animate){
     const fillColor=isPriority?PIN_COLOR_PRIORITY:PIN_COLOR_REGULAR;
     const delay=animate?ci*8:0;
     const g=layer.append('g').attr('transform',`translate(${pt.x},${pt.y})`).style('cursor','pointer').style('opacity',animate?'0':'1');
-    const body=g.append('g').attr('class','pin-body');
-    body.append('path').attr('d',pinPath(pr)).attr('fill',fillColor).attr('stroke','#004270').attr('stroke-width',strokeW).attr('stroke-linejoin','round').style('pointer-events','all').style('transition','transform .18s cubic-bezier(0.34,1.45,0.64,1)');
-    body.append('circle').attr('cx',0).attr('cy',-pr*2.11).attr('r',dotR).attr('fill',PIN_DOT_COLOR).style('pointer-events','all');
+    g.append('path').attr('d',pinPath(pr)).attr('fill',fillColor).attr('stroke','#004270').attr('stroke-width',strokeW).attr('stroke-linejoin','round').style('vector-effect','non-scaling-stroke').style('pointer-events','all').style('transition','transform .18s cubic-bezier(0.34,1.45,0.64,1)');
+    g.append('circle').attr('cx',0).attr('cy',-pr*2.11).attr('r',dotR).attr('fill',PIN_DOT_COLOR).style('pointer-events','all');
 
     if(isMobile){
       // Tap: show tip, auto-dismiss after a few seconds
