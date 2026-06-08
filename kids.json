@@ -594,15 +594,6 @@
     "priority": false
   },
   {
-    "name": "Kaia",
-    "age": "4 years old",
-    "city": "Bridgewater",
-    "state": "NJ",
-    "zip": "08807",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Rey",
     "age": "1 year old",
     "city": "Garland",
@@ -1724,15 +1715,6 @@
     "city": "Sacramento",
     "state": "CA",
     "zip": "95833",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Mara",
-    "age": "3 years old",
-    "city": "Kent",
-    "state": "OH",
-    "zip": "44240",
     "entryDate": "April 2026",
     "priority": false
   },
