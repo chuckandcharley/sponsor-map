@@ -1071,15 +1071,6 @@
     "priority": false
   },
   {
-    "name": "Valentina",
-    "age": "1 year old",
-    "city": "Bixby",
-    "state": "OK",
-    "zip": "74008",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Julius",
     "age": "8 years old",
     "city": "University Hts.",
@@ -1697,15 +1688,6 @@
     "city": "Ormond Beach",
     "state": "FL",
     "zip": "32174",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Mason",
-    "age": "1 year old",
-    "city": "Tulsa",
-    "state": "OK",
-    "zip": "74137",
     "entryDate": "April 2026",
     "priority": false
   },
