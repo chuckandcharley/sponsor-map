@@ -20,6 +20,19 @@
 html,body{width:100%;height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden;font-family:var(--ff)}
 body{display:flex;flex-direction:column;justify-content:center;}
 
+/* ── INTRO LOCK ──
+   While the intro is running (splash → pin drop → fly-in zoom) we set this
+   class on <body>. It kills ALL pointer events on the map wrap so nothing the
+   user does — taps, double-taps, drags, pinches, scrolls — can reach d3.zoom,
+   pins, or the zoom buttons. The lock is lifted exactly once, by JS, ~1s after
+   the intro fully settles (see unlockIntro() below). Touch-action:none on the
+   wrap also prevents iOS/Android from misinterpreting two-finger gestures as
+   scroll-while-locked. */
+body.intro-locked #map-wrap{
+  pointer-events:none !important;
+  touch-action:none !important;
+}
+
 /* ── MAP WRAP ──
    Sizes to its content: the map area (natural-ish ratio) plus a control strip
    below it. No forced 100dvh, so there's no dead space above/below when embedded
@@ -108,10 +121,17 @@ svg#us-map:active{cursor:grabbing}
   #legend-main,#legend-priority{font-size:10px;}
 }
 
-/* ── SPLASH ── */
+/* ── SPLASH ──
+   We now make the splash ACTIVELY capture pointer events while it's visible
+   (pointer-events:auto). Combined with the body.intro-locked rule above,
+   that's belt-and-suspenders: even if the user pokes at the splash itself, the
+   event dies on the splash overlay and never reaches the SVG underneath. The
+   splash is removed (display:none) at the end of the splash sequence so it
+   doesn't keep blocking the map after that. */
 #splash{
   position:fixed;inset:0;z-index:100;overflow:hidden;
-  background:var(--bg);pointer-events:none;
+  background:var(--bg);pointer-events:auto;
+  touch-action:none;
   transition:opacity 0.6s ease;
 }
 #splash.fade-out{opacity:0;}
@@ -143,7 +163,7 @@ svg#us-map:active{cursor:grabbing}
 }
 </style>
 </head>
-<body>
+<body class="intro-locked">
 
 <div id="splash">
   <div id="splash-ui">
@@ -230,6 +250,36 @@ const MAX_K = 12;            // must not exceed the zoom scaleExtent max below
 // How far panning is allowed past the map edge (as a fraction of the viewBox).
 // A little slack lets an edge state (e.g. Washington) sit centred when focused.
 const PAN_MARGIN = 0.35;
+
+// ── INTRO LOCK ────────────────────────────────────────────────
+// Everything from page-load through "fly-in done + buffer" is non-interactive.
+// `body.intro-locked` (set in HTML) gates the CSS rule that kills pointer
+// events on #map-wrap. We also swallow any stray gestures at the window level
+// while locked, as a final guard against passive listeners (wheel, touchmove)
+// nudging anything. JS-level "I changed your zoom transform programmatically"
+// calls still work because they don't go through pointer events.
+const POST_INTRO_BUFFER_MS = 1000;  // user-requested ~1s grace after intro
+let _introUnlocked = false;
+function unlockIntro(){
+  if(_introUnlocked) return;
+  _introUnlocked = true;
+  document.body.classList.remove('intro-locked');
+  window.removeEventListener('touchmove',_swallow,{passive:false,capture:true});
+  window.removeEventListener('wheel',_swallow,{passive:false,capture:true});
+  window.removeEventListener('gesturestart',_swallow,{capture:true});
+}
+function _swallow(e){
+  // Only swallow over the map area itself — don't break scrolling on a parent
+  // page if this is embedded in something the user is scrolling.
+  if(_introUnlocked) return;
+  const t=e.target;
+  if(t && (t.closest && (t.closest('#map-wrap')||t.closest('#splash')))){
+    e.preventDefault(); e.stopPropagation();
+  }
+}
+window.addEventListener('touchmove',_swallow,{passive:false,capture:true});
+window.addEventListener('wheel',_swallow,{passive:false,capture:true});
+window.addEventListener('gesturestart',_swallow,{capture:true});
 
 // ── SEEDED RANDOM ─────────────────────────────────────────────
 function mulberry32(s){
@@ -556,7 +606,15 @@ function _cancelInertia(){if(_inertiaRaf){cancelAnimationFrame(_inertiaRaf);_ine
 const zoom=d3.zoom()
   .scaleExtent([1,12]).extent([[0,0],[SVG_W,SVG_H]])
   .translateExtent([[-SVG_W*PAN_MARGIN,-SVG_H*PAN_MARGIN],[SVG_W*(1+PAN_MARGIN),SVG_H*(1+PAN_MARGIN)]])
-  .filter(event=>{if(event.type==='wheel') return false;return true;})
+  // Filter blocks EVERY user-initiated zoom event while the intro is locked.
+  // Programmatic transforms (svg.call(zoom.transform, …) used by the fly-in,
+  // reset, etc.) bypass the filter, so the fly-in still works. This is a hard
+  // second line of defense in case any pointer event somehow leaks through.
+  .filter(event=>{
+    if(!_introUnlocked) return false;
+    if(event.type==='wheel') return false;
+    return true;
+  })
   .on('zoom',event=>{
     currentK=event.transform.k;zoomGroup.attr('transform',event.transform);
     dismissLegend();
@@ -569,8 +627,9 @@ const zoom=d3.zoom()
     },80);
   });
 svg.call(zoom);
-svg.on('pointerdown.inertia',()=>{_touchCount++;_cancelInertia();_velX=0;_velY=0;_lastPt=null;})
+svg.on('pointerdown.inertia',()=>{if(!_introUnlocked) return;_touchCount++;_cancelInertia();_velX=0;_velY=0;_lastPt=null;})
    .on('pointermove.inertia',event=>{
+     if(!_introUnlocked) return;
      if(_touchCount>1) return;
      if(event.buttons===0&&event.pointerType!=='touch') return;
      const now=performance.now();
@@ -578,6 +637,7 @@ svg.on('pointerdown.inertia',()=>{_touchCount++;_cancelInertia();_velX=0;_velY=0
      _lastPt=[event.clientX,event.clientY];_lastT=now;
    })
    .on('pointerup.inertia pointercancel.inertia',()=>{
+     if(!_introUnlocked) return;
      _touchCount=Math.max(0,_touchCount-1);if(_touchCount>0) return;
      if(Math.abs(_velX)<0.1&&Math.abs(_velY)<0.1) return;
      const MAX_VEL=0.6;
@@ -587,9 +647,9 @@ svg.on('pointerdown.inertia',()=>{_touchCount++;_cancelInertia();_velX=0;_velY=0
      _inertiaRaf=requestAnimationFrame(coast);
    });
 
-document.getElementById('btn-zoom-in').addEventListener('click',()=>{dismissLegend();hideTip();svg.transition().duration(320).call(zoom.scaleBy,2);});
-document.getElementById('btn-zoom-out').addEventListener('click',()=>{dismissLegend();hideTip();svg.transition().duration(320).call(zoom.scaleBy,0.5);});
-document.getElementById('btn-zoom-reset').addEventListener('click',()=>{dismissLegend();hideTip();svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity);});
+document.getElementById('btn-zoom-in').addEventListener('click',()=>{if(!_introUnlocked) return;dismissLegend();hideTip();svg.transition().duration(320).call(zoom.scaleBy,2);});
+document.getElementById('btn-zoom-out').addEventListener('click',()=>{if(!_introUnlocked) return;dismissLegend();hideTip();svg.transition().duration(320).call(zoom.scaleBy,0.5);});
+document.getElementById('btn-zoom-reset').addEventListener('click',()=>{if(!_introUnlocked) return;dismissLegend();hideTip();svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity);});
 
 let mapReady=false,pendingKids=null;
 window._statePaths={};
@@ -637,6 +697,9 @@ function revealOutline(refs){
 }
 
 // Orchestrate how the map first presents the focused state.
+// IMPORTANT: this also drives the intro-lock release. The user can't interact
+// with anything until unlockIntro() fires, exactly POST_INTRO_BUFFER_MS after
+// the focus transform finishes settling.
 function startIntro(kids){
   if(INTRO_MODE==='instant'){
     const tf=focusTransformForFips(FOCUS_STATE.fips);
@@ -650,6 +713,9 @@ function startIntro(kids){
     const refs=buildStateOutline(FOCUS_STATE.fips);
     renderMarkers(kids,true);
     setTimeout(()=>revealOutline(refs),600);
+    // Unlock once pins have finished dropping + a 1s grace period.
+    const settle=window._lastPinSettleMs||1600;
+    setTimeout(unlockIntro, settle + POST_INTRO_BUFFER_MS);
   }else{ // 'fly-in' (recommended)
     renderMarkers(kids,true);
     const refs=buildStateOutline(FOCUS_STATE.fips);
@@ -664,8 +730,18 @@ function startIntro(kids){
       // safety net: reveal even if the transition's events don't fire
       setTimeout(()=>revealOutline(refs),FLYIN_DUR_MS+250);
     },settle+FLYIN_HOLD_MS);
+    // Unlock 1s after the fly-in is fully complete. The total time from "right
+    // now" (startIntro called) until the fly-in finishes is:
+    //   settle (pins drop in)  +  FLYIN_HOLD_MS (hold beat)  +  FLYIN_DUR_MS (zoom)
+    // …then add POST_INTRO_BUFFER_MS for the requested grace period.
+    setTimeout(unlockIntro, settle + FLYIN_HOLD_MS + FLYIN_DUR_MS + POST_INTRO_BUFFER_MS);
   }
 }
+
+// Final hard fallback: if anything above stalls (e.g. a network hang on
+// states-10m.json) we still release the lock so the page is usable. 20s is
+// well past the longest happy-path intro (~8-9s) and avoids leaving a stuck UI.
+setTimeout(unlockIntro, 20000);
 
 fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
   .then(r=>r.json()).then(us=>{
@@ -799,6 +875,7 @@ function hideTip(){
 
 // dismiss on background tap (mobile) / click-away
 document.getElementById('map-wrap').addEventListener('pointerdown',e=>{
+  if(!_introUnlocked) return;
   if(e.target.closest('#pins-group')) return;
   hideTip();
 });
@@ -814,10 +891,10 @@ function renderMarkers(kids,animate){
   const regular=positions.filter(pt=>!pt.kid.priority);
   const priority=positions.filter(pt=>pt.kid.priority);
 
-  // Disable pin interaction while pins are dropping in, so a pin landing under
-  // a stationary cursor can't fire a hover and dismiss the legend / pop a tip.
-  // A real hover only counts once everything has settled. Instant (non-animated)
-  // re-renders — from resize or zoom recluster — are interactive immediately.
+  // Pin-level interactivity gate. Still useful even with the body-wide intro
+  // lock: it specifically prevents a pin landing under a stationary cursor
+  // from triggering its own hover. Set true on instant re-renders (resize /
+  // recluster) so existing pins stay interactive.
   if(animate){ window._pinsInteractive=false; }
   else{ window._pinsInteractive=true; }
 
@@ -833,7 +910,7 @@ function renderMarkers(kids,animate){
     if(isMobile){
       // Tap: show tip, auto-dismiss after a few seconds
       g.on('click',e=>{
-        if(!window._pinsInteractive) return;
+        if(!_introUnlocked||!window._pinsInteractive) return;
         e.stopPropagation();
         dismissLegend();
         if(_activePin===g.node()){hideTip();return;}
@@ -842,8 +919,8 @@ function renderMarkers(kids,animate){
       });
     }else{
       // Hover: animate pin + show tip; leave hides it
-      g.on('mouseenter',()=>{if(!window._pinsInteractive) return;dismissLegend();showTip(kid,pt,g.node(),isPriority);})
-       .on('mouseleave',()=>{if(!window._pinsInteractive) return;hideTip();});
+      g.on('mouseenter',()=>{if(!_introUnlocked||!window._pinsInteractive) return;dismissLegend();showTip(kid,pt,g.node(),isPriority);})
+       .on('mouseleave',()=>{if(!_introUnlocked||!window._pinsInteractive) return;hideTip();});
     }
 
     if(!animate) return;
