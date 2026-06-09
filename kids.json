@@ -1,5 +1,14 @@
 [
   {
+    "name": "Logan",
+    "age": "1 year old",
+    "city": "Plainfield",
+    "state": "IL",
+    "zip": "60586",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Olivia",
     "age": "2 years old",
     "city": "Aledo",
