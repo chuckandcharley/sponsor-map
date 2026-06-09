@@ -54,33 +54,6 @@
     "priority": false
   },
   {
-    "name": "Reginald",
-    "age": "Under 1 year old",
-    "city": "Superior",
-    "state": "WI",
-    "zip": "54880",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Reginald",
-    "age": "Under 1 year old",
-    "city": "Superior",
-    "state": "WI",
-    "zip": "54880",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Maggie",
-    "age": "2 years old",
-    "city": "Summerfield",
-    "state": "OH",
-    "zip": "43788",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Maggie",
     "age": "2 years old",
     "city": "Summerfield",
@@ -108,38 +81,11 @@
     "priority": false
   },
   {
-    "name": "shavar",
-    "age": "8 years old",
-    "city": "rochester",
-    "state": "NY",
-    "zip": "14611",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Shavar",
     "age": "8 years old",
     "city": "Rochester",
     "state": "NY",
     "zip": "14611",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Wrenley",
-    "age": "2 years old",
-    "city": "Richlands",
-    "state": "NC",
-    "zip": "28574",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Lilliana",
-    "age": "5 years old",
-    "city": "Easley",
-    "state": "SC",
-    "zip": "29642",
     "entryDate": "June 2026",
     "priority": false
   },
