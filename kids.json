@@ -36,15 +36,6 @@
     "priority": false
   },
   {
-    "name": "Jacob",
-    "age": "4 years old",
-    "city": "National City",
-    "state": "CA",
-    "zip": "91950",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Navee",
     "age": "2 years old",
     "city": "Broken arrow",
@@ -239,15 +230,6 @@
     "city": "Deer Park",
     "state": "TX",
     "zip": "77536",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Nina",
-    "age": "1 year old",
-    "city": "Nutley",
-    "state": "NJ",
-    "zip": "07110",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -3785,15 +3767,6 @@
     "city": "Pleasanton",
     "state": "TX",
     "zip": "78064",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Matías",
-    "age": "3 years old",
-    "city": "Wellington",
-    "state": "FL",
-    "zip": "33414",
     "entryDate": "November 2025",
     "priority": true
   },
