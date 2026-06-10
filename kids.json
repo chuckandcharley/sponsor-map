@@ -1,5 +1,14 @@
 [
   {
+    "name": "Rue",
+    "age": "6 years old",
+    "city": "Lemont",
+    "state": "IL",
+    "zip": "60439",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Deacon",
     "age": "4 years old",
     "city": "Lumberton",
