@@ -3348,15 +3348,6 @@
     "priority": false
   },
   {
-    "name": "Sam",
-    "age": "Under 1 year old",
-    "city": "New city",
-    "state": "NY",
-    "zip": "10956",
-    "entryDate": "January 2026",
-    "priority": false
-  },
-  {
     "name": "Valentino",
     "age": "2 years old",
     "city": "Newnan",
@@ -3380,15 +3371,6 @@
     "city": "San Antonio",
     "state": "TX",
     "zip": "78245",
-    "entryDate": "January 2026",
-    "priority": false
-  },
-  {
-    "name": "Nora",
-    "age": "2 years old",
-    "city": "Old Lyme",
-    "state": "CT",
-    "zip": "06371",
     "entryDate": "January 2026",
     "priority": false
   },
