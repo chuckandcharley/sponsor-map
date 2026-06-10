@@ -1,5 +1,14 @@
 [
   {
+    "name": "Deacon",
+    "age": "4 years old",
+    "city": "Lumberton",
+    "state": "NC",
+    "zip": "28358",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Everly",
     "age": "2 years old",
     "city": "North Attleboro",
