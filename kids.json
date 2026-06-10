@@ -1,5 +1,14 @@
 [
   {
+    "name": "Alayna",
+    "age": "8 years old",
+    "city": "Columbus",
+    "state": "OH",
+    "zip": "43204",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "River",
     "age": "3 years old",
     "city": "Stow",
@@ -360,15 +369,6 @@
     "priority": false
   },
   {
-    "name": "Warren",
-    "age": "3 years old",
-    "city": "Huntsville",
-    "state": "AL",
-    "zip": "35806",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Xander",
     "age": "9 years old",
     "city": "Peoria",
@@ -473,15 +473,6 @@
     "city": "Benton",
     "state": "AR",
     "zip": "72019",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Hudson",
-    "age": "4 years old",
-    "city": "Enterprise",
-    "state": "AL",
-    "zip": "36330",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -2457,15 +2448,6 @@
     "priority": false
   },
   {
-    "name": "Evelyn",
-    "age": "1 year old",
-    "city": "Montgomery",
-    "state": "AL",
-    "zip": "36109",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
     "name": "Kataleya",
     "age": "3 years old",
     "city": "Laredo",
@@ -3474,15 +3456,6 @@
     "priority": false
   },
   {
-    "name": "Liam",
-    "age": "2 years old",
-    "city": "Columbus",
-    "state": "GA",
-    "zip": "31904",
-    "entryDate": "December 2025",
-    "priority": false
-  },
-  {
     "name": "Pedro",
     "age": "8 years old",
     "city": "Hidalgo",
@@ -3978,15 +3951,6 @@
     "priority": true
   },
   {
-    "name": "Obsidian",
-    "age": "5 years old",
-    "city": "Millbrook",
-    "state": "AL",
-    "zip": "36054",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
     "name": "Samuel",
     "age": "8 years old",
     "city": "Chisholm",
@@ -4235,15 +4199,6 @@
     "city": "Jackson",
     "state": "TN",
     "zip": "38305",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Maizy",
-    "age": "4 years old",
-    "city": "Meridianville",
-    "state": "AL",
-    "zip": "35759",
     "entryDate": "November 2025",
     "priority": true
   },
@@ -4883,15 +4838,6 @@
     "city": "Albany",
     "state": "OR",
     "zip": "97322",
-    "entryDate": "October 2025",
-    "priority": true
-  },
-  {
-    "name": "Greer",
-    "age": "5 years old",
-    "city": "Auburn",
-    "state": "AL",
-    "zip": "36830",
     "entryDate": "October 2025",
     "priority": true
   },
