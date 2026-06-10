@@ -1,5 +1,14 @@
 [
   {
+    "name": "River",
+    "age": "3 years old",
+    "city": "Stow",
+    "state": "OH",
+    "zip": "44224",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Derek",
     "age": "8 years old",
     "city": "Pensacola",
@@ -266,15 +275,6 @@
     "city": "Saint Louis",
     "state": "MO",
     "zip": "63138",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Gracee",
-    "age": "2 years old",
-    "city": "Tavares",
-    "state": "FL",
-    "zip": "32778",
     "entryDate": "June 2026",
     "priority": false
   },
