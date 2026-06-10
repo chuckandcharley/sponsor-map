@@ -3597,7 +3597,7 @@
     "state": "AL",
     "zip": "35903",
     "entryDate": "December 2025",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Owen",
@@ -3606,7 +3606,7 @@
     "state": "OR",
     "zip": "97408",
     "entryDate": "December 2025",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Maverik",
@@ -3615,7 +3615,7 @@
     "state": "WI",
     "zip": "54875",
     "entryDate": "December 2025",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Owen",
