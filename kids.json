@@ -1,5 +1,14 @@
 [
   {
+    "name": "River",
+    "age": "3 years old",
+    "city": "Stow",
+    "state": "OH",
+    "zip": "44224",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Callie",
     "age": "2 years old",
     "city": "Pikeville",
@@ -801,15 +810,6 @@
     "priority": false
   },
   {
-    "name": "Adeline",
-    "age": "4 years old",
-    "city": "Cedar Creek",
-    "state": "TX",
-    "zip": "78612",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Hayfa",
     "age": "2 years old",
     "city": "Katy",
@@ -842,15 +842,6 @@
     "city": "Grand Prairie",
     "state": "TX",
     "zip": "75052",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Teresa",
-    "age": "5 years old",
-    "city": "Leander",
-    "state": "TX",
-    "zip": "78641",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -927,15 +918,6 @@
     "priority": false
   },
   {
-    "name": "Tegan",
-    "age": "3 years old",
-    "city": "Rosanky",
-    "state": "TX",
-    "zip": "78953",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Kaylin",
     "age": "5 years old",
     "city": "McKinney",
@@ -950,24 +932,6 @@
     "city": "San Antonio",
     "state": "TX",
     "zip": "78253",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Leo",
-    "age": "4 years old",
-    "city": "Hutto",
-    "state": "TX",
-    "zip": "78634",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Eden",
-    "age": "5 years old",
-    "city": "Austin",
-    "state": "TX",
-    "zip": "78724",
     "entryDate": "May 2026",
     "priority": false
   },
