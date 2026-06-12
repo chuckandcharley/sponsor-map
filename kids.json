@@ -9,15 +9,6 @@
     "priority": false
   },
   {
-    "name": "Brook",
-    "age": "4 years old",
-    "city": "Hatch",
-    "state": "NM",
-    "zip": "87937",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Wyatt",
     "age": "5 years old",
     "city": "Wilbraham",
@@ -68,15 +59,6 @@
     "city": "Bellingham",
     "state": "MA",
     "zip": "02019",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "River",
-    "age": "3 years old",
-    "city": "Stow",
-    "state": "OH",
-    "zip": "44224",
     "entryDate": "June 2026",
     "priority": false
   },
