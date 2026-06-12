@@ -1,5 +1,14 @@
 [
   {
+    "name": "Wyatt",
+    "age": "5 years old",
+    "city": "Wilbraham",
+    "state": "MA",
+    "zip": "01095",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Franchelys",
     "age": "4 years old",
     "city": "Stratford",
