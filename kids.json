@@ -828,15 +828,6 @@
     "priority": false
   },
   {
-    "name": "Luke",
-    "age": "2 years old",
-    "city": "Mullica Hill",
-    "state": "NJ",
-    "zip": "08062",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Nevaeh",
     "age": "6 years old",
     "city": "Deltaville",
@@ -1859,15 +1850,6 @@
     "city": "Huron",
     "state": "SD",
     "zip": "57350",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Reagan",
-    "age": "1 year old",
-    "city": "Bushkill",
-    "state": "PA",
-    "zip": "18324",
     "entryDate": "April 2026",
     "priority": false
   },
