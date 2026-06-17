@@ -1,23 +1,5 @@
 [
   {
-    "name": "Lindsey",
-    "age": "6 years old",
-    "city": "Helena",
-    "state": "MT",
-    "zip": "59602",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Aaron",
-    "age": "3 years old",
-    "city": "Edinburg",
-    "state": "TX",
-    "zip": "78541",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "McKenna",
     "age": "6 years old",
     "city": "TN",
@@ -1292,15 +1274,6 @@
     "city": "Paxton",
     "state": "MA",
     "zip": "01612",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Sebastian",
-    "age": "1 year old",
-    "city": "Chicago",
-    "state": "IL",
-    "zip": "60652",
     "entryDate": "May 2026",
     "priority": false
   },
