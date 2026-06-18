@@ -684,15 +684,6 @@
     "priority": false
   },
   {
-    "name": "Milan",
-    "age": "4 years old",
-    "city": "Whitehouse Station",
-    "state": "NJ",
-    "zip": "08889",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Olivia",
     "age": "Under 1 year old",
     "city": "Lamar",
@@ -3299,15 +3290,6 @@
     "city": "Orange",
     "state": "MA",
     "zip": "01364",
-    "entryDate": "January 2026",
-    "priority": false
-  },
-  {
-    "name": "Gabriel",
-    "age": "7 years old",
-    "city": "Washington",
-    "state": "DC",
-    "zip": "20015",
     "entryDate": "January 2026",
     "priority": false
   },
