@@ -1,14 +1,5 @@
 [
   {
-    "name": "Griffin",
-    "age": "4 years old",
-    "city": "Dayton",
-    "state": "OH",
-    "zip": "45414",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Eleanor",
     "age": "1 year old",
     "city": "Marlborough",
@@ -32,24 +23,6 @@
     "city": "Richmond",
     "state": "KY",
     "zip": "40475",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Bailey",
-    "age": "7 years old",
-    "city": "Rio oso",
-    "state": "CA",
-    "zip": "95674",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Bailey",
-    "age": "7 years old",
-    "city": "Rio oso",
-    "state": "CA",
-    "zip": "95674",
     "entryDate": "June 2026",
     "priority": false
   },
