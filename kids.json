@@ -1260,15 +1260,6 @@
     "priority": false
   },
   {
-    "name": "Calvin",
-    "age": "3 years old",
-    "city": "Sayville",
-    "state": "NY",
-    "zip": "11782",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Timothy",
     "age": "10 years old",
     "city": "Hixson",
@@ -1319,15 +1310,6 @@
     "city": "Midland",
     "state": "GA",
     "zip": "31820",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Olivia",
-    "age": "3 years old",
-    "city": "Yaphank",
-    "state": "NY",
-    "zip": "11980",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -4514,15 +4496,6 @@
     "city": "Tyler",
     "state": "TX",
     "zip": "75701",
-    "entryDate": "October 2025",
-    "priority": true
-  },
-  {
-    "name": "Jacob",
-    "age": "4 years old",
-    "city": "National City",
-    "state": "CA",
-    "zip": "91950",
     "entryDate": "October 2025",
     "priority": true
   },
