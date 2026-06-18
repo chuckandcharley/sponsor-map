@@ -1,5 +1,14 @@
 [
   {
+    "name": "Griffin",
+    "age": "4 years old",
+    "city": "Dayton",
+    "state": "OH",
+    "zip": "45414",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Eleanor",
     "age": "1 year old",
     "city": "Marlborough",
