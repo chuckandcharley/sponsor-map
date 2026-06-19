@@ -1,5 +1,23 @@
 [
   {
+    "name": "Judah",
+    "age": "2 years old",
+    "city": "Mount Joy",
+    "state": "PA",
+    "zip": "17552",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Carter",
+    "age": "2 years old",
+    "city": "new iberia",
+    "state": "LA",
+    "zip": "70560",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Charlee",
     "age": "6 years old",
     "city": "Anacoco",
@@ -4505,15 +4523,6 @@
     "city": "Crossville",
     "state": "TN",
     "zip": "38572",
-    "entryDate": "October 2025",
-    "priority": true
-  },
-  {
-    "name": "Azai",
-    "age": "7 years old",
-    "city": "Perris",
-    "state": "CA",
-    "zip": "92570",
     "entryDate": "October 2025",
     "priority": true
   },
