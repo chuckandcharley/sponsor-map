@@ -1,5 +1,14 @@
 [
   {
+    "name": "Judah",
+    "age": "2 years old",
+    "city": "Mount Joy",
+    "state": "PA",
+    "zip": "17552",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Maggie",
     "age": "2 years old",
     "city": "Summerfield",
@@ -707,15 +716,6 @@
     "city": "Lamar",
     "state": "CO",
     "zip": "81052",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Benson",
-    "age": "4 years old",
-    "city": "Fort Wayne",
-    "state": "IN",
-    "zip": "46814",
     "entryDate": "May 2026",
     "priority": false
   },
