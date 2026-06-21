@@ -1,5 +1,14 @@
 [
   {
+    "name": "Henry",
+    "age": "3 years old",
+    "city": "Richmond",
+    "state": "VA",
+    "zip": "23223",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Olivia",
     "age": "3 years old",
     "city": "Redmond",
