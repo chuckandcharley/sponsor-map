@@ -1,14 +1,5 @@
 [
   {
-    "name": "Donny",
-    "age": "5 years old",
-    "city": "Sanford",
-    "state": "FL",
-    "zip": "32771",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Estelle \"Ella\"",
     "age": "4 years old",
     "city": "Middleburg",
@@ -54,15 +45,6 @@
     "priority": false
   },
   {
-    "name": "Ivy",
-    "age": "2 years old",
-    "city": "Washington",
-    "state": "PA",
-    "zip": "15301",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Lylah",
     "age": "3 years old",
     "city": "Pawpaw",
@@ -81,56 +63,11 @@
     "priority": false
   },
   {
-    "name": "Said",
-    "age": "4 years old",
-    "city": "Knoxville",
-    "state": "TN",
-    "zip": "37912",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Judah",
-    "age": "2 years old",
-    "city": "Mount Joy",
-    "state": "PA",
-    "zip": "17552",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Hunter",
     "age": "1 year old",
     "city": "Knoxville",
     "state": "TN",
     "zip": "37921",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Kolton",
-    "age": "7 years old",
-    "city": "Ave",
-    "state": "FL",
-    "zip": "32927",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Judah",
-    "age": "2 years old",
-    "city": "Mount Joy",
-    "state": "PA",
-    "zip": "17552",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Maggie",
-    "age": "2 years old",
-    "city": "Summerfield",
-    "state": "OH",
-    "zip": "43788",
     "entryDate": "June 2026",
     "priority": false
   },
