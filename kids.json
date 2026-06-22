@@ -495,15 +495,6 @@
     "priority": false
   },
   {
-    "name": "Luca",
-    "age": "5 years old",
-    "city": "Albuquerque",
-    "state": "NM",
-    "zip": "87120",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Dangelo",
     "age": "9 years old",
     "city": "San Angelo",
@@ -545,15 +536,6 @@
     "city": "Buena vista",
     "state": "VA",
     "zip": "24416",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Griffyn",
-    "age": "2 years old",
-    "city": "Cumming",
-    "state": "GA",
-    "zip": "30040",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -729,6 +711,15 @@
     "priority": false
   },
   {
+    "name": "Christian",
+    "age": "9 years old",
+    "city": "Los Lunas",
+    "state": "NM",
+    "zip": "87031",
+    "entryDate": "May 2026",
+    "priority": false
+  },
+  {
     "name": "Iris",
     "age": "3 years old",
     "city": "Gaffney",
@@ -761,15 +752,6 @@
     "city": "Lamar",
     "state": "CO",
     "zip": "81052",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Nova",
-    "age": "9 years old",
-    "city": "Birmingham",
-    "state": "AL",
-    "zip": "35215",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -1697,15 +1679,6 @@
     "city": "Laveen",
     "state": "AZ",
     "zip": "85339",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Zamari",
-    "age": "3 years old",
-    "city": "Windsor Mill",
-    "state": "MD",
-    "zip": "21207",
     "entryDate": "April 2026",
     "priority": false
   },
