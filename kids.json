@@ -369,15 +369,6 @@
     "priority": false
   },
   {
-    "name": "Rayanne",
-    "age": "3 years old",
-    "city": "Bellingham",
-    "state": "MA",
-    "zip": "02019",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Callie",
     "age": "2 years old",
     "city": "Pikeville",
@@ -2183,15 +2174,6 @@
     "city": "Hanover",
     "state": "PA",
     "zip": "17331",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
-    "name": "Callen",
-    "age": "5 years old",
-    "city": "Mullica Hill",
-    "state": "NJ",
-    "zip": "08062",
     "entryDate": "March 2026",
     "priority": false
   },
