@@ -162,15 +162,6 @@
     "priority": false
   },
   {
-    "name": "Kolton",
-    "age": "7 years old",
-    "city": "Ave",
-    "state": "FL",
-    "zip": "32927",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Oliver",
     "age": "6 years old",
     "city": "Hendersonville",
@@ -302,15 +293,6 @@
     "city": "Willow park",
     "state": "TX",
     "zip": "76087",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Callie",
-    "age": "2 years old",
-    "city": "Pikeville",
-    "state": "NC",
-    "zip": "27863",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -972,15 +954,6 @@
     "priority": false
   },
   {
-    "name": "Dakota",
-    "age": "3 years old",
-    "city": "Council",
-    "state": "NC",
-    "zip": "28434",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Cooper",
     "age": "1 year old",
     "city": "Mascoutah",
@@ -1476,15 +1449,6 @@
     "priority": false
   },
   {
-    "name": "Justin",
-    "age": "4 years old",
-    "city": "Fenton",
-    "state": "MI",
-    "zip": "48430",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
     "name": "Jibrail",
     "age": "2 years old",
     "city": "Abingdon",
@@ -1557,15 +1521,6 @@
     "priority": false
   },
   {
-    "name": "Lukas",
-    "age": "4 years old",
-    "city": "Columbia",
-    "state": "MO",
-    "zip": "65202",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
     "name": "Ariela",
     "age": "6 years old",
     "city": "Palmdale",
@@ -1616,15 +1571,6 @@
     "city": "Battle Creek",
     "state": "MI",
     "zip": "49037",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Dakota",
-    "age": "8 years old",
-    "city": "North Chesterfield",
-    "state": "VA",
-    "zip": "23237",
     "entryDate": "April 2026",
     "priority": false
   },
@@ -1931,15 +1877,6 @@
     "city": "Cullman",
     "state": "AL",
     "zip": "35055",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Duncan",
-    "age": "9 years old",
-    "city": "Nixa",
-    "state": "MO",
-    "zip": "65714",
     "entryDate": "April 2026",
     "priority": false
   },
@@ -2340,15 +2277,6 @@
     "priority": false
   },
   {
-    "name": "Krenlee",
-    "age": "Under 1 year old",
-    "city": "Moss Point",
-    "state": "MS",
-    "zip": "39562",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
     "name": "Natalie",
     "age": "3 years old",
     "city": "Perrysburg",
@@ -2660,15 +2588,6 @@
     "city": "York",
     "state": "PA",
     "zip": "17402",
-    "entryDate": "February 2026",
-    "priority": false
-  },
-  {
-    "name": "BENTLEY",
-    "age": "7 years old",
-    "city": "COCOA",
-    "state": "FL",
-    "zip": "32926",
     "entryDate": "February 2026",
     "priority": false
   },
@@ -3452,15 +3371,6 @@
     "city": "Glenwood",
     "state": "AR",
     "zip": "71943",
-    "entryDate": "December 2025",
-    "priority": false
-  },
-  {
-    "name": "Charleigh",
-    "age": "5 years old",
-    "city": "Westland",
-    "state": "MI",
-    "zip": "48185",
     "entryDate": "December 2025",
     "priority": false
   },
@@ -4280,15 +4190,6 @@
     "city": "Etowah",
     "state": "TN",
     "zip": "37331",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Oliver",
-    "age": "4 years old",
-    "city": "Barnhart",
-    "state": "MO",
-    "zip": "63012",
     "entryDate": "November 2025",
     "priority": true
   },
