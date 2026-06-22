@@ -2187,15 +2187,6 @@
     "priority": false
   },
   {
-    "name": "Jenna",
-    "age": "7 years old",
-    "city": "Bauxite",
-    "state": "AR",
-    "zip": "72011",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
     "name": "Jack",
     "age": "5 years old",
     "city": "Independence",
@@ -2363,15 +2354,6 @@
     "city": "Perrysburg",
     "state": "OH",
     "zip": "43551",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
-    "name": "Eminence",
-    "age": "6 years old",
-    "city": "Bloomington",
-    "state": "IL",
-    "zip": "61704",
     "entryDate": "March 2026",
     "priority": false
   },
@@ -3564,15 +3546,6 @@
     "priority": true
   },
   {
-    "name": "Olivia",
-    "age": "6 years old",
-    "city": "Somerset",
-    "state": "MA",
-    "zip": "02725",
-    "entryDate": "December 2025",
-    "priority": true
-  },
-  {
     "name": "Xander",
     "age": "3 years old",
     "city": "Queen Creek",
@@ -4131,15 +4104,6 @@
     "priority": true
   },
   {
-    "name": "Jacob",
-    "age": "6 years old",
-    "city": "Lauderhill",
-    "state": "FL",
-    "zip": "33319",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
     "name": "Luca",
     "age": "7 years old",
     "city": "Tripoli",
@@ -4343,15 +4307,6 @@
     "city": "Vanalstyne",
     "state": "TX",
     "zip": "75495",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Annabell",
-    "age": "7 years old",
-    "city": "Waxhaw",
-    "state": "NC",
-    "zip": "28173",
     "entryDate": "November 2025",
     "priority": true
   },
@@ -4563,15 +4518,6 @@
     "priority": true
   },
   {
-    "name": "Korra",
-    "age": "5 years old",
-    "city": "Hicksville",
-    "state": "OH",
-    "zip": "43526",
-    "entryDate": "October 2025",
-    "priority": true
-  },
-  {
     "name": "Leela",
     "age": "6 years old",
     "city": "San Jose",
@@ -4770,15 +4716,6 @@
     "priority": true
   },
   {
-    "name": "Lex Zuriel",
-    "age": "2 years old",
-    "city": "San Pablo",
-    "state": "CA",
-    "zip": "94806",
-    "entryDate": "October 2025",
-    "priority": true
-  },
-  {
     "name": "Everlyn",
     "age": "5 years old",
     "city": "Blanchard",
@@ -4937,15 +4874,6 @@
     "city": "Rogers City",
     "state": "MI",
     "zip": "49779",
-    "entryDate": "September 2025",
-    "priority": true
-  },
-  {
-    "name": "Avett",
-    "age": "7 years old",
-    "city": "Jacksonville",
-    "state": "FL",
-    "zip": "32258",
     "entryDate": "September 2025",
     "priority": true
   },
