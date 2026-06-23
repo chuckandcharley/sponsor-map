@@ -3564,15 +3564,6 @@
     "priority": true
   },
   {
-    "name": "Emaline",
-    "age": "1 year old",
-    "city": "Del City",
-    "state": "OK",
-    "zip": "73115",
-    "entryDate": "December 2025",
-    "priority": true
-  },
-  {
     "name": "Emilia",
     "age": "2 years old",
     "city": "Sidney",
@@ -4230,15 +4221,6 @@
     "priority": true
   },
   {
-    "name": "Elijah",
-    "age": "10 years old",
-    "city": "Louisville",
-    "state": "KY",
-    "zip": "40272",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
     "name": "Emory",
     "age": "8 years old",
     "city": "Etowah",
@@ -4829,15 +4811,6 @@
     "city": "Rogers City",
     "state": "MI",
     "zip": "49779",
-    "entryDate": "September 2025",
-    "priority": true
-  },
-  {
-    "name": "Suttyn",
-    "age": "5 years old",
-    "city": "Rainsville",
-    "state": "AL",
-    "zip": "35986",
     "entryDate": "September 2025",
     "priority": true
   },
