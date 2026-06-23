@@ -9,15 +9,6 @@
     "priority": false
   },
   {
-    "name": "Jasiah",
-    "age": "3 years old",
-    "city": "San Antonio",
-    "state": "TX",
-    "zip": "78201",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "June",
     "age": "5 years old",
     "city": "Spindale",
@@ -32,15 +23,6 @@
     "city": "Albemarle",
     "state": "NC",
     "zip": "28001",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Harper",
-    "age": "1 year old",
-    "city": "Jacksonville",
-    "state": "FL",
-    "zip": "32207",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -1436,15 +1418,6 @@
     "city": "White Deer",
     "state": "TX",
     "zip": "79097",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Chloe",
-    "age": "1 year old",
-    "city": "Albemarle",
-    "state": "NC",
-    "zip": "28001",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -4370,15 +4343,6 @@
     "city": "Tyler",
     "state": "TX",
     "zip": "75701",
-    "entryDate": "October 2025",
-    "priority": true
-  },
-  {
-    "name": "Sophia",
-    "age": "2 years old",
-    "city": "West Bloomfield",
-    "state": "MI",
-    "zip": "48324",
     "entryDate": "October 2025",
     "priority": true
   },
