@@ -1,5 +1,14 @@
 [
   {
+    "name": "Everly",
+    "age": "3 years old",
+    "city": "Huntersville",
+    "state": "NC",
+    "zip": "28078",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Chandler",
     "age": "6 years old",
     "city": "Trinity",
@@ -3299,15 +3308,6 @@
     "city": "Hope",
     "state": "AR",
     "zip": "71801",
-    "entryDate": "January 2026",
-    "priority": false
-  },
-  {
-    "name": "Menachem",
-    "age": "8 years old",
-    "city": "Spring Valley",
-    "state": "NY",
-    "zip": "10977",
     "entryDate": "January 2026",
     "priority": false
   },
