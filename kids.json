@@ -1,5 +1,14 @@
 [
   {
+    "name": "Chandler",
+    "age": "6 years old",
+    "city": "Trinity",
+    "state": "NC",
+    "zip": "27370",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "K'lynda",
     "age": "3 years old",
     "city": "Von Ormy",
@@ -3070,7 +3079,7 @@
   },
   {
     "name": "Charlie",
-    "age": "4 years old",
+    "age": "5 years old",
     "city": "Vacaville",
     "state": "CA",
     "zip": "95687",
@@ -3435,7 +3444,7 @@
     "state": "WV",
     "zip": "25705",
     "entryDate": "December 2025",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Pedro",
