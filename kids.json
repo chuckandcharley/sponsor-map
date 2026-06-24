@@ -1,5 +1,14 @@
 [
   {
+    "name": "Rai",
+    "age": "4 years old",
+    "city": "Falls Church",
+    "state": "VA",
+    "zip": "22043",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Everly",
     "age": "3 years old",
     "city": "Huntersville",
