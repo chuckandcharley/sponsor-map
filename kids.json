@@ -1,5 +1,14 @@
 [
   {
+    "name": "Ezra",
+    "age": "6 years old",
+    "city": "Bremen",
+    "state": "GA",
+    "zip": "30110",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Rai",
     "age": "4 years old",
     "city": "Falls Church",
