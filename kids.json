@@ -9,15 +9,6 @@
     "priority": false
   },
   {
-    "name": "Everly",
-    "age": "3 years old",
-    "city": "Huntersville",
-    "state": "NC",
-    "zip": "28078",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Chandler",
     "age": "6 years old",
     "city": "Trinity",
@@ -2282,15 +2273,6 @@
     "city": "Evans",
     "state": "GA",
     "zip": "30809",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
-    "name": "Blakely",
-    "age": "2 years old",
-    "city": "Rockledge",
-    "state": "FL",
-    "zip": "32955",
     "entryDate": "March 2026",
     "priority": false
   },
