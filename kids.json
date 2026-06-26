@@ -1296,15 +1296,6 @@
     "priority": false
   },
   {
-    "name": "Trinity",
-    "age": "6 years old",
-    "city": "Milwaukee",
-    "state": "WI",
-    "zip": "53209",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Sai",
     "age": "5 years old",
     "city": "Modesto",
@@ -3884,6 +3875,15 @@
     "city": "Van Alstyne",
     "state": "TX",
     "zip": "75495",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "Giana",
+    "age": "4 years old",
+    "city": "Las Cruces",
+    "state": "NM",
+    "zip": "88007",
     "entryDate": "November 2025",
     "priority": true
   },
