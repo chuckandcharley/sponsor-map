@@ -1,5 +1,14 @@
 [
   {
+    "name": "Ethan",
+    "age": "4 years old",
+    "city": "Durham",
+    "state": "NC",
+    "zip": "27712",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "John",
     "age": "2 years old",
     "city": "Dodge",
