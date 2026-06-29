@@ -36,15 +36,6 @@
     "priority": false
   },
   {
-    "name": "Harper",
-    "age": "2 years old",
-    "city": "Villa rica",
-    "state": "GA",
-    "zip": "30180",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Corey",
     "age": "2 years old",
     "city": "Palmer",
@@ -734,15 +725,6 @@
     "city": "Rochester",
     "state": "NY",
     "zip": "14611",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Lilliana",
-    "age": "5 years old",
-    "city": "Easley",
-    "state": "SC",
-    "zip": "29642",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -1593,15 +1575,6 @@
     "priority": false
   },
   {
-    "name": "Tyler",
-    "age": "4 years old",
-    "city": "Midland",
-    "state": "GA",
-    "zip": "31820",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Owen",
     "age": "6 years old",
     "city": "Auburn",
@@ -2165,15 +2138,6 @@
     "city": "Washington",
     "state": "MO",
     "zip": "63090",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Hazel",
-    "age": "2 years old",
-    "city": "Knoxville",
-    "state": "IA",
-    "zip": "50138",
     "entryDate": "April 2026",
     "priority": false
   },
