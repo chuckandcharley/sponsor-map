@@ -1,5 +1,14 @@
 [
   {
+    "name": "Luxton",
+    "age": "Under 1 year old",
+    "city": "Spokane",
+    "state": "WA",
+    "zip": "99216",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Mia",
     "age": "8 years old",
     "city": "Wareham",
@@ -950,15 +959,6 @@
     "city": "Los Lunas",
     "state": "NM",
     "zip": "87031",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Iris",
-    "age": "3 years old",
-    "city": "Gaffney",
-    "state": "SC",
-    "zip": "29340",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -4262,15 +4262,6 @@
     "city": "Jackson",
     "state": "TN",
     "zip": "38305",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Elijah",
-    "age": "7 years old",
-    "city": "Spartanburg",
-    "state": "SC",
-    "zip": "29316",
     "entryDate": "November 2025",
     "priority": true
   },
