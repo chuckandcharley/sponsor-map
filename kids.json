@@ -1,5 +1,23 @@
 [
   {
+    "name": "Remington",
+    "age": "3 years old",
+    "city": "Port Clinton",
+    "state": "OH",
+    "zip": "43452",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Remington",
+    "age": "3 years old",
+    "city": "Port Clinton",
+    "state": "OH",
+    "zip": "43452",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Reed",
     "age": "2 years old",
     "city": "Bush",
@@ -3866,15 +3884,6 @@
     "city": "La Place",
     "state": "LA",
     "zip": "70068",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Miyani",
-    "age": "5 years old",
-    "city": "Margate",
-    "state": "FL",
-    "zip": "33063",
     "entryDate": "November 2025",
     "priority": true
   },
