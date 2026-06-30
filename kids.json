@@ -1,32 +1,5 @@
 [
   {
-    "name": "Remington",
-    "age": "3 years old",
-    "city": "Port Clinton",
-    "state": "OH",
-    "zip": "43452",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Remington",
-    "age": "3 years old",
-    "city": "Port Clinton",
-    "state": "OH",
-    "zip": "43452",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Reed",
-    "age": "2 years old",
-    "city": "Bush",
-    "state": "LA",
-    "zip": "70431",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Atlas",
     "age": "4 years old",
     "city": "Dallas",
