@@ -1,5 +1,23 @@
 [
   {
+    "name": "Alice",
+    "age": "6 years old",
+    "city": "Clovis",
+    "state": "CA",
+    "zip": "93619",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "test child",
+    "age": "5 years old",
+    "city": "Portsmouth",
+    "state": "VA",
+    "zip": "23435",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Atlas",
     "age": "4 years old",
     "city": "Dallas",
@@ -50,15 +68,6 @@
     "city": "Wareham",
     "state": "MA",
     "zip": "02571",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "test child first",
-    "age": "3 years old",
-    "city": "suffolk",
-    "state": "VA",
-    "zip": "23435",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -140,15 +149,6 @@
     "city": "Kuttawa",
     "state": "KY",
     "zip": "42055",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Hawi",
-    "age": "3 years old",
-    "city": "Lithonia",
-    "state": "GA",
-    "zip": "30058",
     "entryDate": "June 2026",
     "priority": false
   },
