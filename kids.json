@@ -36,15 +36,6 @@
     "priority": false
   },
   {
-    "name": "Sai",
-    "age": "5 years old",
-    "city": "Modesto",
-    "state": "CA",
-    "zip": "95358",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Luxton",
     "age": "Under 1 year old",
     "city": "Spokane",
@@ -59,15 +50,6 @@
     "city": "Wareham",
     "state": "MA",
     "zip": "02571",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Sai",
-    "age": "5 years old",
-    "city": "Modesto",
-    "state": "CA",
-    "zip": "95358",
     "entryDate": "June 2026",
     "priority": false
   },
