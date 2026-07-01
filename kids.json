@@ -9,47 +9,11 @@
     "priority": false
   },
   {
-    "name": "Alexander",
-    "age": "3 years old",
-    "city": "Bowling Green",
-    "state": "OH",
-    "zip": "43402",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Alexander",
-    "age": "3 years old",
-    "city": "Bowling Green",
-    "state": "OH",
-    "zip": "43402",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Raymon",
-    "age": "9 years old",
-    "city": "Riverhead",
-    "state": "NY",
-    "zip": "11901",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Julia",
     "age": "2 years old",
     "city": "Watkinsville",
     "state": "GA",
     "zip": "30677",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Jameson",
-    "age": "2 years old",
-    "city": "Norwalk",
-    "state": "IA",
-    "zip": "50211",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -5027,15 +4991,6 @@
     "city": "Oshkosh",
     "state": "WI",
     "zip": "54902",
-    "entryDate": "September 2025",
-    "priority": true
-  },
-  {
-    "name": "Remington",
-    "age": "3 years old",
-    "city": "Port Clinton",
-    "state": "OH",
-    "zip": "43452",
     "entryDate": "September 2025",
     "priority": true
   },
