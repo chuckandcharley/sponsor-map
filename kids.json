@@ -1,5 +1,14 @@
 [
   {
+    "name": "Adalae",
+    "age": "2 years old",
+    "city": "Vernal",
+    "state": "UT",
+    "zip": "84078",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Alexander",
     "age": "3 years old",
     "city": "Bowling Green",
@@ -2241,15 +2250,6 @@
     "priority": false
   },
   {
-    "name": "Patrick",
-    "age": "5 years old",
-    "city": "Darien",
-    "state": "CT",
-    "zip": "06820",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
     "name": "Trinity",
     "age": "2 years old",
     "city": "Lyons",
@@ -3488,6 +3488,15 @@
     "city": "San Antonio",
     "state": "TX",
     "zip": "78245",
+    "entryDate": "January 2026",
+    "priority": false
+  },
+  {
+    "name": "Nora",
+    "age": "2 years old",
+    "city": "Old Lyme",
+    "state": "CT",
+    "zip": "06371",
     "entryDate": "January 2026",
     "priority": false
   },
