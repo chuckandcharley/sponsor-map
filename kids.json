@@ -981,15 +981,6 @@
     "priority": false
   },
   {
-    "name": "Lydia",
-    "age": "7 years old",
-    "city": "Ellicott City",
-    "state": "MD",
-    "zip": "21043",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Hank",
     "age": "4 years old",
     "city": "Knoxville",
@@ -1958,6 +1949,15 @@
     "city": "Laveen",
     "state": "AZ",
     "zip": "85339",
+    "entryDate": "April 2026",
+    "priority": false
+  },
+  {
+    "name": "Zamari",
+    "age": "3 years old",
+    "city": "Windsor Mill",
+    "state": "MD",
+    "zip": "21207",
     "entryDate": "April 2026",
     "priority": false
   },
