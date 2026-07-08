@@ -1,5 +1,14 @@
 [
   {
+    "name": "Thomas",
+    "age": "4 years old",
+    "city": "Hollis",
+    "state": "NH",
+    "zip": "03049",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "True",
     "age": "1 year old",
     "city": "Waterbury",
@@ -1409,15 +1418,6 @@
     "city": "Pearsall",
     "state": "TX",
     "zip": "78061",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Noel",
-    "age": "Under 1 year old",
-    "city": "Irving",
-    "state": "TX",
-    "zip": "75060",
     "entryDate": "May 2026",
     "priority": false
   },
