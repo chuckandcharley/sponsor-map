@@ -2,9 +2,9 @@
   {
     "name": "Reed",
     "age": "2 years old",
-    "city": "Covington",
+    "city": "Bush",
     "state": "LA",
-    "zip": "70435",
+    "zip": "70431",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -149,15 +149,6 @@
     "city": "Dallas",
     "state": "TX",
     "zip": "75216",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Reed",
-    "age": "2 years old",
-    "city": "Bush",
-    "state": "LA",
-    "zip": "70431",
     "entryDate": "June 2026",
     "priority": false
   },
