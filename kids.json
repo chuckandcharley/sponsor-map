@@ -1,32 +1,5 @@
 [
   {
-    "name": "July",
-    "age": "3 years old",
-    "city": "Portsmouth",
-    "state": "VA",
-    "zip": "23322",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "June",
-    "age": "4 years old",
-    "city": "Portsmouth",
-    "state": "VA",
-    "zip": "23322",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Child2",
-    "age": "5 years old",
-    "city": "Portsmouth",
-    "state": "VA",
-    "zip": "23322",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Nehemiah",
     "age": "Under 1 year old",
     "city": "Pawtucket",
@@ -734,15 +707,6 @@
     "city": "Stratford",
     "state": "CT",
     "zip": "06614",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Kyleigh",
-    "age": "4 years old",
-    "city": "Fort Myers",
-    "state": "FL",
-    "zip": "33908",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -5000,15 +4964,6 @@
     "city": "Chandler",
     "state": "AZ",
     "zip": "85226",
-    "entryDate": "September 2025",
-    "priority": true
-  },
-  {
-    "name": "Aella",
-    "age": "3 years old",
-    "city": "Wichita",
-    "state": "KS",
-    "zip": "67218",
     "entryDate": "September 2025",
     "priority": true
   },
