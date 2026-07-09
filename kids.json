@@ -1683,15 +1683,6 @@
     "priority": false
   },
   {
-    "name": "Ryla",
-    "age": "4 years old",
-    "city": "Paxton",
-    "state": "MA",
-    "zip": "01612",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Gia",
     "age": "2 years old",
     "city": "Milford",
@@ -1859,6 +1850,15 @@
     "city": "Edmond",
     "state": "OK",
     "zip": "73013",
+    "entryDate": "April 2026",
+    "priority": false
+  },
+  {
+    "name": "Mateo",
+    "age": "3 years old",
+    "city": "Fitchburg",
+    "state": "MA",
+    "zip": "01420",
     "entryDate": "April 2026",
     "priority": false
   },
