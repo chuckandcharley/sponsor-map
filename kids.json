@@ -1,5 +1,14 @@
 [
   {
+    "name": "Child2",
+    "age": "5 years old",
+    "city": "Portsmouth",
+    "state": "VA",
+    "zip": "23322",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Nehemiah",
     "age": "Under 1 year old",
     "city": "Pawtucket",
@@ -203,15 +212,6 @@
     "city": "Clovis",
     "state": "CA",
     "zip": "93619",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Atlas",
-    "age": "4 years old",
-    "city": "Dallas",
-    "state": "TX",
-    "zip": "75216",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -455,15 +455,6 @@
     "city": "Pickerington",
     "state": "OH",
     "zip": "43147",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Santino",
-    "age": "3 years old",
-    "city": "Thorofare",
-    "state": "NJ",
-    "zip": "08086",
     "entryDate": "June 2026",
     "priority": false
   },
