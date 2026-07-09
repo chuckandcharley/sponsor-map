@@ -9,15 +9,6 @@
     "priority": false
   },
   {
-    "name": "Jayden",
-    "age": "4 years old",
-    "city": "Rockford",
-    "state": "IL",
-    "zip": "61103",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "K Lynda",
     "age": "3 years old",
     "city": "Von Ormy",
@@ -41,15 +32,6 @@
     "city": "Harrisburg",
     "state": "PA",
     "zip": "17109",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Lawson",
-    "age": "7 years old",
-    "city": "Covington",
-    "state": "TX",
-    "zip": "76636",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -932,15 +914,6 @@
     "city": "San Augustine",
     "state": "TX",
     "zip": "75972",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Wrenley",
-    "age": "2 years old",
-    "city": "Richlands",
-    "state": "NC",
-    "zip": "28574",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -3218,6 +3191,15 @@
     "city": "Hatch",
     "state": "NM",
     "zip": "87937",
+    "entryDate": "January 2026",
+    "priority": false
+  },
+  {
+    "name": "Lucas",
+    "age": "4 years old",
+    "city": "Bakersfield",
+    "state": "CA",
+    "zip": "93305",
     "entryDate": "January 2026",
     "priority": false
   },
