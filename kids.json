@@ -9,6 +9,24 @@
     "priority": false
   },
   {
+    "name": "Vivian",
+    "age": "4 years old",
+    "city": "Nashville",
+    "state": "TN",
+    "zip": "37205",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
+    "name": "Nehemiah",
+    "age": "Under 1 year old",
+    "city": "Pawtucket",
+    "state": "RI",
+    "zip": "02860",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Jayden",
     "age": "4 years old",
     "city": "Rockford",
@@ -145,7 +163,7 @@
   },
   {
     "name": "Madison",
-    "age": "8 years old",
+    "age": "9 years old",
     "city": "Middleburgh",
     "state": "NY",
     "zip": "12122",
@@ -617,6 +635,15 @@
     "city": "Hendersonville",
     "state": "NC",
     "zip": "28791",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Bryce",
+    "age": "9 years old",
+    "city": "Wentzville",
+    "state": "MO",
+    "zip": "63385",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -2133,6 +2160,15 @@
     "priority": false
   },
   {
+    "name": "Gideon",
+    "age": "6 years old",
+    "city": "Middletown",
+    "state": "VA",
+    "zip": "22645",
+    "entryDate": "April 2026",
+    "priority": false
+  },
+  {
     "name": "Ezekiel",
     "age": "3 years old",
     "city": "Lancaster",
@@ -3133,7 +3169,7 @@
   },
   {
     "name": "Emiliano",
-    "age": "3 years old",
+    "age": "4 years old",
     "city": "Yuma",
     "state": "AZ",
     "zip": "85365",
@@ -3507,7 +3543,7 @@
     "state": "IL",
     "zip": "60030",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Jacob",
