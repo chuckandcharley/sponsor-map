@@ -9,15 +9,6 @@
     "priority": false
   },
   {
-    "name": "Vivian",
-    "age": "4 years old",
-    "city": "Nashville",
-    "state": "TN",
-    "zip": "37205",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Nehemiah",
     "age": "Under 1 year old",
     "city": "Pawtucket",
@@ -689,15 +680,6 @@
     "city": "Georgetown",
     "state": "TX",
     "zip": "78628",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Vela",
-    "age": "2 years old",
-    "city": "Topeka",
-    "state": "KS",
-    "zip": "66604",
     "entryDate": "June 2026",
     "priority": false
   },
