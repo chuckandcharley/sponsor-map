@@ -63,15 +63,6 @@
     "priority": false
   },
   {
-    "name": "Karina",
-    "age": "2 years old",
-    "city": "Kennebunk",
-    "state": "ME",
-    "zip": "04043",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Emily",
     "age": "4 years old",
     "city": "tulare",
@@ -329,15 +320,6 @@
     "city": "Dodge",
     "state": "GA",
     "zip": "31023",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Lucas",
-    "age": "6 years old",
-    "city": "El Paso",
-    "state": "TX",
-    "zip": "79928",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -671,15 +653,6 @@
     "city": "Loves Park",
     "state": "IL",
     "zip": "61111",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Aubrey",
-    "age": "6 years old",
-    "city": "Peachtree City",
-    "state": "GA",
-    "zip": "30269",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -4910,6 +4883,24 @@
     "city": "San Francisco",
     "state": "CA",
     "zip": "94131",
+    "entryDate": "September 2025",
+    "priority": true
+  },
+  {
+    "name": "Jesse",
+    "age": "3 years old",
+    "city": "Ione",
+    "state": "CA",
+    "zip": "95640",
+    "entryDate": "September 2025",
+    "priority": true
+  },
+  {
+    "name": "Josephine",
+    "age": "4 years old",
+    "city": "Kentwood",
+    "state": "LA",
+    "zip": "70444",
     "entryDate": "September 2025",
     "priority": true
   },
