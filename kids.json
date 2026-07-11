@@ -1,5 +1,32 @@
 [
   {
+    "name": "Valentina",
+    "age": "1 year old",
+    "city": "Paterson",
+    "state": "NJ",
+    "zip": "07522",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
+    "name": "Jaylee",
+    "age": "8 years old",
+    "city": "Colorado Springs",
+    "state": "CO",
+    "zip": "80916",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
+    "name": "Judah",
+    "age": "3 years old",
+    "city": "Yorba Linda",
+    "state": "CA",
+    "zip": "92886",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Julian",
     "age": "2 years old",
     "city": "Danvers",
@@ -2602,7 +2629,7 @@
   },
   {
     "name": "McKinley",
-    "age": "3 years old",
+    "age": "4 years old",
     "city": "Creswell",
     "state": "OR",
     "zip": "97426",
@@ -3507,7 +3534,7 @@
     "state": "AR",
     "zip": "71801",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Alyssa",
@@ -3516,7 +3543,7 @@
     "state": "GA",
     "zip": "30720",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Valentino",
@@ -3525,7 +3552,7 @@
     "state": "GA",
     "zip": "30263",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Emersyn",
