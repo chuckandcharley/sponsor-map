@@ -63,15 +63,6 @@
     "priority": false
   },
   {
-    "name": "Julian",
-    "age": "2 years old",
-    "city": "Danvers",
-    "state": "MA",
-    "zip": "01923",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Capri",
     "age": "2 years old",
     "city": "Bridgewater",
@@ -1697,6 +1688,15 @@
     "city": "Hixson",
     "state": "TN",
     "zip": "37343",
+    "entryDate": "May 2026",
+    "priority": false
+  },
+  {
+    "name": "Ryla",
+    "age": "4 years old",
+    "city": "Paxton",
+    "state": "MA",
+    "zip": "01612",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -3543,7 +3543,7 @@
     "state": "DC",
     "zip": "20015",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Amil",
@@ -3552,7 +3552,7 @@
     "state": "KY",
     "zip": "40245",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Ottis",
