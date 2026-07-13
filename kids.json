@@ -1953,15 +1953,6 @@
     "priority": false
   },
   {
-    "name": "Carter",
-    "age": "9 years old",
-    "city": "Sanger",
-    "state": "TX",
-    "zip": "76266",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
     "name": "Lilianna",
     "age": "5 years old",
     "city": "Las Cruces",
@@ -3632,15 +3623,6 @@
     "city": "Miami",
     "state": "FL",
     "zip": "33142",
-    "entryDate": "January 2026",
-    "priority": true
-  },
-  {
-    "name": "Leonardo",
-    "age": "3 years old",
-    "city": "Lubbock",
-    "state": "TX",
-    "zip": "79424",
     "entryDate": "January 2026",
     "priority": true
   },
