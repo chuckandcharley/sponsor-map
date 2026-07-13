@@ -27,15 +27,6 @@
     "priority": false
   },
   {
-    "name": "Bobby",
-    "age": "5 years old",
-    "city": "Mantua",
-    "state": "NJ",
-    "zip": "08051",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Dominic",
     "age": "3 years old",
     "city": "Port Saint Lucie",
@@ -86,15 +77,6 @@
     "city": "Bridgewater",
     "state": "MA",
     "zip": "02324",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "River",
-    "age": "5 years old",
-    "city": "Carrollton",
-    "state": "GA",
-    "zip": "30116",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -860,15 +842,6 @@
     "city": "Chicago",
     "state": "IL",
     "zip": "60609",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Westley",
-    "age": "3 years old",
-    "city": "Albany",
-    "state": "OR",
-    "zip": "97322",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -2376,15 +2349,6 @@
     "priority": false
   },
   {
-    "name": "Claire",
-    "age": "7 years old",
-    "city": "Westlake",
-    "state": "OH",
-    "zip": "44145",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
     "name": "Trinity",
     "age": "2 years old",
     "city": "Lyons",
@@ -3785,15 +3749,6 @@
     "city": "GADSDEN",
     "state": "AL",
     "zip": "35903",
-    "entryDate": "December 2025",
-    "priority": true
-  },
-  {
-    "name": "Owen",
-    "age": "3 years old",
-    "city": "Eugene",
-    "state": "OR",
-    "zip": "97408",
     "entryDate": "December 2025",
     "priority": true
   },
