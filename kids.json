@@ -279,15 +279,6 @@
     "priority": false
   },
   {
-    "name": "Jameson",
-    "age": "2 years old",
-    "city": "Norwalk",
-    "state": "IA",
-    "zip": "50211",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Alice",
     "age": "6 years old",
     "city": "Clovis",
@@ -1629,15 +1620,6 @@
     "priority": false
   },
   {
-    "name": "Julius",
-    "age": "8 years old",
-    "city": "University Hts.",
-    "state": "OH",
-    "zip": "44118",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Olivia",
     "age": "3 years old",
     "city": "LAS VEGAS",
@@ -2345,6 +2327,15 @@
     "city": "Haverhill",
     "state": "MA",
     "zip": "01930",
+    "entryDate": "March 2026",
+    "priority": false
+  },
+  {
+    "name": "Claire",
+    "age": "7 years old",
+    "city": "Westlake",
+    "state": "OH",
+    "zip": "44145",
     "entryDate": "March 2026",
     "priority": false
   },
