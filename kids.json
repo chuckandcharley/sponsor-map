@@ -1,5 +1,14 @@
 [
   {
+    "name": "Ivy",
+    "age": "7 years old",
+    "city": "Hampton",
+    "state": "VA",
+    "zip": "23666",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Avianna",
     "age": "1 year old",
     "city": "Miami",
@@ -2084,15 +2093,6 @@
     "city": "Garland",
     "state": "TX",
     "zip": "75040",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Lillienne",
-    "age": "5 years old",
-    "city": "Myrtle Beach",
-    "state": "SC",
-    "zip": "29588",
     "entryDate": "April 2026",
     "priority": false
   },
