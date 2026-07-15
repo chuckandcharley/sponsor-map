@@ -1512,15 +1512,6 @@
     "priority": false
   },
   {
-    "name": "Ariana",
-    "age": "6 years old",
-    "city": "Dallas",
-    "state": "TX",
-    "zip": "75211",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Luis",
     "age": "5 years old",
     "city": "San Antonio",
@@ -2705,15 +2696,6 @@
     "city": "Apple Valley",
     "state": "CA",
     "zip": "92308",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
-    "name": "Nova",
-    "age": "7 years old",
-    "city": "Memphis",
-    "state": "TN",
-    "zip": "38105",
     "entryDate": "March 2026",
     "priority": false
   },
