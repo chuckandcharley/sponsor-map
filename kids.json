@@ -1,14 +1,5 @@
 [
   {
-    "name": "Marcus",
-    "age": "5 years old",
-    "city": "Portsmouth",
-    "state": "VA",
-    "zip": "23322",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Nola Kate",
     "age": "6 years old",
     "city": "Summerfield",
@@ -563,15 +554,6 @@
     "city": "Spindale",
     "state": "NC",
     "zip": "28160",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Chloe",
-    "age": "1 year old",
-    "city": "Albemarle",
-    "state": "NC",
-    "zip": "28001",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -1265,15 +1247,6 @@
     "city": "South Mills",
     "state": "NC",
     "zip": "27976",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Adonis",
-    "age": "5 years old",
-    "city": "Charlotte",
-    "state": "NC",
-    "zip": "28216",
     "entryDate": "May 2026",
     "priority": false
   },
