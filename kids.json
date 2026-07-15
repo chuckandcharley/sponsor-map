@@ -1,5 +1,14 @@
 [
   {
+    "name": "Sophia",
+    "age": "6 years old",
+    "city": "Waunakee",
+    "state": "WI",
+    "zip": "53597",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Harley",
     "age": "2 years old",
     "city": "South Haven",
@@ -1045,7 +1054,7 @@
   },
   {
     "name": "Natalie",
-    "age": "1 year old",
+    "age": "2 years old",
     "city": "Dundee",
     "state": "FL",
     "zip": "33838",
@@ -2646,15 +2655,6 @@
     "priority": false
   },
   {
-    "name": "Autumn",
-    "age": "3 years old",
-    "city": "Warrenton",
-    "state": "MO",
-    "zip": "63383",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
     "name": "Oliver",
     "age": "7 years old",
     "city": "Cottage Grove",
@@ -3462,7 +3462,7 @@
     "state": "KY",
     "zip": "42728",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Bowen",
