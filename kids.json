@@ -153,15 +153,6 @@
     "priority": false
   },
   {
-    "name": "Capri",
-    "age": "2 years old",
-    "city": "Bridgewater",
-    "state": "MA",
-    "zip": "02324",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Lincoln",
     "age": "9 years old",
     "city": "Apple Valley",
@@ -4415,15 +4406,6 @@
     "city": "Ypsilanti",
     "state": "MI",
     "zip": "48197",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Levi",
-    "age": "5 years old",
-    "city": "Worcester",
-    "state": "MA",
-    "zip": "01605",
     "entryDate": "November 2025",
     "priority": true
   },
