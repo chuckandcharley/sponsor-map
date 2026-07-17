@@ -1,5 +1,14 @@
 [
   {
+    "name": "Leyla'Rei",
+    "age": "5 years old",
+    "city": "NEW WASHINGTON",
+    "state": "IN",
+    "zip": "47162",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Milo",
     "age": "5 years old",
     "city": "Diamond Bar",
@@ -2494,7 +2503,7 @@
   },
   {
     "name": "Sophie",
-    "age": "1 year old",
+    "age": "2 years old",
     "city": "Parrish",
     "state": "FL",
     "zip": "34219",
@@ -3435,7 +3444,7 @@
     "state": "OK",
     "zip": "73626",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Ada",
@@ -3444,7 +3453,7 @@
     "state": "IL",
     "zip": "61032",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Kasen",
