@@ -567,15 +567,6 @@
     "priority": false
   },
   {
-    "name": "June",
-    "age": "5 years old",
-    "city": "Spindale",
-    "state": "NC",
-    "zip": "28160",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Conner",
     "age": "5 years old",
     "city": "Pickerington",
@@ -716,15 +707,6 @@
     "city": "TN",
     "state": "TN",
     "zip": "38372",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Harper",
-    "age": "2 years old",
-    "city": "BLOOMINGDALE",
-    "state": "IL",
-    "zip": "60108",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -4433,6 +4415,15 @@
     "city": "Vanalstyne",
     "state": "TX",
     "zip": "75495",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "Annabell",
+    "age": "7 years old",
+    "city": "Waxhaw",
+    "state": "NC",
+    "zip": "28173",
     "entryDate": "November 2025",
     "priority": true
   },
