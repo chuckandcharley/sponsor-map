@@ -18,15 +18,6 @@
     "priority": false
   },
   {
-    "name": "Milo",
-    "age": "5 years old",
-    "city": "Diamond Bar",
-    "state": "CA",
-    "zip": "91789",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Levi",
     "age": "4 years old",
     "city": "Dalton",
