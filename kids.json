@@ -1,5 +1,14 @@
 [
   {
+    "name": "Oaklyn",
+    "age": "3 years old",
+    "city": "Woodstock",
+    "state": "IL",
+    "zip": "60098",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Leyla'Rei",
     "age": "5 years old",
     "city": "NEW WASHINGTON",
@@ -329,15 +338,6 @@
     "city": "Bowling Green",
     "state": "OH",
     "zip": "43402",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Julia",
-    "age": "2 years old",
-    "city": "Watkinsville",
-    "state": "GA",
-    "zip": "30677",
     "entryDate": "June 2026",
     "priority": false
   },
