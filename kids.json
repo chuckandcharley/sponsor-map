@@ -18,15 +18,6 @@
     "priority": false
   },
   {
-    "name": "Kolton",
-    "age": "Under 1 year old",
-    "city": "Clarksville.",
-    "state": "TN",
-    "zip": "37042",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Jace",
     "age": "2 years old",
     "city": "Gardiner",
@@ -113,15 +104,6 @@
     "city": "Franklin",
     "state": "IN",
     "zip": "46131",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Leo",
-    "age": "6 years old",
-    "city": "Tulsa",
-    "state": "OK",
-    "zip": "74136",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -1319,15 +1301,6 @@
     "city": "Lamar",
     "state": "CO",
     "zip": "81052",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Lotus",
-    "age": "3 years old",
-    "city": "Hamilton",
-    "state": "IN",
-    "zip": "46742",
     "entryDate": "May 2026",
     "priority": false
   },
