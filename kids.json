@@ -1,5 +1,14 @@
 [
   {
+    "name": "Weston",
+    "age": "3 years old",
+    "city": "Alden",
+    "state": "NY",
+    "zip": "14004",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Willow",
     "age": "5 years old",
     "city": "Melbourne",
