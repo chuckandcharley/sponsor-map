@@ -36,15 +36,6 @@
     "priority": false
   },
   {
-    "name": "Janelle",
-    "age": "2 years old",
-    "city": "Fresno",
-    "state": "CA",
-    "zip": "93725",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Andie",
     "age": "5 years old",
     "city": "Nebraska City",
@@ -1679,15 +1670,6 @@
     "city": "San Antonio",
     "state": "TX",
     "zip": "78253",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Kylin",
-    "age": "1 year old",
-    "city": "Houston",
-    "state": "TX",
-    "zip": "77065",
     "entryDate": "May 2026",
     "priority": false
   },
