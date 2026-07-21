@@ -1908,15 +1908,6 @@
     "priority": false
   },
   {
-    "name": "Ammar",
-    "age": "1 year old",
-    "city": "Petersburg",
-    "state": "VA",
-    "zip": "23803",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
     "name": "Manning",
     "age": "1 year old",
     "city": "Apalachin",
@@ -4532,15 +4523,6 @@
     "city": "Vanalstyne",
     "state": "TX",
     "zip": "75495",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Annabell",
-    "age": "7 years old",
-    "city": "Waxhaw",
-    "state": "NC",
-    "zip": "28173",
     "entryDate": "November 2025",
     "priority": true
   },
