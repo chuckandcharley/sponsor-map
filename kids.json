@@ -1,5 +1,23 @@
 [
   {
+    "name": "Ezra",
+    "age": "6 years old",
+    "city": "Denham Springs",
+    "state": "LA",
+    "zip": "70706",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
+    "name": "Lisabella",
+    "age": "5 years old",
+    "city": "Ingleside",
+    "state": "IL",
+    "zip": "60041",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Maeve",
     "age": "4 years old",
     "city": "Bangor",
@@ -203,15 +221,6 @@
     "city": "NEW WASHINGTON",
     "state": "IN",
     "zip": "47162",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Milo",
-    "age": "5 years old",
-    "city": "Diamond Bar",
-    "state": "CA",
-    "zip": "91789",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -1657,7 +1666,7 @@
   },
   {
     "name": "Luis",
-    "age": "5 years old",
+    "age": "6 years old",
     "city": "San Antonio",
     "state": "TX",
     "zip": "78211",
@@ -2556,15 +2565,6 @@
     "priority": false
   },
   {
-    "name": "Elijah",
-    "age": "6 years old",
-    "city": "Columbus",
-    "state": "WI",
-    "zip": "53925",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
     "name": "Emilio",
     "age": "6 years old",
     "city": "Las cruces",
@@ -2935,7 +2935,7 @@
   },
   {
     "name": "Angell",
-    "age": "7 years old",
+    "age": "8 years old",
     "city": "Hempstead",
     "state": "NY",
     "zip": "11550",
