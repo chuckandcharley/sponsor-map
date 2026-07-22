@@ -1,5 +1,14 @@
 [
   {
+    "name": "Alex",
+    "age": "2 years old",
+    "city": "Stuart",
+    "state": "FL",
+    "zip": "34994",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Ava",
     "age": "1 year old",
     "city": "San jose",
@@ -23,15 +32,6 @@
     "city": "Ingleside",
     "state": "IL",
     "zip": "60041",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Maeve",
-    "age": "4 years old",
-    "city": "Bangor",
-    "state": "ME",
-    "zip": "04401",
     "entryDate": "July 2026",
     "priority": false
   },
