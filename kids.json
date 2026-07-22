@@ -99,15 +99,6 @@
     "priority": false
   },
   {
-    "name": "Weston",
-    "age": "3 years old",
-    "city": "Alden",
-    "state": "NY",
-    "zip": "14004",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Willow",
     "age": "5 years old",
     "city": "Melbourne",
@@ -1742,15 +1733,6 @@
     "city": "Portola",
     "state": "CA",
     "zip": "96122",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Rylee",
-    "age": "4 years old",
-    "city": "Avoca",
-    "state": "MN",
-    "zip": "56114",
     "entryDate": "May 2026",
     "priority": false
   },
