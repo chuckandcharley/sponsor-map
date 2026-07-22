@@ -612,15 +612,6 @@
     "priority": false
   },
   {
-    "name": "Carson",
-    "age": "8 years old",
-    "city": "Billings",
-    "state": "MT",
-    "zip": "59102",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "Raiden",
     "age": "3 years old",
     "city": "Kuttawa",
@@ -1103,15 +1094,6 @@
     "city": "Locust Grove",
     "state": "GA",
     "zip": "30248",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Grayson",
-    "age": "6 years old",
-    "city": "Helena",
-    "state": "MT",
-    "zip": "59602",
     "entryDate": "June 2026",
     "priority": false
   },
