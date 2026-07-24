@@ -45,15 +45,6 @@
     "priority": false
   },
   {
-    "name": "Alex",
-    "age": "2 years old",
-    "city": "Stuart",
-    "state": "FL",
-    "zip": "34994",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Ava",
     "age": "1 year old",
     "city": "San jose",
@@ -590,15 +581,6 @@
     "city": "Spokane",
     "state": "WA",
     "zip": "99216",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Mia",
-    "age": "8 years old",
-    "city": "Wareham",
-    "state": "MA",
-    "zip": "02571",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -1886,15 +1868,6 @@
     "city": "Watertown",
     "state": "SD",
     "zip": "57201",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Lukas",
-    "age": "10 years old",
-    "city": "Middlefield",
-    "state": "CT",
-    "zip": "06455",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -3411,15 +3384,6 @@
     "priority": false
   },
   {
-    "name": "Emma",
-    "age": "8 years old",
-    "city": "NewLenox",
-    "state": "IL",
-    "zip": "60451",
-    "entryDate": "January 2026",
-    "priority": false
-  },
-  {
     "name": "Sofia",
     "age": "5 years old",
     "city": "Greensboro",
@@ -4469,6 +4433,15 @@
     "city": "Yelm",
     "state": "WA",
     "zip": "98597",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "Mia",
+    "age": "5 years old",
+    "city": "Burlington",
+    "state": "CT",
+    "zip": "06013",
     "entryDate": "November 2025",
     "priority": true
   },
