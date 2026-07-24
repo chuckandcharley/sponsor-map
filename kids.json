@@ -1404,15 +1404,6 @@
     "priority": false
   },
   {
-    "name": "Sofia",
-    "age": "2 years old",
-    "city": "South Mills",
-    "state": "NC",
-    "zip": "27976",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
     "name": "Roslyn",
     "age": "7 years old",
     "city": "Elgin",
@@ -2390,15 +2381,6 @@
     "city": "Palm Bay",
     "state": "FL",
     "zip": "32907",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Tanveka",
-    "age": "10 years old",
-    "city": "Frisco",
-    "state": "TX",
-    "zip": "75036",
     "entryDate": "April 2026",
     "priority": false
   },
