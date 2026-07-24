@@ -2124,15 +2124,6 @@
     "priority": false
   },
   {
-    "name": "Jaiden",
-    "age": "5 years old",
-    "city": "Laveen",
-    "state": "AZ",
-    "zip": "85339",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
     "name": "Tallulah",
     "age": "2 years old",
     "city": "Limestone",
@@ -3591,15 +3582,6 @@
     "priority": true
   },
   {
-    "name": "Gabriel",
-    "age": "7 years old",
-    "city": "Washington",
-    "state": "DC",
-    "zip": "20015",
-    "entryDate": "January 2026",
-    "priority": true
-  },
-  {
     "name": "Amil",
     "age": "3 years old",
     "city": "Louisville",
@@ -4653,15 +4635,6 @@
     "priority": true
   },
   {
-    "name": "Sebastian",
-    "age": "3 years old",
-    "city": "Chickamauga",
-    "state": "GA",
-    "zip": "30707",
-    "entryDate": "October 2025",
-    "priority": true
-  },
-  {
     "name": "Savannah",
     "age": "9 years old",
     "city": "Tyler",
@@ -5018,6 +4991,15 @@
     "city": "Kentwood",
     "state": "LA",
     "zip": "70444",
+    "entryDate": "September 2025",
+    "priority": true
+  },
+  {
+    "name": "Carleigh",
+    "age": "4 years old",
+    "city": "Palm Bay",
+    "state": "FL",
+    "zip": "32907",
     "entryDate": "September 2025",
     "priority": true
   },
