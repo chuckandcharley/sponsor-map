@@ -1,5 +1,23 @@
 [
   {
+    "name": "Delilah",
+    "age": "2 years old",
+    "city": "Dallas",
+    "state": "GA",
+    "zip": "30132",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
+    "name": "Grit",
+    "age": "2 years old",
+    "city": "Louisa",
+    "state": "VA",
+    "zip": "23093",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Thomas",
     "age": "1 year old",
     "city": "Bolingbrook",
@@ -3304,7 +3322,7 @@
   },
   {
     "name": "Bailey",
-    "age": "7 years old",
+    "age": "8 years old",
     "city": "Rio Oso",
     "state": "CA",
     "zip": "95674",
@@ -3399,7 +3417,7 @@
     "state": "TX",
     "zip": "78237",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Rhettley",
@@ -3408,7 +3426,7 @@
     "state": "KY",
     "zip": "42211",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Rex",
@@ -3417,7 +3435,7 @@
     "state": "IL",
     "zip": "60617",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Olivia",
@@ -3426,7 +3444,7 @@
     "state": "VT",
     "zip": "05461",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Amethyst",
@@ -3435,7 +3453,7 @@
     "state": "TX",
     "zip": "78251",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Max",
@@ -3444,7 +3462,7 @@
     "state": "LA",
     "zip": "70433",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Riley",
@@ -3453,7 +3471,7 @@
     "state": "OH",
     "zip": "44060",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Charlie",
@@ -3462,7 +3480,7 @@
     "state": "CA",
     "zip": "95687",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Sofia",
