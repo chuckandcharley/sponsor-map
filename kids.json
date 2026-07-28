@@ -1,5 +1,14 @@
 [
   {
+    "name": "Maverick",
+    "age": "7 years old",
+    "city": "Beaver Dam",
+    "state": "WI",
+    "zip": "53916",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "ZIPPORAH",
     "age": "4 years old",
     "city": "Noblesville",
