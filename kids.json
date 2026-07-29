@@ -819,15 +819,6 @@
     "priority": false
   },
   {
-    "name": "Ethan",
-    "age": "4 years old",
-    "city": "Durham",
-    "state": "NC",
-    "zip": "27712",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
     "name": "John",
     "age": "2 years old",
     "city": "Dodge",
@@ -1202,6 +1193,15 @@
     "city": "Lemont",
     "state": "IL",
     "zip": "60439",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Deacon",
+    "age": "4 years old",
+    "city": "Lumberton",
+    "state": "NC",
+    "zip": "28358",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -1688,15 +1688,6 @@
     "city": "Hartsville",
     "state": "SC",
     "zip": "29550",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Adriana",
-    "age": "2 years old",
-    "city": "Lumberton",
-    "state": "NC",
-    "zip": "28360",
     "entryDate": "May 2026",
     "priority": false
   },
