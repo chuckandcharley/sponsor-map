@@ -1,5 +1,14 @@
 [
   {
+    "name": "Gabriel",
+    "age": "7 years old",
+    "city": "San Pablo",
+    "state": "CA",
+    "zip": "94806",
+    "entryDate": "July 2026",
+    "priority": false
+  },
+  {
     "name": "Maverick",
     "age": "7 years old",
     "city": "Beaver Dam",
@@ -2746,7 +2755,7 @@
   },
   {
     "name": "Joshua",
-    "age": "2 years old",
+    "age": "3 years old",
     "city": "Churchville",
     "state": "NY",
     "zip": "14428",
@@ -3381,7 +3390,7 @@
     "state": "OH",
     "zip": "45103",
     "entryDate": "January 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Brook",
