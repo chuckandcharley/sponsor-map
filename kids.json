@@ -36,15 +36,6 @@
     "priority": false
   },
   {
-    "name": "Michal",
-    "age": "4 years old",
-    "city": "Denver",
-    "state": "CO",
-    "zip": "80237",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Bella",
     "age": "8 years old",
     "city": "Los Angeles",
@@ -72,29 +63,11 @@
     "priority": false
   },
   {
-    "name": "Clementine",
-    "age": "3 years old",
-    "city": "Easton",
-    "state": "PA",
-    "zip": "18045",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Rylee",
     "age": "7 years old",
     "city": "Scranton",
     "state": "SC",
     "zip": "29591",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Gabriel",
-    "age": "7 years old",
-    "city": "San Pablo",
-    "state": "CA",
-    "zip": "94806",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -167,15 +140,6 @@
     "city": "Bolingbrook",
     "state": "IL",
     "zip": "60440",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Oren",
-    "age": "5 years old",
-    "city": "Lee",
-    "state": "MA",
-    "zip": "01238",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -770,15 +734,6 @@
     "city": "Coralville",
     "state": "IA",
     "zip": "52241",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Madison",
-    "age": "9 years old",
-    "city": "Middleburgh",
-    "state": "NY",
-    "zip": "12122",
     "entryDate": "July 2026",
     "priority": false
   },
