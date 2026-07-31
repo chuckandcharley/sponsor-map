@@ -9,15 +9,6 @@
     "priority": false
   },
   {
-    "name": "Avianna",
-    "age": "1 year old",
-    "city": "Miami",
-    "state": "FL",
-    "zip": "33157",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Rowan",
     "age": "4 years old",
     "city": "New Hartford",
@@ -1436,6 +1427,15 @@
     "city": "Burton",
     "state": "OH",
     "zip": "44021",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Evelyn",
+    "age": "3 years old",
+    "city": "Niskayuna",
+    "state": "NY",
+    "zip": "12309",
     "entryDate": "June 2026",
     "priority": false
   },
