@@ -2818,7 +2818,7 @@
   },
   {
     "name": "Sophia",
-    "age": "Under 1 year old",
+    "age": "1 year old",
     "city": "Evans",
     "state": "GA",
     "zip": "30809",
@@ -3286,7 +3286,7 @@
   },
   {
     "name": "Rah-Miyah",
-    "age": "3 years old",
+    "age": "4 years old",
     "city": "Shawano",
     "state": "WI",
     "zip": "54166",
@@ -3426,7 +3426,7 @@
     "state": "VA",
     "zip": "24084",
     "entryDate": "February 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Mira",
