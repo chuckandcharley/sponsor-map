@@ -2565,15 +2565,6 @@
     "priority": false
   },
   {
-    "name": "Theodore ( Theo )",
-    "age": "4 years old",
-    "city": "Washington",
-    "state": "MO",
-    "zip": "63090",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
     "name": "Hazel",
     "age": "3 years old",
     "city": "Knoxville",
@@ -3933,15 +3924,6 @@
     "priority": true
   },
   {
-    "name": "Emely",
-    "age": "9 years old",
-    "city": "Spanaway",
-    "state": "WA",
-    "zip": "98387",
-    "entryDate": "December 2025",
-    "priority": true
-  },
-  {
     "name": "Xander",
     "age": "3 years old",
     "city": "Queen Creek",
@@ -4257,15 +4239,6 @@
     "priority": true
   },
   {
-    "name": "Emely",
-    "age": "9 years old",
-    "city": "Spanaway",
-    "state": "WA",
-    "zip": "98387",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
     "name": "Josafat",
     "age": "3 years old",
     "city": "Yuma",
@@ -4527,15 +4500,6 @@
     "priority": true
   },
   {
-    "name": "Emely",
-    "age": "9 years old",
-    "city": "Spanaway",
-    "state": "WA",
-    "zip": "98387",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
     "name": "Simon",
     "age": "3 years old",
     "city": "Campbell",
@@ -4595,15 +4559,6 @@
     "city": "Perryville",
     "state": "MO",
     "zip": "63775",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "emely",
-    "age": "9 years old",
-    "city": "spanaway",
-    "state": "WA",
-    "zip": "98387",
     "entryDate": "November 2025",
     "priority": true
   },
