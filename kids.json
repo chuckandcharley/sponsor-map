@@ -1,5 +1,14 @@
 [
   {
+    "name": "Oliver",
+    "age": "2 years old",
+    "city": "Saint Joseph",
+    "state": "MO",
+    "zip": "64506",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
     "name": "Giovanni",
     "age": "2 years old",
     "city": "Jacksonville",
@@ -455,15 +464,6 @@
     "city": "Gardiner",
     "state": "ME",
     "zip": "04345",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Brynn",
-    "age": "1 year old",
-    "city": "Torrance",
-    "state": "CA",
-    "zip": "90503",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -3291,7 +3291,7 @@
     "state": "TX",
     "zip": "75556",
     "entryDate": "February 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Maeve",
