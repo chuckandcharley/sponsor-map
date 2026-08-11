@@ -189,15 +189,6 @@
     "priority": false
   },
   {
-    "name": "Bella",
-    "age": "8 years old",
-    "city": "Los Angeles",
-    "state": "CA",
-    "zip": "90022",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Sol",
     "age": "6 years old",
     "city": "Huron",
@@ -2921,15 +2912,6 @@
     "city": "Creswell",
     "state": "OR",
     "zip": "97426",
-    "entryDate": "March 2026",
-    "priority": false
-  },
-  {
-    "name": "Owen",
-    "age": "6 years old",
-    "city": "Eugene",
-    "state": "OR",
-    "zip": "97404",
     "entryDate": "March 2026",
     "priority": false
   },
