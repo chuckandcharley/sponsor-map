@@ -3726,15 +3726,6 @@
     "priority": true
   },
   {
-    "name": "Bowen",
-    "age": "9 years old",
-    "city": "Milford",
-    "state": "OH",
-    "zip": "45150",
-    "entryDate": "January 2026",
-    "priority": true
-  },
-  {
     "name": "Theo",
     "age": "4 years old",
     "city": "Duluth",
@@ -3758,15 +3749,6 @@
     "city": "Louisville",
     "state": "KY",
     "zip": "40245",
-    "entryDate": "January 2026",
-    "priority": true
-  },
-  {
-    "name": "Ottis",
-    "age": "6 years old",
-    "city": "Lebanon",
-    "state": "OH",
-    "zip": "45036",
     "entryDate": "January 2026",
     "priority": true
   },
