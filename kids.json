@@ -54,15 +54,6 @@
     "priority": false
   },
   {
-    "name": "Rhett",
-    "age": "1 year old",
-    "city": "Montpellier",
-    "state": "VA",
-    "zip": "23192",
-    "entryDate": "August 2026",
-    "priority": false
-  },
-  {
     "name": "Mehki",
     "age": "4 years old",
     "city": "Raleigh",
@@ -1121,6 +1112,15 @@
     "city": "Jacksonville",
     "state": "FL",
     "zip": "32207",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
+    "name": "Henry",
+    "age": "3 years old",
+    "city": "Richmond",
+    "state": "VA",
+    "zip": "23223",
     "entryDate": "June 2026",
     "priority": false
   },
