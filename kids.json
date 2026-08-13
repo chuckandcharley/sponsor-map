@@ -810,15 +810,6 @@
     "priority": false
   },
   {
-    "name": "Medha",
-    "age": "3 years old",
-    "city": "Dallas",
-    "state": "TX",
-    "zip": "75248",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Francine",
     "age": "10 years old",
     "city": "Riverside",
@@ -1886,15 +1877,6 @@
     "city": "Longview",
     "state": "TX",
     "zip": "75605",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Aspen",
-    "age": "1 year old",
-    "city": "Grand Prairie",
-    "state": "TX",
-    "zip": "75052",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -4055,15 +4037,6 @@
     "city": "Ludlow",
     "state": "MA",
     "zip": "01056",
-    "entryDate": "December 2025",
-    "priority": true
-  },
-  {
-    "name": "Maverick",
-    "age": "4 years old",
-    "city": "Trenton",
-    "state": "GA",
-    "zip": "30752",
     "entryDate": "December 2025",
     "priority": true
   },
