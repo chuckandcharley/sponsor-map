@@ -1,5 +1,14 @@
 [
   {
+    "name": "Hailey",
+    "age": "5 years old",
+    "city": "Oceanside",
+    "state": "NY",
+    "zip": "11572",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
     "name": "Emmett",
     "age": "4 years old",
     "city": "Cortez",
@@ -284,15 +293,6 @@
     "city": "Dallas",
     "state": "GA",
     "zip": "30132",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
-    "name": "Grit",
-    "age": "2 years old",
-    "city": "Louisa",
-    "state": "VA",
-    "zip": "23093",
     "entryDate": "July 2026",
     "priority": false
   },
@@ -4784,15 +4784,6 @@
     "city": "Valley",
     "state": "AL",
     "zip": "36854",
-    "entryDate": "October 2025",
-    "priority": true
-  },
-  {
-    "name": "Raeden",
-    "age": "4 years old",
-    "city": "Rogers",
-    "state": "TX",
-    "zip": "76569",
     "entryDate": "October 2025",
     "priority": true
   },
