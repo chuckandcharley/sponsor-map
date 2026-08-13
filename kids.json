@@ -1,5 +1,23 @@
 [
   {
+    "name": "Emmett",
+    "age": "4 years old",
+    "city": "Cortez",
+    "state": "CO",
+    "zip": "81321",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
+    "name": "Emerson",
+    "age": "5 years old",
+    "city": "Spokane",
+    "state": "WA",
+    "zip": "99208",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
     "name": "Elias",
     "age": "6 years old",
     "city": "Warwick",
@@ -721,7 +739,7 @@
   },
   {
     "name": "Lincoln",
-    "age": "9 years old",
+    "age": "10 years old",
     "city": "Apple Valley",
     "state": "CA",
     "zip": "92307",
@@ -3264,7 +3282,7 @@
     "state": "GA",
     "zip": "31537",
     "entryDate": "February 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Cora",
