@@ -54,15 +54,6 @@
     "priority": false
   },
   {
-    "name": "Mehki",
-    "age": "4 years old",
-    "city": "Raleigh",
-    "state": "NC",
-    "zip": "27610",
-    "entryDate": "August 2026",
-    "priority": false
-  },
-  {
     "name": "Atticus",
     "age": "2 years old",
     "city": "Lester Prairie",
@@ -5108,15 +5099,6 @@
     "city": "Corryton",
     "state": "TN",
     "zip": "37721",
-    "entryDate": "September 2025",
-    "priority": true
-  },
-  {
-    "name": "Zya",
-    "age": "3 years old",
-    "city": "Chandler",
-    "state": "AZ",
-    "zip": "85226",
     "entryDate": "September 2025",
     "priority": true
   },
