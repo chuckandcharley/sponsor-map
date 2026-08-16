@@ -1819,7 +1819,7 @@
   },
   {
     "name": "Malka",
-    "age": "Under 1 year old",
+    "age": "1 year old",
     "city": "Brooklyn",
     "state": "NY",
     "zip": "11218",
@@ -3210,7 +3210,7 @@
     "state": "IA",
     "zip": "52302",
     "entryDate": "February 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Tanner",
@@ -3219,7 +3219,7 @@
     "state": "GA",
     "zip": "31023",
     "entryDate": "February 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Ridlee",
@@ -4420,7 +4420,7 @@
   },
   {
     "name": "Jenson",
-    "age": "3 years old",
+    "age": "4 years old",
     "city": "Franklin",
     "state": "NC",
     "zip": "29734",
