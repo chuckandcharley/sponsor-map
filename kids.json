@@ -1,5 +1,14 @@
 [
   {
+    "name": "Ezra",
+    "age": "5 years old",
+    "city": "Stanfield",
+    "state": "NC",
+    "zip": "28163",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
     "name": "River",
     "age": "2 years old",
     "city": "Northfield",
