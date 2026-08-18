@@ -1,5 +1,23 @@
 [
   {
+    "name": "Clinton Kase",
+    "age": "1 year old",
+    "city": "Lynchburg",
+    "state": "VA",
+    "zip": "24502",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
+    "name": "Tucker",
+    "age": "Under 1 year old",
+    "city": "Aurora",
+    "state": "IN",
+    "zip": "47001",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
     "name": "Paul",
     "age": "4 years old",
     "city": "Mechanicsville",
@@ -73,7 +91,7 @@
   },
   {
     "name": "Emerson",
-    "age": "5 years old",
+    "age": "6 years old",
     "city": "Spokane",
     "state": "WA",
     "zip": "99208",
@@ -379,7 +397,7 @@
   },
   {
     "name": "Dean",
-    "age": "2 years old",
+    "age": "3 years old",
     "city": "Albuquerque",
     "state": "NM",
     "zip": "87105",
@@ -2845,7 +2863,7 @@
   },
   {
     "name": "Milo",
-    "age": "7 years old",
+    "age": "8 years old",
     "city": "Bartlett",
     "state": "TN",
     "zip": "38133",
@@ -3201,7 +3219,7 @@
     "state": "IL",
     "zip": "61536",
     "entryDate": "February 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Genesis",
@@ -3210,7 +3228,7 @@
     "state": "TX",
     "zip": "75638",
     "entryDate": "February 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Phoenix",
