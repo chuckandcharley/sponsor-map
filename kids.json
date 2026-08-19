@@ -18,24 +18,6 @@
     "priority": false
   },
   {
-    "name": "Corbett",
-    "age": "4 years old",
-    "city": "Greenville",
-    "state": "NC",
-    "zip": "27834",
-    "entryDate": "August 2026",
-    "priority": false
-  },
-  {
-    "name": "Graham",
-    "age": "5 years old",
-    "city": "Walker",
-    "state": "LA",
-    "zip": "70785",
-    "entryDate": "August 2026",
-    "priority": false
-  },
-  {
     "name": "Graham",
     "age": "5 years old",
     "city": "Walker",
