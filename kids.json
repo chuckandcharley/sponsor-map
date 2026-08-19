@@ -1,5 +1,14 @@
 [
   {
+    "name": "Cora",
+    "age": "9 years old",
+    "city": "Grafton",
+    "state": "ND",
+    "zip": "58237",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
     "name": "Corbett",
     "age": "4 years old",
     "city": "Greenville",
@@ -1760,15 +1769,6 @@
     "city": "Palm Coast",
     "state": "FL",
     "zip": "32164",
-    "entryDate": "May 2026",
-    "priority": false
-  },
-  {
-    "name": "Arlette",
-    "age": "3 years old",
-    "city": "Algona",
-    "state": "WA",
-    "zip": "98001",
     "entryDate": "May 2026",
     "priority": false
   },
@@ -4883,6 +4883,15 @@
     "city": "Tucson",
     "state": "AZ",
     "zip": "85718",
+    "entryDate": "October 2025",
+    "priority": true
+  },
+  {
+    "name": "Mia",
+    "age": "6 years old",
+    "city": "East Palo Alto",
+    "state": "CA",
+    "zip": "94303",
     "entryDate": "October 2025",
     "priority": true
   },
