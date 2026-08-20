@@ -90,15 +90,6 @@
     "priority": false
   },
   {
-    "name": "James-Michael (RJ)",
-    "age": "4 years old",
-    "city": "Louisville",
-    "state": "KY",
-    "zip": "40220",
-    "entryDate": "August 2026",
-    "priority": false
-  },
-  {
     "name": "Serene",
     "age": "9 years old",
     "city": "York",
@@ -5126,6 +5117,15 @@
     "city": "Bethel",
     "state": "OH",
     "zip": "45106",
+    "entryDate": "October 2025",
+    "priority": true
+  },
+  {
+    "name": "Jyreece",
+    "age": "4 years old",
+    "city": "Louisville",
+    "state": "KY",
+    "zip": "40212",
     "entryDate": "October 2025",
     "priority": true
   },
