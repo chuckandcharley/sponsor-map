@@ -153,6 +153,15 @@
     "priority": false
   },
   {
+    "name": "Ezra",
+    "age": "5 years old",
+    "city": "Stanfield",
+    "state": "NC",
+    "zip": "28163",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
     "name": "River",
     "age": "2 years old",
     "city": "Northfield",
@@ -4730,15 +4739,6 @@
     "city": "Vanalstyne",
     "state": "TX",
     "zip": "75495",
-    "entryDate": "November 2025",
-    "priority": true
-  },
-  {
-    "name": "Annabell",
-    "age": "7 years old",
-    "city": "Waxhaw",
-    "state": "NC",
-    "zip": "28173",
     "entryDate": "November 2025",
     "priority": true
   },
