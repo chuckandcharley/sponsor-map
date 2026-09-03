@@ -90,6 +90,15 @@
     "priority": false
   },
   {
+    "name": "Lincoln",
+    "age": "7 years old",
+    "city": "Suffield",
+    "state": "CT",
+    "zip": "06078",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
     "name": "Brylee",
     "age": "5 years old",
     "city": "Marianna",
@@ -1643,15 +1652,6 @@
     "city": "Wilbraham",
     "state": "MA",
     "zip": "01095",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Franchelys",
-    "age": "4 years old",
-    "city": "Stratford",
-    "state": "CT",
-    "zip": "06614",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -3587,15 +3587,6 @@
     "city": "Evans",
     "state": "GA",
     "zip": "30809",
-    "entryDate": "February 2026",
-    "priority": true
-  },
-  {
-    "name": "Cyrus",
-    "age": "2 years old",
-    "city": "Appleton",
-    "state": "WI",
-    "zip": "54914",
     "entryDate": "February 2026",
     "priority": true
   },
