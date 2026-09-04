@@ -9,15 +9,6 @@
     "priority": false
   },
   {
-    "name": "Charlotte",
-    "age": "2 years old",
-    "city": "Harmony",
-    "state": "PA",
-    "zip": "16037",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
     "name": "Owen",
     "age": "1 year old",
     "city": "Monterey Park",
@@ -1557,6 +1548,15 @@
     "priority": false
   },
   {
+    "name": "Ivy",
+    "age": "3 years old",
+    "city": "Washington",
+    "state": "PA",
+    "zip": "15301",
+    "entryDate": "June 2026",
+    "priority": false
+  },
+  {
     "name": "Hunter",
     "age": "1 year old",
     "city": "Knoxville",
@@ -2489,15 +2489,6 @@
     "city": "Covington",
     "state": "TX",
     "zip": "76636",
-    "entryDate": "April 2026",
-    "priority": false
-  },
-  {
-    "name": "Jibrail",
-    "age": "2 years old",
-    "city": "Abingdon",
-    "state": "MD",
-    "zip": "21009",
     "entryDate": "April 2026",
     "priority": false
   },
