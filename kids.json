@@ -1,19 +1,19 @@
 [
   {
+    "name": "Ryleigh",
+    "age": "5 years old",
+    "city": "Twinsburg",
+    "state": "OH",
+    "zip": "44087",
+    "entryDate": "September 2026",
+    "priority": false
+  },
+  {
     "name": "Jazzlynn",
     "age": "2 years old",
     "city": "Williamsburg",
     "state": "VA",
     "zip": "23188",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
-    "name": "Rylee",
-    "age": "7 years old",
-    "city": "Bonifay",
-    "state": "FL",
-    "zip": "32425",
     "entryDate": "September 2026",
     "priority": false
   },
@@ -54,38 +54,11 @@
     "priority": false
   },
   {
-    "name": "Matteo",
-    "age": "3 years old",
-    "city": "Humble",
-    "state": "TX",
-    "zip": "77338",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
     "name": "Alexander",
     "age": "1 year old",
     "city": "Indianapolis",
     "state": "IN",
     "zip": "46317",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
-    "name": "Rylee",
-    "age": "7 years old",
-    "city": "Bonifay",
-    "state": "FL",
-    "zip": "32425",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
-    "name": "Wrenley",
-    "age": "1 year old",
-    "city": "Victorville",
-    "state": "CA",
-    "zip": "92392",
     "entryDate": "September 2026",
     "priority": false
   },
