@@ -1,5 +1,14 @@
 [
   {
+    "name": "Yolanda",
+    "age": "3 years old",
+    "city": "Running sorings",
+    "state": "CA",
+    "zip": "92382",
+    "entryDate": "September 2026",
+    "priority": false
+  },
+  {
     "name": "Ryleigh",
     "age": "5 years old",
     "city": "Twinsburg",
@@ -936,15 +945,6 @@
     "priority": false
   },
   {
-    "name": "Savannah",
-    "age": "3 years old",
-    "city": "Las vegas",
-    "state": "NV",
-    "zip": "89166",
-    "entryDate": "August 2026",
-    "priority": false
-  },
-  {
     "name": "Matthew",
     "age": "7 years old",
     "city": "Saint Cloud",
@@ -1139,15 +1139,6 @@
     "city": "CHULUOTA",
     "state": "FL",
     "zip": "32766",
-    "entryDate": "August 2026",
-    "priority": false
-  },
-  {
-    "name": "Savannah",
-    "age": "9 years old",
-    "city": "North Las Vegas",
-    "state": "NV",
-    "zip": "89031",
     "entryDate": "August 2026",
     "priority": false
   },
