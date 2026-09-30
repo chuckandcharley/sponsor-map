@@ -432,15 +432,6 @@
     "priority": false
   },
   {
-    "name": "Audrey",
-    "age": "2 years old",
-    "city": "Conyers",
-    "state": "GA",
-    "zip": "30012",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
     "name": "Forrest",
     "age": "3 years old",
     "city": "Appleton",
@@ -599,15 +590,6 @@
     "city": "Oregon city",
     "state": "OR",
     "zip": "97045",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
-    "name": "Jude",
-    "age": "Under 1 year old",
-    "city": "Millersville",
-    "state": "MD",
-    "zip": "21108",
     "entryDate": "September 2026",
     "priority": false
   },
