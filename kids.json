@@ -1,14 +1,5 @@
 [
   {
-    "name": "Rory",
-    "age": "4 years old",
-    "city": "Corydon",
-    "state": "IN",
-    "zip": "47112",
-    "entryDate": "October 2026",
-    "priority": false
-  },
-  {
     "name": "Ray",
     "age": "4 years old",
     "city": "Surprise",
@@ -5315,6 +5306,15 @@
     "city": "Delphos",
     "state": "OH",
     "zip": "45833",
+    "entryDate": "October 2025",
+    "priority": true
+  },
+  {
+    "name": "Bentley",
+    "age": "5 years old",
+    "city": "Laconia",
+    "state": "IN",
+    "zip": "47135",
     "entryDate": "October 2025",
     "priority": true
   },
