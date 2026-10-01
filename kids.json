@@ -1,5 +1,14 @@
 [
   {
+    "name": "Rory",
+    "age": "4 years old",
+    "city": "Corydon",
+    "state": "IN",
+    "zip": "47112",
+    "entryDate": "October 2026",
+    "priority": false
+  },
+  {
     "name": "Ray",
     "age": "4 years old",
     "city": "Surprise",
