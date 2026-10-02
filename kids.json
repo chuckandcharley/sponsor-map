@@ -1,5 +1,14 @@
 [
   {
+    "name": "Bridgette",
+    "age": "2 years old",
+    "city": "Halstead",
+    "state": "KS",
+    "zip": "67056",
+    "entryDate": "October 2026",
+    "priority": false
+  },
+  {
     "name": "Ryan",
     "age": "6 years old",
     "city": "NORFOLK",
@@ -4406,15 +4415,6 @@
     "city": "Hobbs",
     "state": "NM",
     "zip": "88240",
-    "entryDate": "January 2026",
-    "priority": true
-  },
-  {
-    "name": "Adalynn",
-    "age": "2 years old",
-    "city": "Goshen",
-    "state": "OH",
-    "zip": "45122",
     "entryDate": "January 2026",
     "priority": true
   },
