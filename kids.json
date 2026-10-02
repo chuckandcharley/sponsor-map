@@ -9,15 +9,6 @@
     "priority": false
   },
   {
-    "name": "Sonya",
-    "age": "1 year old",
-    "city": "Waconia",
-    "state": "MN",
-    "zip": "55387",
-    "entryDate": "October 2026",
-    "priority": false
-  },
-  {
     "name": "Levi",
     "age": "5 years old",
     "city": "CARVER",
@@ -4217,15 +4208,6 @@
     "city": "Duluth",
     "state": "MN",
     "zip": "55811",
-    "entryDate": "January 2026",
-    "priority": true
-  },
-  {
-    "name": "Olivia",
-    "age": "5 years old",
-    "city": "SALISBURY",
-    "state": "NC",
-    "zip": "28144",
     "entryDate": "January 2026",
     "priority": true
   },
