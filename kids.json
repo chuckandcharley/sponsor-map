@@ -1,5 +1,14 @@
 [
   {
+    "name": "Marley",
+    "age": "1 year old",
+    "city": "Baltimore",
+    "state": "MD",
+    "zip": "21215",
+    "entryDate": "October 2026",
+    "priority": false
+  },
+  {
     "name": "Lloyd",
     "age": "3 years old",
     "city": "Uniontown",
