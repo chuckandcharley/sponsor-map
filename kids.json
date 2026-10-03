@@ -1,5 +1,14 @@
 [
   {
+    "name": "Adalynn",
+    "age": "6 years old",
+    "city": "Houston",
+    "state": "MO",
+    "zip": "65483",
+    "entryDate": "October 2026",
+    "priority": false
+  },
+  {
     "name": "Bridgette",
     "age": "2 years old",
     "city": "Halstead",
@@ -64,7 +73,7 @@
   },
   {
     "name": "Alex",
-    "age": "8 years old",
+    "age": "9 years old",
     "city": "sherman",
     "state": "TX",
     "zip": "75092",
@@ -86,15 +95,6 @@
     "city": "Frisco",
     "state": "TX",
     "zip": "75033",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
-    "name": "Violet",
-    "age": "2 years old",
-    "city": "Riverside",
-    "state": "CA",
-    "zip": "92508",
     "entryDate": "September 2026",
     "priority": false
   },
@@ -1783,7 +1783,7 @@
   },
   {
     "name": "Adalae",
-    "age": "2 years old",
+    "age": "3 years old",
     "city": "Vernal",
     "state": "UT",
     "zip": "84078",
@@ -3246,7 +3246,7 @@
     "state": "AL",
     "zip": "35055",
     "entryDate": "April 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Duncan",
@@ -3255,7 +3255,7 @@
     "state": "NC",
     "zip": "27410",
     "entryDate": "April 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Kaden",
@@ -3264,7 +3264,7 @@
     "state": "GA",
     "zip": "31788",
     "entryDate": "April 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Adam",
