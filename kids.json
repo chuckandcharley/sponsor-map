@@ -1,5 +1,32 @@
 [
   {
+    "name": "Adaline",
+    "age": "Under 1 year old",
+    "city": "Clarksville",
+    "state": "FL",
+    "zip": "32430",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
+    "name": "Adrian",
+    "age": "2 years old",
+    "city": "Providence",
+    "state": "RI",
+    "zip": "02904",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
+    "name": "Ellora aka Lola",
+    "age": "5 years old",
+    "city": "Marysville",
+    "state": "CA",
+    "zip": "95901",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
     "name": "Maranatha",
     "age": "Under 1 year old",
     "city": "Hemet",
@@ -2674,7 +2701,7 @@
   },
   {
     "name": "Olivia",
-    "age": "3 years old",
+    "age": "4 years old",
     "city": "Redmond",
     "state": "OR",
     "zip": "97756",
@@ -3246,7 +3273,7 @@
     "state": "NY",
     "zip": "11218",
     "entryDate": "May 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Luka",
@@ -3255,7 +3282,7 @@
     "state": "SC",
     "zip": "29550",
     "entryDate": "May 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Cooper",
@@ -4393,7 +4420,7 @@
   },
   {
     "name": "Benjamin",
-    "age": "4 years old",
+    "age": "5 years old",
     "city": "Hawthorn Woods",
     "state": "IL",
     "zip": "60047",
