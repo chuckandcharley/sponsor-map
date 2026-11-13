@@ -1,5 +1,14 @@
 [
   {
+    "name": "Nyari",
+    "age": "5 years old",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60657",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
     "name": "Adaline",
     "age": "Under 1 year old",
     "city": "Clarksville",
