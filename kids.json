@@ -603,15 +603,6 @@
     "priority": false
   },
   {
-    "name": "Kylar",
-    "age": "3 years old",
-    "city": "Easley",
-    "state": "SC",
-    "zip": "29640",
-    "entryDate": "October 2026",
-    "priority": false
-  },
-  {
     "name": "Victoria",
     "age": "6 years old",
     "city": "El centro",
@@ -869,15 +860,6 @@
     "city": "Sacramento",
     "state": "CA",
     "zip": "95820",
-    "entryDate": "October 2026",
-    "priority": false
-  },
-  {
-    "name": "Josie",
-    "age": "2 years old",
-    "city": "Spring Hill",
-    "state": "FL",
-    "zip": "34608",
     "entryDate": "October 2026",
     "priority": false
   },
