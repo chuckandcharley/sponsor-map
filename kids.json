@@ -666,6 +666,15 @@
     "priority": false
   },
   {
+    "name": "Bristol",
+    "age": "4 years old",
+    "city": "Forest",
+    "state": "VA",
+    "zip": "24551",
+    "entryDate": "October 2026",
+    "priority": false
+  },
+  {
     "name": "Victoria",
     "age": "6 years old",
     "city": "El centro",
@@ -1850,6 +1859,15 @@
     "city": "Walker",
     "state": "LA",
     "zip": "70785",
+    "entryDate": "August 2026",
+    "priority": false
+  },
+  {
+    "name": "Clinton Kase",
+    "age": "1 year old",
+    "city": "Lynchburg",
+    "state": "VA",
+    "zip": "24502",
     "entryDate": "August 2026",
     "priority": false
   },
