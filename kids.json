@@ -1,5 +1,14 @@
 [
   {
+    "name": "Chloe",
+    "age": "2 years old",
+    "city": "Moncks Corner",
+    "state": "SC",
+    "zip": "29461",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
     "name": "Ezekiel",
     "age": "3 years old",
     "city": "Woodmere",
