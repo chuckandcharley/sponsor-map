@@ -1125,15 +1125,6 @@
     "priority": false
   },
   {
-    "name": "Katrielle",
-    "age": "5 years old",
-    "city": "Salinas",
-    "state": "CA",
-    "zip": "93907",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
     "name": "Gabriel",
     "age": "6 years old",
     "city": "Gulfport",
@@ -1175,15 +1166,6 @@
     "city": "Lowell",
     "state": "IN",
     "zip": "46356",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
-    "name": "Benjamin",
-    "age": "6 years old",
-    "city": "Salinas",
-    "state": "CA",
-    "zip": "93906",
     "entryDate": "September 2026",
     "priority": false
   },
@@ -5234,15 +5216,6 @@
     "city": "Ludlow",
     "state": "MA",
     "zip": "01056",
-    "entryDate": "December 2025",
-    "priority": true
-  },
-  {
-    "name": "Emma",
-    "age": "4 years old",
-    "city": "Hollister",
-    "state": "CA",
-    "zip": "95023",
     "entryDate": "December 2025",
     "priority": true
   },
