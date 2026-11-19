@@ -1,5 +1,23 @@
 [
   {
+    "name": "Charli",
+    "age": "6 years old",
+    "city": "Culloden",
+    "state": "WV",
+    "zip": "25510",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
+    "name": "Eli",
+    "age": "2 years old",
+    "city": "Itasca",
+    "state": "TX",
+    "zip": "76055",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
     "name": "Bravely",
     "age": "4 years old",
     "city": "Crowley",
@@ -640,7 +658,7 @@
   },
   {
     "name": "Kinsley",
-    "age": "Under 1 year old",
+    "age": "1 year old",
     "city": "Orange City",
     "state": "FL",
     "zip": "32763",
@@ -1513,15 +1531,6 @@
   },
   {
     "name": "Miles",
-    "age": "2 years old",
-    "city": "Andalusia",
-    "state": "IL",
-    "zip": "61232",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
-    "name": "Miles",
     "age": "3 years old",
     "city": "Oregon city",
     "state": "OR",
@@ -2143,7 +2152,7 @@
   },
   {
     "name": "Ashtyn",
-    "age": "2 years old",
+    "age": "3 years old",
     "city": "Keosauqua",
     "state": "IA",
     "zip": "52565",
@@ -2565,15 +2574,6 @@
     "priority": false
   },
   {
-    "name": "Younes",
-    "age": "5 years old",
-    "city": "Coralville",
-    "state": "IA",
-    "zip": "52241",
-    "entryDate": "July 2026",
-    "priority": false
-  },
-  {
     "name": "Adalae",
     "age": "3 years old",
     "city": "Vernal",
@@ -2615,15 +2615,6 @@
     "city": "Spokane",
     "state": "WA",
     "zip": "99216",
-    "entryDate": "June 2026",
-    "priority": false
-  },
-  {
-    "name": "Violet",
-    "age": "3 years old",
-    "city": "Davenport",
-    "state": "IA",
-    "zip": "52803-2716",
     "entryDate": "June 2026",
     "priority": false
   },
@@ -3430,7 +3421,7 @@
   },
   {
     "name": "Sawyer",
-    "age": "1 year old",
+    "age": "2 years old",
     "city": "Weatherford",
     "state": "TX",
     "zip": "76086",
@@ -4514,15 +4505,6 @@
     "city": "Eastman",
     "state": "GA",
     "zip": "31023",
-    "entryDate": "February 2026",
-    "priority": true
-  },
-  {
-    "name": "Ridlee",
-    "age": "3 years old",
-    "city": "Mount Vernon",
-    "state": "IA",
-    "zip": "52314",
     "entryDate": "February 2026",
     "priority": true
   },
