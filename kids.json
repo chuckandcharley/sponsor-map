@@ -27,15 +27,6 @@
     "priority": false
   },
   {
-    "name": "Bravely",
-    "age": "4 years old",
-    "city": "Crowley",
-    "state": "TX",
-    "zip": "76036",
-    "entryDate": "November 2026",
-    "priority": false
-  },
-  {
     "name": "may",
     "age": "1 year old",
     "city": "chipley",
@@ -59,15 +50,6 @@
     "city": "Wilmington",
     "state": "DE",
     "zip": "19803",
-    "entryDate": "November 2026",
-    "priority": false
-  },
-  {
-    "name": "Milo",
-    "age": "7 years old",
-    "city": "Saint Louis",
-    "state": "MO",
-    "zip": "63138",
     "entryDate": "November 2026",
     "priority": false
   },
@@ -158,15 +140,6 @@
     "city": "Chicago",
     "state": "IL",
     "zip": "60657",
-    "entryDate": "November 2026",
-    "priority": false
-  },
-  {
-    "name": "Adaline",
-    "age": "Under 1 year old",
-    "city": "Clarksville",
-    "state": "FL",
-    "zip": "32430",
     "entryDate": "November 2026",
     "priority": false
   },
