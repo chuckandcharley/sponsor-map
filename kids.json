@@ -1,5 +1,14 @@
 [
   {
+    "name": "Ezekiel",
+    "age": "3 years old",
+    "city": "Woodmere",
+    "state": "NY",
+    "zip": "11598",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
     "name": "Nathaniel",
     "age": "3 years old",
     "city": "Tyler",
