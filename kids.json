@@ -1395,15 +1395,6 @@
     "priority": false
   },
   {
-    "name": "Camilla",
-    "age": "4 years old",
-    "city": "Luling",
-    "state": "TX",
-    "zip": "78648",
-    "entryDate": "September 2026",
-    "priority": false
-  },
-  {
     "name": "Mackenzie",
     "age": "3 years old",
     "city": "South Beloit",
@@ -5648,6 +5639,15 @@
     "city": "JONESBORO",
     "state": "AR",
     "zip": "72450",
+    "entryDate": "November 2025",
+    "priority": true
+  },
+  {
+    "name": "Easton",
+    "age": "3 years old",
+    "city": "Fischer",
+    "state": "TX",
+    "zip": "78623",
     "entryDate": "November 2025",
     "priority": true
   },
