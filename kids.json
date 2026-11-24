@@ -1,23 +1,5 @@
 [
   {
-    "name": "Aiden",
-    "age": "2 years old",
-    "city": "Norfolk",
-    "state": "VA",
-    "zip": "23513",
-    "entryDate": "November 2026",
-    "priority": false
-  },
-  {
-    "name": "Indiana",
-    "age": "4 years old",
-    "city": "Front Royal",
-    "state": "VA",
-    "zip": "22630",
-    "entryDate": "November 2026",
-    "priority": false
-  },
-  {
     "name": "Penelope",
     "age": "2 years old",
     "city": "Ulysses",
