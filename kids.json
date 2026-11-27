@@ -3264,7 +3264,7 @@
     "state": "NC",
     "zip": "28904",
     "entryDate": "May 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Theodore",
@@ -3273,7 +3273,7 @@
     "state": "WA",
     "zip": "98671",
     "entryDate": "May 2026",
-    "priority": false
+    "priority": true
   },
   {
     "name": "Kayden",
