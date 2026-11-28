@@ -1,5 +1,14 @@
 [
   {
+    "name": "Elliot",
+    "age": "2 years old",
+    "city": "Raleigh",
+    "state": "NC",
+    "zip": "27616",
+    "entryDate": "November 2026",
+    "priority": false
+  },
+  {
     "name": "Zaiya",
     "age": "2 years old",
     "city": "Fort Wayne",
